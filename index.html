@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<link rel="stylesheet" href="css/datepicker.css" type="text/css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="css/layout.css" />
+    <title>DatePicker - jQuery plugin</title>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/datepicker.js"></script>
+    <script type="text/javascript" src="js/eye.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="js/layout.js?ver=1.0.2"></script>
+</head>
+<body>
+    <div class="wrapper">
+        <h1>Date Picker - jQuery plugin</h1>
+        <ul class="navigationTabs">
+            <li><a href="#about" rel="about">About</a></li>
+            <li><a href="#download" rel="download">Download</a></li>
+            <li><a href="#implement" rel="implement">Implement</a></li>
+        </ul>
+        <div class="tabsContent">
+            <div class="tab">
+                <h2>About</h2>
+				<p>Date Picker component with a lot of options and easy to fit in your web application.</p>
+				<h3>Last update</h3>
+				<p>22.05.2009 - Check Download tab</p>
+                <h3>Features</h3>
+                <ul>
+                    <li>Flat mode - as element in page</li>
+                    <li>Multiple calendars in the component</li>
+                    <li>Allows single, multiple or range selection</li>
+					<li>Mark dates as special, weekends, special days</li>
+					<li>Easy to customize the look by changing CSS</li>
+					<li>Localiation for months' and days' names</li>
+					<li>Custom day to start the week</li>
+					<li>Fits into the viewport</li>
+                </ul>
+				<h3>License</h3>
+				<p>Dual licensed under the MIT and GPL licenses.</p>
+                <h3>Examples</h3>
+				<p id="date"></p>
+				<p>Flat mode, single selection, the week start monday.</p>
+			<pre>$('#date').DatePicker({
+	flat: true,
+	date: '2008-07-31',
+	current: '2008-07-31',
+	calendars: 1,
+	starts: 1
+});</pre>
+				<p>Flat mode, multiple selection, disabled dates, special day, the week start sunday.</p>
+				<p id="date2"></p>
+			<pre>$('#date2').DatePicker({
+	flat: true,
+	date: ['2008-07-31', '2008-07-28'],
+	current: '2008-07-31',
+	format: 'Y-m-d',
+	calendars: 1,
+	mode: 'multiple',
+	onRender: function(date) {
+		return {
+			disabled: (date.valueOf() < now.valueOf()),
+			className: date.valueOf() == now2.valueOf() ? 'datepickerSpecial' : false
+		}
+	},
+	starts: 0
+});</pre>
+				<p><a href="#" id="clearSelection">Clear selection</a></p>
+				<pre>$('#date3').DatePickerClear();</pre>
+				<p>Flat mode, range selection, 3 calendars.</p>
+				<p id="date3"></p>
+			<pre>$('#date3').DatePicker({
+	flat: true,
+	date: ['2008-07-28','2008-07-31'],
+	current: '2008-07-31',
+	calendars: 3,
+	mode: 'range',
+	starts: 1
+});</pre>
+				<p>Attached to an text field and usign callbacks to update the date selection with the value from the field.</p>
+				<p>
+					<input class="inputDate" id="inputDate" value="06/14/2008" />
+					<label id="closeOnSelect"><input type="checkbox" /> Close on selection</label>
+				</p>
+			<pre>$('#inputDate').DatePicker({
+	format:'m/d/Y',
+	date: $('#inputDate').val(),
+	current: $('#inputDate').val(),
+	starts: 1,
+	position: 'r',
+	onBeforeShow: function(){
+		$('#inputDate').DatePickerSetDate($('#inputDate').val(), true);
+	},
+	onChange: function(formated, dates){
+		$('#inputDate').val(formated);
+		if ($('#closeOnSelect input').attr('checked')) {
+			$('#inputDate').DatePickerHide();
+		}
+	}
+});</pre>
+				<p>Flat mode, inside a custom widget and with custom design.</p>
+				<div id="widget">
+					<div id="widgetField">
+						<span>28 July, 2008 &divide; 31 July, 2008</span>
+						<a href="#">Select date range</a>
+					</div>
+					<div id="widgetCalendar">
+					</div>
+				</div>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+				<p>&nbsp;</p>
+            </div>
+            <div class="tab">
+                <h2>Download</h2>
+                <p><a href="datepicker.zip">datepicker.zip (50 kb)</a>: jQuery, Javscript files, CSS files, images, examples and instructions.</p>
+                <h3>Changelog</h3>
+                <dl>
+					<dt>22.05.2009</dt>
+					<dd>added: close on selection example</dd>
+					<dd>added: onChange has  new parameter: reference to related element</dd>
+					<dd>added: start view days, months, years</dd>
+					<dd>added: clear selection in multiple and range mode</dd>
+					<dd>fixed: datepicker hide and show methods</dd>
+					<dd>fixed: january selection (tahns to Konstantin Zavialov)</dd>
+					<dd>fixed: working with jQuery 1.3</dd>
+					<dd>fixed: deselecting a date in multiple mode (thanks to Geelen Sebastien)</dd>
+					<dt>22.08.2008</dt>
+					<dd>Fixed bug: where some events were not canceled right on Safari</dd>
+					<dd>Fixed bug: where teh view port was not detected right on Safari</dd>
+					<dt>31.07.2008</dt>
+					<dd>Added new method: 'DatePickerGetDate'</dd>
+					<dd>Minor speed improvement</dd>
+					<dt>30.07.2008</dt>
+					<dd>The first release.</dd>
+                </dl>
+            </div>
+            <div class="tab">
+                <h2>Implement</h2>
+                <p>Attach the Javascript and CSS files to your document. Edit CSS file and fix the paths to  images and change colors to fit your site theme.</p>
+                <pre>
+&lt;link rel="stylesheet" media="screen" type="text/css" href="css/datepicker.css" /&gt;
+&lt;script type="text/javascript" src="js/datepicker.js"&gt;&lt;/script&gt;
+                </pre>
+                <h3>Invocation code</h3>
+                <p>All you have to do is to select the elements in a jQuery way and call the plugin.</p>
+                <pre>
+ $('input').DatePicker(options);
+                </pre>
+                <h3>Options</h3>
+                <p>A hash of parameters. All parameters are optional.</p>
+                <table>
+                	<tr>
+                		<td><strong>eventName</strong></td>
+                		<td>string</td>
+                		<td>The desired event to trigger the date picker. Default: 'click'</td>
+                	</tr>
+                	<tr>
+                		<td><strong>date</strong></td>
+                		<td>String, Date or array</td>
+                		<td>The selected date(s) as string (will be converted to Date object based on teh format suplied) and Date object for single selection, as Array of strings or Date objects</td>
+                	</tr>
+                	<tr>
+                		<td><strong>flat</strong></td>
+                		<td>boolean</td>
+                		<td>Whatever if the date picker is appended to the element or triggered by an event. Default false</td>
+                	</tr>
+                	<tr>
+                		<td><strong>start</strong></td>
+                		<td>integer</td>
+                		<td>The day week start. Default 1 (monday)</td>
+                	</tr>
+                	<tr>
+                		<td><strong>prev</strong></td>
+                		<td>string</td>
+                		<td>HTML inserted to previous links. Default '&#9664;' (UNICODE black left arrow)</td>
+                	</tr>
+                	<tr>
+                		<td><strong>next</strong></td>
+                		<td>string</td>
+                		<td>HTML inserted to next links. Default '&#9654;' (UNICODE black right arrow)</td>
+                	</tr>
+                	<tr>
+                		<td><strong>mode</strong></td>
+                		<td>string ['single'|'multiple'|'range']</td>
+                		<td>Date selection mode. Default 'single'</td>
+                	</tr>
+					<tr>
+                		<td><strong>view</strong></td>
+                		<td>string ['days'|'months'|'years']</td>
+                		<td>Start view mode. Default 'days'</td>
+					</tr>
+                	<tr>
+                		<td><strong>calendars</strong></td>
+                		<td>integer</td>
+                		<td>Number of calendars to render inside the date picker. Default 1</td>
+                	</tr>
+                	<tr>
+                		<td><strong>format</strong></td>
+                		<td>string</td>
+                		<td>Date format. Default 'Y-m-d'</td>
+                	</tr>
+                	<tr>
+                		<td><strong>position</strong></td>
+                		<td>string ['top'|'left'|'right'|'bottom']</td>
+                		<td>Date picker's position relative to the trigegr element (non flat mode only). Default 'bottom'</td>
+                	</tr>
+                	<tr>
+                		<td><strong>locale</strong></td>
+                		<td>hash</td>
+                		<td>Location: provide a hash with keys 'days', 'daysShort', 'daysMin', 'months', 'monthsShort', 'week'. Default english</td>
+                	</tr>
+                	<tr>
+                		<td><strong>onShow</strong></td>
+                		<td>function</td>
+                		<td>Callback function triggered when the date picker is shown</td>
+                	</tr>
+                	<tr>
+                		<td><strong>onBeforeShow</strong></td>
+                		<td>function</td>
+                		<td>Callback function triggered before the date picker is shown</td>
+                	</tr>
+                	<tr>
+                		<td><strong>onHide</strong></td>
+                		<td>function</td>
+                		<td>Callback function triggered when the date picker is hidden</td>
+                	</tr>
+                	<tr>
+                		<td><strong>onChange</strong></td>
+                		<td>function</td>
+                		<td>Callback function triggered when the date is changed</td>
+                	</tr>
+                	<tr>
+                		<td><strong>onRender</strong></td>
+                		<td>function</td>
+                		<td>Callback function triggered when the date is rendered inside a calendar. It should return and hash with keys: 'selected' to select the date, 'disabled' to disable the date, 'className' for additional CSS class</td>
+                	</tr>
+                </table>
+                <h3>Set date</h3>
+                <p>If you want to set a diferent date selection.</p>
+                <pre>$('input').DatePickerSetDate(date, shiftTo);</pre>
+				<p>The 'date' argument is the same format as the option 'date' and the 'shiftTo' argument (boolean) moves the curent month view to the date selection provided.</p>
+				<h3>Get date</h3>
+				<p>Get date selection.</p>
+				<pre>$('input').DatePickerGetDate(formated);</pre>
+				<p>Set 'formated' to true if you whant to get teh selection formated.</p>
+				<h3>Show and hide date picker</h3>
+                <p>Show or hide a date picker.</p>
+				<pre>$('input').DatePickerShow();</pre>
+				<pre>$('input').DatePickerHide();</pre>
+				<h3>Clear multiple selection</h3>
+				<p>Clear selection in multiple and range mode</p>
+				<pre>$('#datepicker').DatePickerClear();</pre>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
