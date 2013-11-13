@@ -517,9 +517,9 @@
 				var tmp;
 				if (options.mode == 'single') {
 					tmp = new Date(options.date);
-					return [formatDate(tmp, options.format), tmp, options.el];
+					return [formatDate(tmp, options.format), tmp];
 				} else {
-					tmp = [[],[], options.el];
+					tmp = [[],[]];
 					$.each(options.date, function(nr, val){
 						var date = new Date(val);
 						tmp[0].push(formatDate(date, options.format));
@@ -555,7 +555,7 @@
 				return false;
 			},
 			show = function () {
-				var cal = $(this);
+				var cal = this.pickmeup;
 				if (!cal.is(':visible')) {
 					fill(cal);
 					var options = cal.data('pickmeup');
@@ -571,10 +571,10 @@
 					layout(cal);
 					switch (options.position){
 						case 'top':
-							top -= cal.outerHight();
+							top -= cal.offsetHeight;
 							break;
 						case 'left':
-							left -= cal.outerWidth();
+							left -= cal.offsetWidth;
 							break;
 						case 'right':
 							left += this.offsetWidth;
@@ -583,14 +583,14 @@
 							top += this.offsetHeight;
 							break;
 					}
-					if (top + cal.outerheight() > viewPort.t + viewPort.h) {
-						top = pos.top  - cal.outerHight();
+					if (top + cal.offsetHeight > viewPort.t + viewPort.h) {
+						top = pos.top  - cal.offsetHeight;
 					}
 					if (top < viewPort.t) {
-						top = pos.top + this.offsetHeight + cal.outerHight();
+						top = pos.top + this.offsetHeight + cal.offsetHeight;
 					}
-					if (left + cal.outerWidth() > viewPort.l + viewPort.w) {
-						left = pos.left - cal.outerWidth();
+					if (left + cal.offsetWidth > viewPort.l + viewPort.w) {
+						left = pos.left - cal.offsetWidth;
 					}
 					if (left < viewPort.l) {
 						left = pos.left + this.offsetWidth
@@ -622,10 +622,9 @@
 				extendDate(options.locale);
 				options.calendars = Math.max(1, parseInt(options.calendars,10)||1);
 				options.mode = /single|multiple|range/.test(options.mode) ? options.mode : 'single';
-				return this.each(function(){
+				return this.each(function(){console.log(this);
 					if (!$(this).data('pickmeup')) {
 						var i;
-						options.el = this;
 						if (options.date.constructor == String) {
 							options.date = parseDate(options.date, options.format);
 							options.date.setHours(0,0,0,0);
@@ -677,6 +676,7 @@
 						cal
 							.addClass(views[options.view]).append(html);
 						fill(cal);
+						this.pickmeup	= cal;
 						if (options.flat) {
 							cal.appendTo(this).show().css('position', 'relative');
 							layout(cal);
@@ -687,24 +687,24 @@
 					}
 				});
 			},
-			showPicker: function() {
+			showPicker: function() {alert('');
 				return this.each( function () {
-					if ($(this).data('pickmeup')) {
+					if (this.pickmeup) {
 						show.apply(this);
 					}
 				});
 			},
 			hidePicker: function() {
 				return this.each( function () {
-					if ($(this).data('pickmeup')) {
-						$(this).hide();
+					if (this.pickmeup) {
+						this.pickmeup.hide();
 					}
 				});
 			},
 			setDate: function(date, shiftTo){
 				return this.each(function(){
-					if ($(this).data('pickmeup')) {
-						var cal = $(this);
+					if (this.pickmeup) {
+						var cal = this.pickmeup;
 						var options = cal.data('pickmeup');
 						options.date = date;
 						if (options.date.constructor == String) {
@@ -736,12 +736,15 @@
 				});
 			},
 			getDate: function (formated) {
-				return prepareDate($(this).data('pickmeup'))[formated ? 0 : 1];
+				if (this[0].pickmeup) {
+					return prepareDate(this[0].pickmeup.data('pickmeup'))[formated ? 0 : 1];
+				}
+				return 0;
 			},
 			clear: function(){
 				return this.each(function(){
-					if ($(this).data('pickmeup')) {
-						var cal = $(this);
+					if (this.pickmeup) {
+						var cal = this.pickmeup;
 						var options = cal.data('pickmeup');
 						if (options.mode != 'single') {
 							options.date = [];
@@ -752,9 +755,9 @@
 			},
 			fixLayout: function(){
 				return this.each(function(){
-					if ($(this).data('pickmeup')) {
+					if (this.pickmeup) {
 						var cal = $(this);
-						var options = cal.data('pickmeup');
+						var options = this.pickmeup;
 						if (options.flat) {
 							layout(cal);
 						}

@@ -61,14 +61,14 @@
 			},
 			onChange: function(formated, dates){
 				$('#inputDate').val(formated);
-				if ($('#closeOnSelect input').attr('checked')) {
+				if ($('#closeOnSelect input').prop('checked')) {
 					$('#inputDate').pickmeupHide();
 				}
 			}
 		});
 		var now3 = new Date();
 		now3.addDays(-4);
-		var now4 = new Date()
+		var now4 = new Date();
 		$('#widgetCalendar').pickmeup({
 			flat: true,
 			format: 'd B, Y',
@@ -77,7 +77,7 @@
 			mode: 'range',
 			starts: 1,
 			onChange: function(formated) {
-				$('#widgetField span').get(0).innerHTML = formated.join(' &divide; ');
+				$('#widgetField').find('span').get(0).innerHTML = formated.join(' &divide; ');
 			}
 		});
 		var state = false;
