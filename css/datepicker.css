@@ -55,14 +55,14 @@
 td.datepickerNotInMonth a {
 	color: #666;
 }
-.datepickerDays .datepickerSelected{
+.datepickerDays .pmu-selected{
 	background: #136A9F;
 }
-.datepickerDays .datepickerNotInMonth.datepickerSelected {
+.datepickerDays .datepickerNotInMonth.pmu-selected {
 	background: #17384d;
 }
-.datepickerYears .datepickerSelected,
-.pmu-months .datepickerSelected{
+.datepickerYears .pmu-selected,
+.pmu-months .pmu-selected{
 	background: #17384d;
 }
 .datepicker .datepickerNotInMonth a:hover {
@@ -87,30 +87,30 @@ td.datepickerNotInMonth a {
 	float: left;
 	width: 20px;
 }
-.datepickerViewDays .pmu-months,
-.datepickerViewDays .datepickerYears {
+.pmu-view-days .pmu-months,
+.pmu-view-days .datepickerYears {
 	display: none;
 }
-.datepickerViewMonths .datepickerDays,
-.datepickerViewMonths .datepickerYears,
-.datepickerViewMonths .datepickerDoW {
+.pmu-view-months .datepickerDays,
+.pmu-view-months .datepickerYears,
+.pmu-view-months .datepickerDoW {
 	display: none;
 }
-.datepickerViewYears .datepickerDays,
-.datepickerViewYears .pmu-months,
-.datepickerViewYears .datepickerDoW {
+.pmu-view-years .datepickerDays,
+.pmu-view-years .pmu-months,
+.pmu-view-years .datepickerDoW {
 	display: none;
 }
-.datepickerDisabled a,
-.datepickerDisabled.datepickerNotInMonth a{
+.pmu-disabled a,
+.pmu-disabled.datepickerNotInMonth a{
 	color: #333;
 }
-.datepickerDisabled a:hover {
+.pmu-disabled a:hover {
 	color: #333;
 }
 .datepickerSpecial a {
 	background: #700;
 }
-.datepickerSpecial.datepickerSelected a {
+.datepickerSpecial.pmu-selected a {
 	background: #a00;
 }

@@ -9,9 +9,9 @@
 (function ($) {
 	var DatePicker = function () {
 		var	views = {
-				years: 'datepickerViewYears',
-				moths: 'datepickerViewMonths',
-				days: 'datepickerViewDays'
+				years: 'pmu-view-years',
+				moths: 'pmu-view-months',
+				days: 'pmu-view-days'
 			},
 			tpl = {
 				wrapper: '<div class="datepicker"></div>',
@@ -41,7 +41,7 @@
 				days: [
 					'<tbody class="datepickerDays">',
 						'<tr>',
-							'<th class="datepickerWeek"><a href="#"><span><%=weeks[0].week%></span></a></th>',
+							'<th class="pmu-week"><a href="#"><span><%=weeks[0].week%></span></a></th>',
 							'<td class="<%=weeks[0].days[0].classname%>"><a href="#"><span><%=weeks[0].days[0].text%></span></a></td>',
 							'<td class="<%=weeks[0].days[1].classname%>"><a href="#"><span><%=weeks[0].days[1].text%></span></a></td>',
 							'<td class="<%=weeks[0].days[2].classname%>"><a href="#"><span><%=weeks[0].days[2].text%></span></a></td>',
@@ -51,7 +51,7 @@
 							'<td class="<%=weeks[0].days[6].classname%>"><a href="#"><span><%=weeks[0].days[6].text%></span></a></td>',
 						'</tr>',
 						'<tr>',
-							'<th class="datepickerWeek"><a href="#"><span><%=weeks[1].week%></span></a></th>',
+							'<th class="pmu-week"><a href="#"><span><%=weeks[1].week%></span></a></th>',
 							'<td class="<%=weeks[1].days[0].classname%>"><a href="#"><span><%=weeks[1].days[0].text%></span></a></td>',
 							'<td class="<%=weeks[1].days[1].classname%>"><a href="#"><span><%=weeks[1].days[1].text%></span></a></td>',
 							'<td class="<%=weeks[1].days[2].classname%>"><a href="#"><span><%=weeks[1].days[2].text%></span></a></td>',
@@ -61,7 +61,7 @@
 							'<td class="<%=weeks[1].days[6].classname%>"><a href="#"><span><%=weeks[1].days[6].text%></span></a></td>',
 						'</tr>',
 						'<tr>',
-							'<th class="datepickerWeek"><a href="#"><span><%=weeks[2].week%></span></a></th>',
+							'<th class="pmu-week"><a href="#"><span><%=weeks[2].week%></span></a></th>',
 							'<td class="<%=weeks[2].days[0].classname%>"><a href="#"><span><%=weeks[2].days[0].text%></span></a></td>',
 							'<td class="<%=weeks[2].days[1].classname%>"><a href="#"><span><%=weeks[2].days[1].text%></span></a></td>',
 							'<td class="<%=weeks[2].days[2].classname%>"><a href="#"><span><%=weeks[2].days[2].text%></span></a></td>',
@@ -71,7 +71,7 @@
 							'<td class="<%=weeks[2].days[6].classname%>"><a href="#"><span><%=weeks[2].days[6].text%></span></a></td>',
 						'</tr>',
 						'<tr>',
-							'<th class="datepickerWeek"><a href="#"><span><%=weeks[3].week%></span></a></th>',
+							'<th class="pmu-week"><a href="#"><span><%=weeks[3].week%></span></a></th>',
 							'<td class="<%=weeks[3].days[0].classname%>"><a href="#"><span><%=weeks[3].days[0].text%></span></a></td>',
 							'<td class="<%=weeks[3].days[1].classname%>"><a href="#"><span><%=weeks[3].days[1].text%></span></a></td>',
 							'<td class="<%=weeks[3].days[2].classname%>"><a href="#"><span><%=weeks[3].days[2].text%></span></a></td>',
@@ -81,7 +81,7 @@
 							'<td class="<%=weeks[3].days[6].classname%>"><a href="#"><span><%=weeks[3].days[6].text%></span></a></td>',
 						'</tr>',
 						'<tr>',
-							'<th class="datepickerWeek"><a href="#"><span><%=weeks[4].week%></span></a></th>',
+							'<th class="pmu-week"><a href="#"><span><%=weeks[4].week%></span></a></th>',
 							'<td class="<%=weeks[4].days[0].classname%>"><a href="#"><span><%=weeks[4].days[0].text%></span></a></td>',
 							'<td class="<%=weeks[4].days[1].classname%>"><a href="#"><span><%=weeks[4].days[1].text%></span></a></td>',
 							'<td class="<%=weeks[4].days[2].classname%>"><a href="#"><span><%=weeks[4].days[2].text%></span></a></td>',
@@ -91,7 +91,7 @@
 							'<td class="<%=weeks[4].days[6].classname%>"><a href="#"><span><%=weeks[4].days[6].text%></span></a></td>',
 						'</tr>',
 						'<tr>',
-							'<th class="datepickerWeek"><a href="#"><span><%=weeks[5].week%></span></a></th>',
+							'<th class="pmu-week"><a href="#"><span><%=weeks[5].week%></span></a></th>',
 							'<td class="<%=weeks[5].days[0].classname%>"><a href="#"><span><%=weeks[5].days[0].text%></span></a></td>',
 							'<td class="<%=weeks[5].days[1].classname%>"><a href="#"><span><%=weeks[5].days[1].text%></span></a></td>',
 							'<td class="<%=weeks[5].days[2].classname%>"><a href="#"><span><%=weeks[5].days[2].text%></span></a></td>',
@@ -160,14 +160,14 @@
 					date = new Date(options.current);
 					date.addMonths(-currentCal + i);
 					tblCal = cal.find('.pmu-instance').eq(i);
-					switch (cal[0].className.match(/datepickerViewDays|datepickerViewMonths|datepickerViewYears/)[0]) {
-						case 'datepickerViewDays':
+					switch (cal[0].className.match(/pmu-view-days|pmu-view-months|pmu-view-years/)[0]) {
+						case 'pmu-view-days':
 							dow = formatDate(date, 'B, Y');
 							break;
-						case 'datepickerViewMonths':
+						case 'pmu-view-months':
 							dow = date.getFullYear();
 							break;
-						case 'datepickerViewYears':
+						case 'pmu-view-years':
 							dow = (date.getFullYear()-6) + ' - ' + (date.getFullYear()+5);
 							break;
 					}
@@ -214,10 +214,10 @@
 						var fromUser = options.onRender(date);
 						var val = date.valueOf();
 						if (fromUser.selected || options.date == val || $.inArray(val, options.date) > -1 || (options.mode == 'range' && val >= options.date[0] && val <= options.date[1])) {
-							data.weeks[indic].days[indic2].classname.push('datepickerSelected');
+							data.weeks[indic].days[indic2].classname.push('pmu-selected');
 						}
 						if (fromUser.disabled) {
-							data.weeks[indic].days[indic2].classname.push('datepickerDisabled');
+							data.weeks[indic].days[indic2].classname.push('pmu-disabled');
 						}
 						if (fromUser.className) {
 							data.weeks[indic].days[indic2].classname.push(fromUser.className);
@@ -455,7 +455,7 @@
 			click = function(e) {
 				var el = $(e.target);
 				if (el.hasClass('pmu-button')) {
-					if (el.hasClass('datepickerDisabled')) {
+					if (el.hasClass('pmu-disabled')) {
 						return false;
 					}
 					var options = $(this).data('datepicker');
@@ -466,7 +466,7 @@
 					var changed = false;
 					var fillIt = false;
 					if (el.parent().is('nav')) {
-						if (root.hasClass('datepickerWeek') && options.mode == 'range' && !el.next().hasClass('datepickerDisabled')) {
+						if (root.hasClass('pmu-week') && options.mode == 'range' && !el.next().hasClass('pmu-disabled')) {
 							var val = parseInt(instance.next().text(), 10);
 							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
 							if (instance.next().hasClass('datepickerNotInMonth')) {
@@ -482,81 +482,73 @@
 							options.lastSel = false;
 						} else if (el.hasClass('pmu-month')) {
 							tmp.addMonths(tblIndex - Math.floor(options.calendars / 2));
-							if (root.hasClass('datepickerViewDays')) {
-								root.removeClass('datepickerViewDays').addClass('datepickerViewMonths');
-								el.text(tmp.getFullYear());
-							} else if (root.hasClass('datepickerViewMonths')) {
-								root.removeClass('datepickerViewMonths').addClass('datepickerViewYears');
-								el.text((tmp.getFullYear()-6) + ' - ' + (tmp.getFullYear()+5));
-							} else if (root.hasClass('datepickerViewYears')) {
-								root.removeClass('datepickerViewYears').addClass('datepickerViewDays');
+							if (root.hasClass('pmu-view-years')) {
+								root.removeClass('pmu-view-years').addClass('pmu-view-days');
 								el.text(formatDate(tmp, 'B, Y'));
+							} else if (root.hasClass('pmu-view-months')) {
+								root.removeClass('pmu-view-months').addClass('pmu-view-years');
+								el.text((tmp.getFullYear()-6) + ' - ' + (tmp.getFullYear()+5));
+							} else if (root.hasClass('pmu-view-days')) {
+								root.removeClass('pmu-view-days').addClass('pmu-view-months');
+								el.text(tmp.getFullYear());
 							}
 						} else {
-							switch (root.get(0).className.match(/datepickerViewDays|datepickerViewMonths|datepickerViewYears/)[0]) {
-								case 'datepickerViewDays':
-									options.current.addMonths(instance.hasClass('pmu-prev') ? -1 : 1);
-									break;
-								case 'datepickerViewMonths':
-									options.current.addYears(instance.hasClass('pmu-prev') ? -1 : 1);
-									break;
-								case 'datepickerViewYears':
-									options.current.addYears(instance.hasClass('pmu-prev') ? -12 : 12);
-									break;
+							if (root.hasClass('pmu-view-years')) {
+								options.current.addYears(instance.hasClass('pmu-prev') ? -12 : 12);
+							} else if (root.hasClass('pmu-view-months')) {
+								options.current.addYears(instance.hasClass('pmu-prev') ? -1 : 1);
+							} else if (root.hasClass('pmu-view-days')) {
+								options.current.addMonths(instance.hasClass('pmu-prev') ? -1 : 1);
 							}
 							fillIt = true;
 						}
-					} else if (instance.is('td') && !instance.hasClass('datepickerDisabled')) {
-						switch (root.get(0).className.match(/datepickerViewDays|datepickerViewMonths|datepickerViewYears/)[0]) {
-							case 'datepickerViewMonths':
-								options.current.setMonth(root.find('tbody.pmu-months td').index(instance));
-								options.current.setFullYear(parseInt(root.find('thead th.pmu-month span').text(), 10));
-								options.current.addMonths(Math.floor(options.calendars/2) - tblIndex);
-								root.get(0).className = 'datepickerViewDays';
-								break;
-							case 'datepickerViewYears':
-								options.current.setFullYear(parseInt(el.text(), 10));
-								root.get(0).className = 'datepickerViewMonths';
-								break;
-							default:
-								var val = parseInt(el.text(), 10);
-								tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
-								if (instance.hasClass('datepickerNotInMonth')) {
-									tmp.addMonths(val > 15 ? -1 : 1);
-								}
-								tmp.setDate(val);
-								switch (options.mode) {
-									case 'multiple':
-										val = (tmp.setHours(0,0,0,0)).valueOf();
-										if ($.inArray(val, options.date) > -1) {
-											$.each(options.date, function(nr, dat){
-												if (dat == val) {
-													options.date.splice(nr,1);
-													return false;
-												}
-											});
-										} else {
-											options.date.push(val);
-										}
-										break;
-									case 'range':
-										if (!options.lastSel) {
-											options.date[0] = (tmp.setHours(0,0,0,0)).valueOf();
-										}
-										val = (tmp.setHours(23,59,59,0)).valueOf();
-										if (val < options.date[0]) {
-											options.date[1] = options.date[0] + 86399000;
-											options.date[0] = val - 86399000;
-										} else {
-											options.date[1] = val;
-										}
-										options.lastSel = !options.lastSel;
-										break;
-									default:
-										options.date = tmp.valueOf();
-										break;
-								}
-								break;
+					} else if (!instance.hasClass('pmu-disabled')) {
+						if (root.hasClass('pmu-view-years')) {
+							options.current.setFullYear(parseInt(el.text(), 10));
+							root.get(0).className = 'pmu-view-months';
+						} else if (root.hasClass('pmu-view-months')) {
+							options.current.setMonth(root.find('tbody.pmu-months td').index(instance));
+							options.current.setFullYear(parseInt(root.find('thead th.pmu-month span').text(), 10));
+							options.current.addMonths(Math.floor(options.calendars/2) - tblIndex);
+							root.get(0).className = 'pmu-view-days';
+						} else {
+							var val = parseInt(el.text(), 10);
+							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
+							if (instance.hasClass('datepickerNotInMonth')) {
+								tmp.addMonths(val > 15 ? -1 : 1);
+							}
+							tmp.setDate(val);
+							switch (options.mode) {
+								case 'multiple':
+									val = (tmp.setHours(0,0,0,0)).valueOf();
+									if ($.inArray(val, options.date) > -1) {
+										$.each(options.date, function(nr, dat){
+											if (dat == val) {
+												options.date.splice(nr,1);
+												return false;
+											}
+										});
+									} else {
+										options.date.push(val);
+									}
+									break;
+								case 'range':
+									if (!options.lastSel) {
+										options.date[0] = (tmp.setHours(0,0,0,0)).valueOf();
+									}
+									val = (tmp.setHours(23,59,59,0)).valueOf();
+									if (val < options.date[0]) {
+										options.date[1] = options.date[0] + 86399000;
+										options.date[0] = val - 86399000;
+									} else {
+										options.date[1] = val;
+									}
+									options.lastSel = !options.lastSel;
+									break;
+								default:
+									options.date = tmp.valueOf();
+									break;
+							}
 						}
 						fillIt = true;
 						changed = true;
