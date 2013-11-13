@@ -91,12 +91,13 @@
 			.pmu-button {
 				padding    : .9em 0;
 				text-align : center;
-				width      : 4rem;
+				width      : 3.5rem;
 			}
 		}
 
 		.pmu-day-of-week {
-			color : $day-of-week;
+			color  : $day-of-week;
+			cursor : default;
 		}
 
 		.pmu-day-of-week,

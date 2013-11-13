@@ -55,9 +55,10 @@
     .pickmeup .pmu-instance .pmu-months .pmu-button {
       padding: 0.9em 0;
       text-align: center;
-      width: 4rem; }
+      width: 3.5rem; }
     .pickmeup .pmu-instance .pmu-day-of-week {
-      color: #666666; }
+      color: #999999;
+      cursor: default; }
     .pickmeup .pmu-instance .pmu-day-of-week,
     .pickmeup .pmu-instance .pmu-days > div {
       line-height: 1em; }

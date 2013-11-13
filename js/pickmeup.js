@@ -23,7 +23,6 @@
 							'<div class="pmu-month pmu-button"></div>',
 						'</nav>',
 						'<nav class="pmu-day-of-week">',
-							'<div><%=week%></div>',
 							'<div><%=day1%></div>',
 							'<div><%=day2%></div>',
 							'<div><%=day3%></div>',
@@ -37,64 +36,58 @@
 				days: [
 					'<div class="pmu-days">',
 						'<div>',
-							'<div class="pmu-week pmu-button"><%=weeks[0].week%></div>',
-							'<div class="<%=weeks[0].days[0].classname%> pmu-button"><%=weeks[0].days[0].text%></div>',
-							'<div class="<%=weeks[0].days[1].classname%> pmu-button"><%=weeks[0].days[1].text%></div>',
-							'<div class="<%=weeks[0].days[2].classname%> pmu-button"><%=weeks[0].days[2].text%></div>',
-							'<div class="<%=weeks[0].days[3].classname%> pmu-button"><%=weeks[0].days[3].text%></div>',
-							'<div class="<%=weeks[0].days[4].classname%> pmu-button"><%=weeks[0].days[4].text%></div>',
-							'<div class="<%=weeks[0].days[5].classname%> pmu-button"><%=weeks[0].days[5].text%></div>',
-							'<div class="<%=weeks[0].days[6].classname%> pmu-button"><%=weeks[0].days[6].text%></div>',
+							'<div class="<%=days[0][0].class%> pmu-button"><%=days[0][0].text%></div>',
+							'<div class="<%=days[0][1].class%> pmu-button"><%=days[0][1].text%></div>',
+							'<div class="<%=days[0][2].class%> pmu-button"><%=days[0][2].text%></div>',
+							'<div class="<%=days[0][3].class%> pmu-button"><%=days[0][3].text%></div>',
+							'<div class="<%=days[0][4].class%> pmu-button"><%=days[0][4].text%></div>',
+							'<div class="<%=days[0][5].class%> pmu-button"><%=days[0][5].text%></div>',
+							'<div class="<%=days[0][6].class%> pmu-button"><%=days[0][6].text%></div>',
 						'</div>',
 						'<div>',
-							'<div class="pmu-week pmu-button"><%=weeks[1].week%></div>',
-							'<div class="<%=weeks[1].days[0].classname%> pmu-button"><%=weeks[1].days[0].text%></div>',
-							'<div class="<%=weeks[1].days[1].classname%> pmu-button"><%=weeks[1].days[1].text%></div>',
-							'<div class="<%=weeks[1].days[2].classname%> pmu-button"><%=weeks[1].days[2].text%></div>',
-							'<div class="<%=weeks[1].days[3].classname%> pmu-button"><%=weeks[1].days[3].text%></div>',
-							'<div class="<%=weeks[1].days[4].classname%> pmu-button"><%=weeks[1].days[4].text%></div>',
-							'<div class="<%=weeks[1].days[5].classname%> pmu-button"><%=weeks[1].days[5].text%></div>',
-							'<div class="<%=weeks[1].days[6].classname%> pmu-button"><%=weeks[1].days[6].text%></div>',
+							'<div class="<%=days[1][0].class%> pmu-button"><%=days[1][0].text%></div>',
+							'<div class="<%=days[1][1].class%> pmu-button"><%=days[1][1].text%></div>',
+							'<div class="<%=days[1][2].class%> pmu-button"><%=days[1][2].text%></div>',
+							'<div class="<%=days[1][3].class%> pmu-button"><%=days[1][3].text%></div>',
+							'<div class="<%=days[1][4].class%> pmu-button"><%=days[1][4].text%></div>',
+							'<div class="<%=days[1][5].class%> pmu-button"><%=days[1][5].text%></div>',
+							'<div class="<%=days[1][6].class%> pmu-button"><%=days[1][6].text%></div>',
 						'</div>',
 						'<div>',
-							'<div class="pmu-week pmu-button"><%=weeks[2].week%></div>',
-							'<div class="<%=weeks[2].days[0].classname%> pmu-button"><%=weeks[2].days[0].text%></div>',
-							'<div class="<%=weeks[2].days[1].classname%> pmu-button"><%=weeks[2].days[1].text%></div>',
-							'<div class="<%=weeks[2].days[2].classname%> pmu-button"><%=weeks[2].days[2].text%></div>',
-							'<div class="<%=weeks[2].days[3].classname%> pmu-button"><%=weeks[2].days[3].text%></div>',
-							'<div class="<%=weeks[2].days[4].classname%> pmu-button"><%=weeks[2].days[4].text%></div>',
-							'<div class="<%=weeks[2].days[5].classname%> pmu-button"><%=weeks[2].days[5].text%></div>',
-							'<div class="<%=weeks[2].days[6].classname%> pmu-button"><%=weeks[2].days[6].text%></div>',
+							'<div class="<%=days[2][0].class%> pmu-button"><%=days[2][0].text%></div>',
+							'<div class="<%=days[2][1].class%> pmu-button"><%=days[2][1].text%></div>',
+							'<div class="<%=days[2][2].class%> pmu-button"><%=days[2][2].text%></div>',
+							'<div class="<%=days[2][3].class%> pmu-button"><%=days[2][3].text%></div>',
+							'<div class="<%=days[2][4].class%> pmu-button"><%=days[2][4].text%></div>',
+							'<div class="<%=days[2][5].class%> pmu-button"><%=days[2][5].text%></div>',
+							'<div class="<%=days[2][6].class%> pmu-button"><%=days[2][6].text%></div>',
 						'</div>',
 						'<div>',
-							'<div class="pmu-week pmu-button"><%=weeks[3].week%></div>',
-							'<div class="<%=weeks[3].days[0].classname%> pmu-button"><%=weeks[3].days[0].text%></div>',
-							'<div class="<%=weeks[3].days[1].classname%> pmu-button"><%=weeks[3].days[1].text%></div>',
-							'<div class="<%=weeks[3].days[2].classname%> pmu-button"><%=weeks[3].days[2].text%></div>',
-							'<div class="<%=weeks[3].days[3].classname%> pmu-button"><%=weeks[3].days[3].text%></div>',
-							'<div class="<%=weeks[3].days[4].classname%> pmu-button"><%=weeks[3].days[4].text%></div>',
-							'<div class="<%=weeks[3].days[5].classname%> pmu-button"><%=weeks[3].days[5].text%></div>',
-							'<div class="<%=weeks[3].days[6].classname%> pmu-button"><%=weeks[3].days[6].text%></div>',
+							'<div class="<%=days[3][0].class%> pmu-button"><%=days[3][0].text%></div>',
+							'<div class="<%=days[3][1].class%> pmu-button"><%=days[3][1].text%></div>',
+							'<div class="<%=days[3][2].class%> pmu-button"><%=days[3][2].text%></div>',
+							'<div class="<%=days[3][3].class%> pmu-button"><%=days[3][3].text%></div>',
+							'<div class="<%=days[3][4].class%> pmu-button"><%=days[3][4].text%></div>',
+							'<div class="<%=days[3][5].class%> pmu-button"><%=days[3][5].text%></div>',
+							'<div class="<%=days[3][6].class%> pmu-button"><%=days[3][6].text%></div>',
 						'</div>',
 						'<div>',
-							'<div class="pmu-week pmu-button"><%=weeks[4].week%></div>',
-							'<div class="<%=weeks[4].days[0].classname%> pmu-button"><%=weeks[4].days[0].text%></div>',
-							'<div class="<%=weeks[4].days[1].classname%> pmu-button"><%=weeks[4].days[1].text%></div>',
-							'<div class="<%=weeks[4].days[2].classname%> pmu-button"><%=weeks[4].days[2].text%></div>',
-							'<div class="<%=weeks[4].days[3].classname%> pmu-button"><%=weeks[4].days[3].text%></div>',
-							'<div class="<%=weeks[4].days[4].classname%> pmu-button"><%=weeks[4].days[4].text%></div>',
-							'<div class="<%=weeks[4].days[5].classname%> pmu-button"><%=weeks[4].days[5].text%></div>',
-							'<div class="<%=weeks[4].days[6].classname%> pmu-button"><%=weeks[4].days[6].text%></div>',
+							'<div class="<%=days[4][0].class%> pmu-button"><%=days[4][0].text%></div>',
+							'<div class="<%=days[4][1].class%> pmu-button"><%=days[4][1].text%></div>',
+							'<div class="<%=days[4][2].class%> pmu-button"><%=days[4][2].text%></div>',
+							'<div class="<%=days[4][3].class%> pmu-button"><%=days[4][3].text%></div>',
+							'<div class="<%=days[4][4].class%> pmu-button"><%=days[4][4].text%></div>',
+							'<div class="<%=days[4][5].class%> pmu-button"><%=days[4][5].text%></div>',
+							'<div class="<%=days[4][6].class%> pmu-button"><%=days[4][6].text%></div>',
 						'</div>',
 						'<div>',
-							'<div class="pmu-week pmu-button"><%=weeks[5].week%></div>',
-							'<div class="<%=weeks[5].days[0].classname%> pmu-button"><%=weeks[5].days[0].text%></div>',
-							'<div class="<%=weeks[5].days[1].classname%> pmu-button"><%=weeks[5].days[1].text%></div>',
-							'<div class="<%=weeks[5].days[2].classname%> pmu-button"><%=weeks[5].days[2].text%></div>',
-							'<div class="<%=weeks[5].days[3].classname%> pmu-button"><%=weeks[5].days[3].text%></div>',
-							'<div class="<%=weeks[5].days[4].classname%> pmu-button"><%=weeks[5].days[4].text%></div>',
-							'<div class="<%=weeks[5].days[5].classname%> pmu-button"><%=weeks[5].days[5].text%></div>',
-							'<div class="<%=weeks[5].days[6].classname%> pmu-button"><%=weeks[5].days[6].text%></div>',
+							'<div class="<%=days[5][0].class%> pmu-button"><%=days[5][0].text%></div>',
+							'<div class="<%=days[5][1].class%> pmu-button"><%=days[5][1].text%></div>',
+							'<div class="<%=days[5][2].class%> pmu-button"><%=days[5][2].text%></div>',
+							'<div class="<%=days[5][3].class%> pmu-button"><%=days[5][3].text%></div>',
+							'<div class="<%=days[5][4].class%> pmu-button"><%=days[5][4].text%></div>',
+							'<div class="<%=days[5][5].class%> pmu-button"><%=days[5][5].text%></div>',
+							'<div class="<%=days[5][6].class%> pmu-button"><%=days[5][6].text%></div>',
 						'</div>',
 					'</div>'
 				],
@@ -124,8 +117,8 @@
 			defaults = {
 				flat: false,
 				starts: 1,
-				prev: '&#9664;',
-				next: '&#9654;',
+				prev: '◀',
+				next: '▶',
 				lastSel: false,
 				mode: 'single',
 				view: 'days',
@@ -143,32 +136,27 @@
 					daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
 					daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
 					months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-					monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-					weekMin: 'wk'
+					monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 				}
 			},
 			fill = function(cal) {
 				cal = $(cal);
 				var options = cal.data('pickmeup');
-				var currentCal = Math.floor(options.calendars/2), date, data, dow, month, cnt = 0, week, days, indic, indic2, html, tblCal;
+				var currentCal = Math.floor(options.calendars / 2), date, data, dow, month, cnt = 0, days, week_row, day_of_week, html, tblCal;
 				cal.find('.pmu-instance > :not(nav)').remove();
 				for (var i = 0; i < options.calendars; i++) {
 					date = new Date(options.current);
 					date.addMonths(-currentCal + i);
 					tblCal = cal.find('.pmu-instance').eq(i);
-					switch (cal[0].className.match(/pmu-view-days|pmu-view-months|pmu-view-years/)[0]) {
-						case 'pmu-view-days':
-							dow = formatDate(date, 'B, Y');
-							break;
-						case 'pmu-view-months':
-							dow = date.getFullYear();
-							break;
-						case 'pmu-view-years':
-							dow = (date.getFullYear()-6) + ' - ' + (date.getFullYear()+5);
-							break;
+					if (cal.hasClass('pmu-view-years')) {
+						dow = (date.getFullYear() - 6) + ' - ' + (date.getFullYear()+5);
+					} else if (cal.hasClass('pmu-view-months')) {
+						dow = date.getFullYear();
+					} else  if (cal.hasClass('pmu-view-days')) {
+						dow = formatDate(date, 'B, Y');
 					}
 					tblCal.find('.pmu-month').text(dow);
-					dow = date.getFullYear()-6;
+					dow = date.getFullYear() - 6;
 					data = {
 						data: [],
 						className: 'pmu-years'
@@ -178,47 +166,42 @@
 					}
 					html = tmpl(tpl.months.join(''), data);
 					date.setDate(1);
-					data = {weeks:[], test: 10};
+					data = {days:[], test: 10};
 					month = date.getMonth();
 					dow = (date.getDay() - options.starts) % 7;
 					date.addDays(-(dow + (dow < 0 ? 7 : 0)));
-					week = -1;
 					cnt = 0;
 					while (cnt < 42) {
-						indic = parseInt(cnt/7,10);
-						indic2 = cnt%7;
-						if (!data.weeks[indic]) {
-							week = date.getWeekNumber();
-							data.weeks[indic] = {
-								week: week,
-								days: []
-							};
+						week_row = parseInt(cnt / 7,10);
+						day_of_week = cnt % 7;
+						if (!data.days[week_row]) {
+							data.days[week_row] = [];
 						}
-						data.weeks[indic].days[indic2] = {
+						data.days[week_row][day_of_week] = {
 							text: date.getDate(),
-							classname: []
+							class: []
 						};
 						if (month != date.getMonth()) {
-							data.weeks[indic].days[indic2].classname.push('pmu-not-in-month');
+							data.days[week_row][day_of_week].class.push('pmu-not-in-month');
 						}
 						if (date.getDay() == 0) {
-							data.weeks[indic].days[indic2].classname.push('pmu-sunday');
+							data.days[week_row][day_of_week].class.push('pmu-sunday');
 						}
 						if (date.getDay() == 6) {
-							data.weeks[indic].days[indic2].classname.push('pmu-saturday');
+							data.days[week_row][day_of_week].class.push('pmu-saturday');
 						}
 						var fromUser = options.onRender(date);
 						var val = date.valueOf();
 						if (fromUser.selected || options.date == val || $.inArray(val, options.date) > -1 || (options.mode == 'range' && val >= options.date[0] && val <= options.date[1])) {
-							data.weeks[indic].days[indic2].classname.push('pmu-selected');
+							data.days[week_row][day_of_week].class.push('pmu-selected');
 						}
 						if (fromUser.disabled) {
-							data.weeks[indic].days[indic2].classname.push('pmu-disabled');
+							data.days[week_row][day_of_week].class.push('pmu-disabled');
 						}
 						if (fromUser.className) {
-							data.weeks[indic].days[indic2].classname.push(fromUser.className);
+							data.days[week_row][day_of_week].class.push(fromUser.className);
 						}
-						data.weeks[indic].days[indic2].classname = data.weeks[indic].days[indic2].classname.join(' ');
+						data.days[week_row][day_of_week].class = data.days[week_row][day_of_week].class.join(' ');
 						cnt++;
 						date.addDays(1);
 					}
@@ -283,7 +266,6 @@
 				var m = date.getMonth();
 				var d = date.getDate();
 				var y = date.getFullYear();
-				var wn = date.getWeekNumber();
 				var w = date.getDay();
 				var s = {};
 				var hr = date.getHours();
@@ -300,13 +282,13 @@
 					part = parts[i];
 					switch (parts[i]) {
 						case 'a':
-							part = date.getDayName();
+							part = date.getDayName(false);
 							break;
 						case 'A':
 							part = date.getDayName(true);
 							break;
 						case 'b':
-							part = date.getMonthName();
+							part = date.getMonthName(false);
 							break;
 						case 'B':
 							part = date.getMonthName(true);
@@ -404,20 +386,14 @@
 					this.setDate(Math.min(this.tempDate, this.getMaxDays()));
 				};
 				Date.prototype.getMaxDays = function() {
-					var tmpDate = new Date(Date.parse(this)),
+					var tmpDate = new Date(),
 						d = 28, m;
 					m = tmpDate.getMonth();
-					d = 28;
 					while (tmpDate.getMonth() == m) {
 						d ++;
 						tmpDate.setDate(d);
 					}
 					return d - 1;
-				};
-				Date.prototype.getFirstDay = function() {
-					var tmpDate = new Date(Date.parse(this));
-					tmpDate.setDate(1);
-					return tmpDate.getDay();
 				};
 				Date.prototype.getWeekNumber = function() {
 					var tempDate = new Date(this);
@@ -455,28 +431,15 @@
 						return false;
 					}
 					var options = $(this).data('pickmeup');
-					var instance = el.parentsUntil('.pickmeup');
+					var instance = el.parents('.pmu-instance').eq(0);
 					var root = instance.parent();
-					var tblIndex = $('.pmu-instance', this).index(root.get(0)) - 1;
+					var tblIndex = $('.pmu-instance', root).index(instance);
 					var tmp = new Date(options.current);
 					var changed = false;
 					var fillIt = false;
+					var val;
 					if (el.parent().is('nav')) {
-						if (root.hasClass('pmu-week') && options.mode == 'range' && !el.next().hasClass('pmu-disabled')) {
-							var val = parseInt(instance.next().text(), 10);
-							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
-							if (instance.next().hasClass('pmu-not-in-month')) {
-								tmp.addMonths(val > 15 ? -1 : 1);
-							}
-							tmp.setDate(val);
-							options.date[0] = (tmp.setHours(0,0,0,0)).valueOf();
-							tmp.setHours(23,59,59,0);
-							tmp.addDays(6);
-							options.date[1] = tmp.valueOf();
-							fillIt = true;
-							changed = true;
-							options.lastSel = false;
-						} else if (el.hasClass('pmu-month')) {
+						if (el.hasClass('pmu-month')) {
 							tmp.addMonths(tblIndex - Math.floor(options.calendars / 2));
 							if (root.hasClass('pmu-view-years')) {
 								root.removeClass('pmu-view-years').addClass('pmu-view-days');
@@ -498,19 +461,19 @@
 							}
 							fillIt = true;
 						}
-					} else if (!instance.hasClass('pmu-disabled')) {
+					} else if (!el.hasClass('pmu-disabled')) {
 						if (root.hasClass('pmu-view-years')) {
 							options.current.setFullYear(parseInt(el.text(), 10));
-							root.get(0).className = 'pmu-view-months';
+							root.removeClass('pmu-view-years').addClass('pmu-view-months');
 						} else if (root.hasClass('pmu-view-months')) {
-							options.current.setMonth(root.find('.pmu-months > div').index(instance));
+							options.current.setMonth(root.find('.pmu-months .pmu-button').index(el));
 							options.current.setFullYear(parseInt(root.find('.pmu-month').text(), 10));
-							options.current.addMonths(Math.floor(options.calendars/2) - tblIndex);
-							root.get(0).className = 'pmu-view-days';
+							options.current.addMonths(Math.floor(options.calendars / 2) - tblIndex);
+							root.removeClass('pmu-view-months').addClass('pmu-view-days');
 						} else {
-							var val = parseInt(el.text(), 10);
-							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
-							if (instance.hasClass('pmu-not-in-month')) {
+							val = parseInt(el.text(), 10);
+							tmp.addMonths(tblIndex - Math.floor(options.calendars / 2));
+							if (el.hasClass('pmu-not-in-month')) {
 								tmp.addMonths(val > 15 ? -1 : 1);
 							}
 							tmp.setDate(val);
@@ -550,7 +513,7 @@
 						changed = true;
 					}
 					if (fillIt) {
-						fill(this);
+						fill(root);
 					}
 					if (changed) {
 						options.onChange.apply(this, prepareDate(options));
@@ -710,7 +673,6 @@
 						for (var i = 0; i < options.calendars; i++) {
 							cnt = options.starts;
 							html += tmpl(tpl.head.join(''), {
-									week: options.locale.weekMin,
 									prev: options.prev,
 									next: options.next,
 									day1: options.locale.daysMin[(cnt++)%7],
