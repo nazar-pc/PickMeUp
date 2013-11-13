@@ -115,28 +115,28 @@
 				]
 			},
 			defaults = {
-				flat: false,
-				starts: 1,
-				prev: '◀',
-				next: '▶',
-				lastSel: false,
-				mode: 'single',
-				view: 'days',
-				calendars: 1,
-				format: 'Y-m-d',
-				position: 'bottom',
-				eventName: 'click',
-				onRender: function(){return {};},
-				onChange: function(){return true;},
-				onShow: function(){return true;},
-				onBeforeShow: function(){return true;},
-				onHide: function(){return true;},
-				locale: {
-					days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-					daysShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-					daysMin: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-					months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-					monthsShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+				flat			: false,
+				starts			: 1,
+				prev			: '◀',
+				next			: '▶',
+				lastSel			: false,
+				mode			: 'single',
+				view			: 'days',
+				calendars		: 1,
+				format			: 'Y-m-d',
+				position		: 'bottom',
+				eventName		: 'click',
+				onRender		: function(){return {};},
+				onChange		: function(){return true;},
+				onShow			: function(){return true;},
+				onBeforeShow	: function(){return true;},
+				onHide			: function(){return true;},
+				locale			: {
+					days		: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+					daysShort	: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+					daysMin		: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+					months		: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+					monthsShort	: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 				}
 			},
 			fill = function(cal) {
@@ -278,9 +278,9 @@
 				var min = date.getMinutes();
 				var sec = date.getSeconds();
 				var parts = format.split(''), part;
-				for ( var i = 0; i < parts.length; i++ ) {
+				for (var i = 0; i < parts.length; i++) {
 					part = parts[i];
-					switch (parts[i]) {
+					switch (part) {
 						case 'a':
 							part = date.getDayName(false);
 							break;
@@ -395,14 +395,6 @@
 					}
 					return d - 1;
 				};
-				Date.prototype.getWeekNumber = function() {
-					var tempDate = new Date(this);
-					tempDate.setDate(tempDate.getDate() - (tempDate.getDay() + 6) % 7 + 3);
-					var dms = tempDate.valueOf();
-					tempDate.setMonth(0);
-					tempDate.setDate(4);
-					return Math.round((dms - tempDate.valueOf()) / (604800000)) + 1;
-				};
 				Date.prototype.getDayOfYear = function() {
 					var now = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
 					var then = new Date(this.getFullYear(), 0, 0, 0, 0, 0);
@@ -410,15 +402,14 @@
 					return Math.floor(time / 24*60*60*1000);
 				};
 			},
-			layout = function (el) {
-				var options = $(el).data('pickmeup');
-				var cal = $('#' + options.id);
-				var tbl = cal.find('.pmu-instance');
+			layout = function (cal) {
+				cal = $(cal);
+				var instance = cal.find('.pmu-instance');
 				var width = 0;
-				tbl.each(function () {
+				instance.each(function () {
 					width	+= $(this).outerWidth();
 				});
-				var height = tbl.outerHeight();
+				var height = instance.outerHeight();
 				cal.css({
 					width: width + 'px',
 					height: height + 'px'
@@ -481,11 +472,12 @@
 								case 'multiple':
 									val = (tmp.setHours(0,0,0,0)).valueOf();
 									if ($.inArray(val, options.date) > -1) {
-										$.each(options.date, function(nr, dat){
+										$.each(options.date, function (nr, dat){
 											if (dat == val) {
 												options.date.splice(nr,1);
 												return false;
 											}
+											return true;
 										});
 									} else {
 										options.date.push(val);
@@ -563,12 +555,11 @@
 				return false;
 			},
 			show = function () {
-				var cal = $('#' + $(this).data('pickmeupId'));
+				var cal = $(this);
 				if (!cal.is(':visible')) {
-					var calEl = cal.get(0);
 					fill(cal);
 					var options = cal.data('pickmeup');
-					options.onBeforeShow.apply(this, [cal.get(0)]);
+					options.onBeforeShow.call(this, cal);
 					var pos = $(this).offset();
 					var viewPort = getViewport();
 					var top = pos.top;
@@ -577,13 +568,13 @@
 						visibility: 'hidden',
 						display: 'block'
 					});
-					layout(calEl);
+					layout(cal);
 					switch (options.position){
 						case 'top':
-							top -= calEl.offsetHeight;
+							top -= cal.outerHight();
 							break;
 						case 'left':
-							left -= calEl.offsetWidth;
+							left -= cal.outerWidth();
 							break;
 						case 'right':
 							left += this.offsetWidth;
@@ -592,14 +583,14 @@
 							top += this.offsetHeight;
 							break;
 					}
-					if (top + calEl.offsetHeight > viewPort.t + viewPort.h) {
-						top = pos.top  - calEl.offsetHeight;
+					if (top + cal.outerheight() > viewPort.t + viewPort.h) {
+						top = pos.top  - cal.outerHight();
 					}
 					if (top < viewPort.t) {
-						top = pos.top + this.offsetHeight + calEl.offsetHeight;
+						top = pos.top + this.offsetHeight + cal.outerHight();
 					}
-					if (left + calEl.offsetWidth > viewPort.l + viewPort.w) {
-						left = pos.left - calEl.offsetWidth;
+					if (left + cal.outerWidth() > viewPort.l + viewPort.w) {
+						left = pos.left - cal.outerWidth();
 					}
 					if (left < viewPort.l) {
 						left = pos.left + this.offsetWidth
@@ -633,6 +624,7 @@
 				options.mode = /single|multiple|range/.test(options.mode) ? options.mode : 'single';
 				return this.each(function(){
 					if (!$(this).data('pickmeup')) {
+						var i;
 						options.el = this;
 						if (options.date.constructor == String) {
 							options.date = parseDate(options.date, options.format);
@@ -645,7 +637,7 @@
 									options.date.push(((new Date(options.date[0])).setHours(23,59,59,0)).valueOf());
 								}
 							} else {
-								for (var i = 0; i < options.date.length; i++) {
+								for (i = 0; i < options.date.length; i++) {
 									options.date[i] = (parseDate(options.date[i], options.format).setHours(0,0,0,0)).valueOf();
 								}
 								if (options.mode == 'range') {
@@ -662,15 +654,13 @@
 						}
 						options.current.setDate(1);
 						options.current.setHours(0,0,0,0);
-						var id = 'pickmeup_' + parseInt(Math.random() * 1000), cnt;
-						options.id = id;
-						$(this).data('pickmeupId', options.id);
-						var cal = $(tpl.wrapper).attr('id', id).bind('click', click).data('pickmeup', options);
+						var cnt;
+						var cal = $(tpl.wrapper).bind('click', click).data('pickmeup', options);
 						if (options.className) {
 							cal.addClass(options.className);
 						}
 						var html = '';
-						for (var i = 0; i < options.calendars; i++) {
+						for (i = 0; i < options.calendars; i++) {
 							cnt = options.starts;
 							html += tmpl(tpl.head.join(''), {
 									prev: options.prev,
@@ -689,7 +679,7 @@
 						fill(cal);
 						if (options.flat) {
 							cal.appendTo(this).show().css('position', 'relative');
-							layout(cal.get(0));
+							layout(cal);
 						} else {
 							cal.appendTo(document.body);
 							$(this).bind(options.eventName, show);
@@ -699,22 +689,22 @@
 			},
 			showPicker: function() {
 				return this.each( function () {
-					if ($(this).data('pickmeupId')) {
+					if ($(this).data('pickmeup')) {
 						show.apply(this);
 					}
 				});
 			},
 			hidePicker: function() {
 				return this.each( function () {
-					if ($(this).data('pickmeupId')) {
-						$('#' + $(this).data('pickmeupId')).hide();
+					if ($(this).data('pickmeup')) {
+						$(this).hide();
 					}
 				});
 			},
 			setDate: function(date, shiftTo){
 				return this.each(function(){
-					if ($(this).data('pickmeupId')) {
-						var cal = $('#' + $(this).data('pickmeupId'));
+					if ($(this).data('pickmeup')) {
+						var cal = $(this);
 						var options = cal.data('pickmeup');
 						options.date = date;
 						if (options.date.constructor == String) {
@@ -745,15 +735,13 @@
 					}
 				});
 			},
-			getDate: function(formated) {
-				if (this.size() > 0) {
-					return prepareDate($('#' + $(this).data('pickmeupId')).data('pickmeup'))[formated ? 0 : 1];
-				}
+			getDate: function (formated) {
+				return prepareDate($(this).data('pickmeup'))[formated ? 0 : 1];
 			},
 			clear: function(){
 				return this.each(function(){
-					if ($(this).data('pickmeupId')) {
-						var cal = $('#' + $(this).data('pickmeupId'));
+					if ($(this).data('pickmeup')) {
+						var cal = $(this);
 						var options = cal.data('pickmeup');
 						if (options.mode != 'single') {
 							options.date = [];
@@ -764,11 +752,11 @@
 			},
 			fixLayout: function(){
 				return this.each(function(){
-					if ($(this).data('pickmeupId')) {
-						var cal = $('#' + $(this).data('pickmeupId'));
+					if ($(this).data('pickmeup')) {
+						var cal = $(this);
 						var options = cal.data('pickmeup');
 						if (options.flat) {
-							layout(cal.get(0));
+							layout(cal);
 						}
 					}
 				});
