@@ -1,25 +1,18 @@
 .datepicker {
+	background: #121212;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
-	width: 196px;
-	height: 147px;
 	position: absolute;
 	cursor: default;
 	top: 0;
 	left: 0;
 	display: none;
 }
-.datepickerContainer {
-	background: #121212;
-	position: absolute;
-	top: 10px;
-	left: 10px;
-}
 .datepickerHidden {
 	display: none;
 }
-.datepicker table {
-	border-collapse:collapse;
+.pmu-instance {
+	display: inline-block;
 }
 .datepicker [data-pmu-button] {
 	color: #eee;

@@ -189,12 +189,10 @@ input.inputDate {
 	background: #B9B9B9;
 }
 #widgetCalendar .datepicker {
+	background: transparent !important;
 	position: absolute;
 	bottom: 0;
 	top: auto;
-}
-#widgetCalendar .datepickerContainer {
-	background: transparent !important;
 }
 #widgetCalendar .datepicker a:hover{
 	color: #b6f063;

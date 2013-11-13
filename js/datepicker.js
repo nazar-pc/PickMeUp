@@ -14,28 +14,29 @@
 				days: 'datepickerViewDays'
 			},
 			tpl = {
-				wrapper: '<div class="datepicker"><div class="datepickerContainer"></div></div>',
+				wrapper: '<div class="datepicker"></div>',
 				head: [
 					'<div class="pmu-instance">',
-					'<nav>' +
-						'<div class="pmu-prev" data-pmu-button><%=prev%></div>',
-						'<div class="pmu-next" data-pmu-button><%=next%></div>' +
-						'<div class="pmu-month" data-pmu-button></div>',
-					'</nav>',
-					'<table cellspacing="0" cellpadding="0">',
-						'<thead>',
-							'<tr class="datepickerDoW">',
-								'<th><span><%=week%></span></th>',
-								'<th><span><%=day1%></span></th>',
-								'<th><span><%=day2%></span></th>',
-								'<th><span><%=day3%></span></th>',
-								'<th><span><%=day4%></span></th>',
-								'<th><span><%=day5%></span></th>',
-								'<th><span><%=day6%></span></th>',
-								'<th><span><%=day7%></span></th>',
-							'</tr>',
-						'</thead>',
-					'</table></div>'
+						'<nav>' +
+							'<div class="pmu-prev" data-pmu-button><%=prev%></div>',
+							'<div class="pmu-next" data-pmu-button><%=next%></div>' +
+							'<div class="pmu-month" data-pmu-button></div>',
+						'</nav>',
+						'<table cellspacing="0" cellpadding="0">',
+							'<thead>',
+								'<tr class="datepickerDoW">',
+									'<th><span><%=week%></span></th>',
+									'<th><span><%=day1%></span></th>',
+									'<th><span><%=day2%></span></th>',
+									'<th><span><%=day3%></span></th>',
+									'<th><span><%=day4%></span></th>',
+									'<th><span><%=day5%></span></th>',
+									'<th><span><%=day6%></span></th>',
+									'<th><span><%=day7%></span></th>',
+								'</tr>',
+							'</thead>',
+						'</table>' +
+					'</div>'
 				],
 				days: [
 					'<tbody class="datepickerDays">',
@@ -440,18 +441,13 @@
 			layout = function (el) {
 				var options = $(el).data('datepicker');
 				var cal = $('#' + options.id);
-				if (!options.extraHeight) {
-					var divs = $(el).find('div');
-					options.extraHeight = divs.get(0).offsetHeight + divs.get(1).offsetHeight;
-					options.extraWidth = divs.get(2).offsetWidth + divs.get(3).offsetWidth;
-				}
-				var tbl = cal.find('table:first').get(0);
-				var width = tbl.offsetWidth;
-				var height = tbl.offsetHeight;
+				var tbl = cal.find('.pmu-instance');
+				var width = 0;
+				tbl.each(function () {
+					width	+= $(this).outerWidth();
+				});
+				var height = tbl.outerHeight();
 				cal.css({
-					width: width + options.extraWidth + 'px',
-					height: height + options.extraHeight + 'px'
-				}).find('div.datepickerContainer').css({
 					width: width + 'px',
 					height: height + 'px'
 				});
@@ -749,8 +745,7 @@
 								});
 						}
 						cal
-							.addClass(views[options.view])
-							.find('.datepickerContainer').append(html);
+							.addClass(views[options.view]).append(html);
 						fill(cal);
 						if (options.flat) {
 							cal.appendTo(this).show().css('position', 'relative');
