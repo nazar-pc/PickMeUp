@@ -578,12 +578,11 @@
 				}
 			},
 			getViewport = function () {
-				var m = document.compatMode == 'CSS1Compat';
 				return {
-					l : window.pageXOffset || (m ? document.documentElement.scrollLeft : document.body.scrollLeft),
-					t : window.pageYOffset || (m ? document.documentElement.scrollTop : document.body.scrollTop),
-					w : window.innerWidth || (m ? document.documentElement.clientWidth : document.body.clientWidth),
-					h : window.innerHeight || (m ? document.documentElement.clientHeight : document.body.clientHeight)
+					l : window.pageXOffset || document.documentElement.scrollLeft,
+					t : window.pageYOffset || document.documentElement.scrollTop,
+					w : window.innerWidth || document.documentElement.clientWidth,
+					h : window.innerHeight || document.documentElement.clientHeight
 				};
 			},
 			isChildOf = function(parentEl, el, container) {
@@ -604,7 +603,7 @@
 				}
 				return false;
 			},
-			show = function (ev) {
+			show = function () {
 				var cal = $('#' + $(this).data('datepickerId'));
 				if (!cal.is(':visible')) {
 					var calEl = cal.get(0);
@@ -615,7 +614,6 @@
 					var viewPort = getViewport();
 					var top = pos.top;
 					var left = pos.left;
-					var oldDisplay = $.curCSS(calEl, 'display');
 					cal.css({
 						visibility: 'hidden',
 						display: 'block'
