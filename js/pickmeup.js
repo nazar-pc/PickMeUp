@@ -7,14 +7,14 @@
  *
  */
 (function ($) {
-	var DatePicker = function () {
+	var pickmeup = function () {
 		var	views = {
 				years: 'pmu-view-years',
 				moths: 'pmu-view-months',
 				days: 'pmu-view-days'
 			},
 			tpl = {
-				wrapper: '<div class="datepicker"></div>',
+				wrapper: '<div class="pickmeup"></div>',
 				head: [
 					'<div class="pmu-instance">',
 						'<nav>' +
@@ -22,107 +22,103 @@
 							'<div class="pmu-next pmu-button"><%=next%></div>' +
 							'<div class="pmu-month pmu-button"></div>',
 						'</nav>',
-						'<table cellspacing="0" cellpadding="0">',
-							'<thead>',
-								'<tr class="datepickerDoW">',
-									'<th><span><%=week%></span></th>',
-									'<th><span><%=day1%></span></th>',
-									'<th><span><%=day2%></span></th>',
-									'<th><span><%=day3%></span></th>',
-									'<th><span><%=day4%></span></th>',
-									'<th><span><%=day5%></span></th>',
-									'<th><span><%=day6%></span></th>',
-									'<th><span><%=day7%></span></th>',
-								'</tr>',
-							'</thead>',
-						'</table>' +
+						'<nav class="pmu-day-of-week">',
+							'<div><%=week%></div>',
+							'<div><%=day1%></div>',
+							'<div><%=day2%></div>',
+							'<div><%=day3%></div>',
+							'<div><%=day4%></div>',
+							'<div><%=day5%></div>',
+							'<div><%=day6%></div>',
+							'<div><%=day7%></div>',
+						'</nav>',
 					'</div>'
 				],
 				days: [
-					'<tbody class="datepickerDays">',
-						'<tr>',
-							'<th class="pmu-week"><a href="#"><span><%=weeks[0].week%></span></a></th>',
-							'<td class="<%=weeks[0].days[0].classname%>"><a href="#"><span><%=weeks[0].days[0].text%></span></a></td>',
-							'<td class="<%=weeks[0].days[1].classname%>"><a href="#"><span><%=weeks[0].days[1].text%></span></a></td>',
-							'<td class="<%=weeks[0].days[2].classname%>"><a href="#"><span><%=weeks[0].days[2].text%></span></a></td>',
-							'<td class="<%=weeks[0].days[3].classname%>"><a href="#"><span><%=weeks[0].days[3].text%></span></a></td>',
-							'<td class="<%=weeks[0].days[4].classname%>"><a href="#"><span><%=weeks[0].days[4].text%></span></a></td>',
-							'<td class="<%=weeks[0].days[5].classname%>"><a href="#"><span><%=weeks[0].days[5].text%></span></a></td>',
-							'<td class="<%=weeks[0].days[6].classname%>"><a href="#"><span><%=weeks[0].days[6].text%></span></a></td>',
-						'</tr>',
-						'<tr>',
-							'<th class="pmu-week"><a href="#"><span><%=weeks[1].week%></span></a></th>',
-							'<td class="<%=weeks[1].days[0].classname%>"><a href="#"><span><%=weeks[1].days[0].text%></span></a></td>',
-							'<td class="<%=weeks[1].days[1].classname%>"><a href="#"><span><%=weeks[1].days[1].text%></span></a></td>',
-							'<td class="<%=weeks[1].days[2].classname%>"><a href="#"><span><%=weeks[1].days[2].text%></span></a></td>',
-							'<td class="<%=weeks[1].days[3].classname%>"><a href="#"><span><%=weeks[1].days[3].text%></span></a></td>',
-							'<td class="<%=weeks[1].days[4].classname%>"><a href="#"><span><%=weeks[1].days[4].text%></span></a></td>',
-							'<td class="<%=weeks[1].days[5].classname%>"><a href="#"><span><%=weeks[1].days[5].text%></span></a></td>',
-							'<td class="<%=weeks[1].days[6].classname%>"><a href="#"><span><%=weeks[1].days[6].text%></span></a></td>',
-						'</tr>',
-						'<tr>',
-							'<th class="pmu-week"><a href="#"><span><%=weeks[2].week%></span></a></th>',
-							'<td class="<%=weeks[2].days[0].classname%>"><a href="#"><span><%=weeks[2].days[0].text%></span></a></td>',
-							'<td class="<%=weeks[2].days[1].classname%>"><a href="#"><span><%=weeks[2].days[1].text%></span></a></td>',
-							'<td class="<%=weeks[2].days[2].classname%>"><a href="#"><span><%=weeks[2].days[2].text%></span></a></td>',
-							'<td class="<%=weeks[2].days[3].classname%>"><a href="#"><span><%=weeks[2].days[3].text%></span></a></td>',
-							'<td class="<%=weeks[2].days[4].classname%>"><a href="#"><span><%=weeks[2].days[4].text%></span></a></td>',
-							'<td class="<%=weeks[2].days[5].classname%>"><a href="#"><span><%=weeks[2].days[5].text%></span></a></td>',
-							'<td class="<%=weeks[2].days[6].classname%>"><a href="#"><span><%=weeks[2].days[6].text%></span></a></td>',
-						'</tr>',
-						'<tr>',
-							'<th class="pmu-week"><a href="#"><span><%=weeks[3].week%></span></a></th>',
-							'<td class="<%=weeks[3].days[0].classname%>"><a href="#"><span><%=weeks[3].days[0].text%></span></a></td>',
-							'<td class="<%=weeks[3].days[1].classname%>"><a href="#"><span><%=weeks[3].days[1].text%></span></a></td>',
-							'<td class="<%=weeks[3].days[2].classname%>"><a href="#"><span><%=weeks[3].days[2].text%></span></a></td>',
-							'<td class="<%=weeks[3].days[3].classname%>"><a href="#"><span><%=weeks[3].days[3].text%></span></a></td>',
-							'<td class="<%=weeks[3].days[4].classname%>"><a href="#"><span><%=weeks[3].days[4].text%></span></a></td>',
-							'<td class="<%=weeks[3].days[5].classname%>"><a href="#"><span><%=weeks[3].days[5].text%></span></a></td>',
-							'<td class="<%=weeks[3].days[6].classname%>"><a href="#"><span><%=weeks[3].days[6].text%></span></a></td>',
-						'</tr>',
-						'<tr>',
-							'<th class="pmu-week"><a href="#"><span><%=weeks[4].week%></span></a></th>',
-							'<td class="<%=weeks[4].days[0].classname%>"><a href="#"><span><%=weeks[4].days[0].text%></span></a></td>',
-							'<td class="<%=weeks[4].days[1].classname%>"><a href="#"><span><%=weeks[4].days[1].text%></span></a></td>',
-							'<td class="<%=weeks[4].days[2].classname%>"><a href="#"><span><%=weeks[4].days[2].text%></span></a></td>',
-							'<td class="<%=weeks[4].days[3].classname%>"><a href="#"><span><%=weeks[4].days[3].text%></span></a></td>',
-							'<td class="<%=weeks[4].days[4].classname%>"><a href="#"><span><%=weeks[4].days[4].text%></span></a></td>',
-							'<td class="<%=weeks[4].days[5].classname%>"><a href="#"><span><%=weeks[4].days[5].text%></span></a></td>',
-							'<td class="<%=weeks[4].days[6].classname%>"><a href="#"><span><%=weeks[4].days[6].text%></span></a></td>',
-						'</tr>',
-						'<tr>',
-							'<th class="pmu-week"><a href="#"><span><%=weeks[5].week%></span></a></th>',
-							'<td class="<%=weeks[5].days[0].classname%>"><a href="#"><span><%=weeks[5].days[0].text%></span></a></td>',
-							'<td class="<%=weeks[5].days[1].classname%>"><a href="#"><span><%=weeks[5].days[1].text%></span></a></td>',
-							'<td class="<%=weeks[5].days[2].classname%>"><a href="#"><span><%=weeks[5].days[2].text%></span></a></td>',
-							'<td class="<%=weeks[5].days[3].classname%>"><a href="#"><span><%=weeks[5].days[3].text%></span></a></td>',
-							'<td class="<%=weeks[5].days[4].classname%>"><a href="#"><span><%=weeks[5].days[4].text%></span></a></td>',
-							'<td class="<%=weeks[5].days[5].classname%>"><a href="#"><span><%=weeks[5].days[5].text%></span></a></td>',
-							'<td class="<%=weeks[5].days[6].classname%>"><a href="#"><span><%=weeks[5].days[6].text%></span></a></td>',
-						'</tr>',
-					'</tbody>'
+					'<div class="pmu-days">',
+						'<div>',
+							'<div class="pmu-week pmu-button"><%=weeks[0].week%></div>',
+							'<div class="<%=weeks[0].days[0].classname%> pmu-button"><%=weeks[0].days[0].text%></div>',
+							'<div class="<%=weeks[0].days[1].classname%> pmu-button"><%=weeks[0].days[1].text%></div>',
+							'<div class="<%=weeks[0].days[2].classname%> pmu-button"><%=weeks[0].days[2].text%></div>',
+							'<div class="<%=weeks[0].days[3].classname%> pmu-button"><%=weeks[0].days[3].text%></div>',
+							'<div class="<%=weeks[0].days[4].classname%> pmu-button"><%=weeks[0].days[4].text%></div>',
+							'<div class="<%=weeks[0].days[5].classname%> pmu-button"><%=weeks[0].days[5].text%></div>',
+							'<div class="<%=weeks[0].days[6].classname%> pmu-button"><%=weeks[0].days[6].text%></div>',
+						'</div>',
+						'<div>',
+							'<div class="pmu-week pmu-button"><%=weeks[1].week%></div>',
+							'<div class="<%=weeks[1].days[0].classname%> pmu-button"><%=weeks[1].days[0].text%></div>',
+							'<div class="<%=weeks[1].days[1].classname%> pmu-button"><%=weeks[1].days[1].text%></div>',
+							'<div class="<%=weeks[1].days[2].classname%> pmu-button"><%=weeks[1].days[2].text%></div>',
+							'<div class="<%=weeks[1].days[3].classname%> pmu-button"><%=weeks[1].days[3].text%></div>',
+							'<div class="<%=weeks[1].days[4].classname%> pmu-button"><%=weeks[1].days[4].text%></div>',
+							'<div class="<%=weeks[1].days[5].classname%> pmu-button"><%=weeks[1].days[5].text%></div>',
+							'<div class="<%=weeks[1].days[6].classname%> pmu-button"><%=weeks[1].days[6].text%></div>',
+						'</div>',
+						'<div>',
+							'<div class="pmu-week pmu-button"><%=weeks[2].week%></div>',
+							'<div class="<%=weeks[2].days[0].classname%> pmu-button"><%=weeks[2].days[0].text%></div>',
+							'<div class="<%=weeks[2].days[1].classname%> pmu-button"><%=weeks[2].days[1].text%></div>',
+							'<div class="<%=weeks[2].days[2].classname%> pmu-button"><%=weeks[2].days[2].text%></div>',
+							'<div class="<%=weeks[2].days[3].classname%> pmu-button"><%=weeks[2].days[3].text%></div>',
+							'<div class="<%=weeks[2].days[4].classname%> pmu-button"><%=weeks[2].days[4].text%></div>',
+							'<div class="<%=weeks[2].days[5].classname%> pmu-button"><%=weeks[2].days[5].text%></div>',
+							'<div class="<%=weeks[2].days[6].classname%> pmu-button"><%=weeks[2].days[6].text%></div>',
+						'</div>',
+						'<div>',
+							'<div class="pmu-week pmu-button"><%=weeks[3].week%></div>',
+							'<div class="<%=weeks[3].days[0].classname%> pmu-button"><%=weeks[3].days[0].text%></div>',
+							'<div class="<%=weeks[3].days[1].classname%> pmu-button"><%=weeks[3].days[1].text%></div>',
+							'<div class="<%=weeks[3].days[2].classname%> pmu-button"><%=weeks[3].days[2].text%></div>',
+							'<div class="<%=weeks[3].days[3].classname%> pmu-button"><%=weeks[3].days[3].text%></div>',
+							'<div class="<%=weeks[3].days[4].classname%> pmu-button"><%=weeks[3].days[4].text%></div>',
+							'<div class="<%=weeks[3].days[5].classname%> pmu-button"><%=weeks[3].days[5].text%></div>',
+							'<div class="<%=weeks[3].days[6].classname%> pmu-button"><%=weeks[3].days[6].text%></div>',
+						'</div>',
+						'<div>',
+							'<div class="pmu-week pmu-button"><%=weeks[4].week%></div>',
+							'<div class="<%=weeks[4].days[0].classname%> pmu-button"><%=weeks[4].days[0].text%></div>',
+							'<div class="<%=weeks[4].days[1].classname%> pmu-button"><%=weeks[4].days[1].text%></div>',
+							'<div class="<%=weeks[4].days[2].classname%> pmu-button"><%=weeks[4].days[2].text%></div>',
+							'<div class="<%=weeks[4].days[3].classname%> pmu-button"><%=weeks[4].days[3].text%></div>',
+							'<div class="<%=weeks[4].days[4].classname%> pmu-button"><%=weeks[4].days[4].text%></div>',
+							'<div class="<%=weeks[4].days[5].classname%> pmu-button"><%=weeks[4].days[5].text%></div>',
+							'<div class="<%=weeks[4].days[6].classname%> pmu-button"><%=weeks[4].days[6].text%></div>',
+						'</div>',
+						'<div>',
+							'<div class="pmu-week pmu-button"><%=weeks[5].week%></div>',
+							'<div class="<%=weeks[5].days[0].classname%> pmu-button"><%=weeks[5].days[0].text%></div>',
+							'<div class="<%=weeks[5].days[1].classname%> pmu-button"><%=weeks[5].days[1].text%></div>',
+							'<div class="<%=weeks[5].days[2].classname%> pmu-button"><%=weeks[5].days[2].text%></div>',
+							'<div class="<%=weeks[5].days[3].classname%> pmu-button"><%=weeks[5].days[3].text%></div>',
+							'<div class="<%=weeks[5].days[4].classname%> pmu-button"><%=weeks[5].days[4].text%></div>',
+							'<div class="<%=weeks[5].days[5].classname%> pmu-button"><%=weeks[5].days[5].text%></div>',
+							'<div class="<%=weeks[5].days[6].classname%> pmu-button"><%=weeks[5].days[6].text%></div>',
+						'</div>',
+					'</div>'
 				],
 				months: [
-					'<tbody class="<%=className%>">',
-						'<tr>',
-							'<td colspan="2"><a href="#"><span><%=data[0]%></span></a></td>',
-							'<td colspan="2"><a href="#"><span><%=data[1]%></span></a></td>',
-							'<td colspan="2"><a href="#"><span><%=data[2]%></span></a></td>',
-							'<td colspan="2"><a href="#"><span><%=data[3]%></span></a></td>',
-						'</tr>',
-						'<tr>',
-							'<td colspan="2"><a href="#"><span><%=data[4]%></span></a></td>',
-							'<td colspan="2"><a href="#"><span><%=data[5]%></span></a></td>',
-							'<td colspan="2"><a href="#"><span><%=data[6]%></span></a></td>',
-							'<td colspan="2"><a href="#"><span><%=data[7]%></span></a></td>',
-						'</tr>',
-						'<tr>',
-							'<td colspan="2"><a href="#"><span><%=data[8]%></span></a></td>',
-							'<td colspan="2"><a href="#"><span><%=data[9]%></span></a></td>',
-							'<td colspan="2"><a href="#"><span><%=data[10]%></span></a></td>',
-							'<td colspan="2"><a href="#"><span><%=data[11]%></span></a></td>',
-						'</tr>',
-					'</tbody>'
+					'<div class="<%=className%>">',
+						'<div>',
+							'<div class="pmu-button"><%=data[0]%></div>',
+							'<div class="pmu-button"><%=data[1]%></div>',
+							'<div class="pmu-button"><%=data[2]%></div>',
+							'<div class="pmu-button"><%=data[3]%></div>',
+						'</div>',
+						'<div>',
+							'<div class="pmu-button"><%=data[4]%></div>',
+							'<div class="pmu-button"><%=data[5]%></div>',
+							'<div class="pmu-button"><%=data[6]%></div>',
+							'<div class="pmu-button"><%=data[7]%></div>',
+						'</div>',
+						'<div>',
+							'<div class="pmu-button"><%=data[8]%></div>',
+							'<div class="pmu-button"><%=data[9]%></div>',
+							'<div class="pmu-button"><%=data[10]%></div>',
+							'<div class="pmu-button"><%=data[11]%></div>',
+						'</div>',
+					'</div>'
 				]
 			},
 			defaults = {
@@ -153,7 +149,7 @@
 			},
 			fill = function(cal) {
 				cal = $(cal);
-				var options = cal.data('datepicker');
+				var options = cal.data('pickmeup');
 				var currentCal = Math.floor(options.calendars/2), date, data, dow, month, cnt = 0, week, days, indic, indic2, html, tblCal;
 				cal.find('.pmu-instance > :not(nav)').remove();
 				for (var i = 0; i < options.calendars; i++) {
@@ -175,7 +171,7 @@
 					dow = date.getFullYear()-6;
 					data = {
 						data: [],
-						className: 'datepickerYears'
+						className: 'pmu-years'
 					};
 					for ( var j = 0; j < 12; j++) {
 						data.data.push(dow + j);
@@ -203,13 +199,13 @@
 							classname: []
 						};
 						if (month != date.getMonth()) {
-							data.weeks[indic].days[indic2].classname.push('datepickerNotInMonth');
+							data.weeks[indic].days[indic2].classname.push('pmu-not-in-month');
 						}
 						if (date.getDay() == 0) {
-							data.weeks[indic].days[indic2].classname.push('datepickerSunday');
+							data.weeks[indic].days[indic2].classname.push('pmu-sunday');
 						}
 						if (date.getDay() == 6) {
-							data.weeks[indic].days[indic2].classname.push('datepickerSaturday');
+							data.weeks[indic].days[indic2].classname.push('pmu-saturday');
 						}
 						var fromUser = options.onRender(date);
 						var val = date.valueOf();
@@ -439,7 +435,7 @@
 				};
 			},
 			layout = function (el) {
-				var options = $(el).data('datepicker');
+				var options = $(el).data('pickmeup');
 				var cal = $('#' + options.id);
 				var tbl = cal.find('.pmu-instance');
 				var width = 0;
@@ -458,8 +454,8 @@
 					if (el.hasClass('pmu-disabled')) {
 						return false;
 					}
-					var options = $(this).data('datepicker');
-					var instance = el.parentsUntil('.datepicker');
+					var options = $(this).data('pickmeup');
+					var instance = el.parentsUntil('.pickmeup');
 					var root = instance.parent();
 					var tblIndex = $('.pmu-instance', this).index(root.get(0)) - 1;
 					var tmp = new Date(options.current);
@@ -469,7 +465,7 @@
 						if (root.hasClass('pmu-week') && options.mode == 'range' && !el.next().hasClass('pmu-disabled')) {
 							var val = parseInt(instance.next().text(), 10);
 							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
-							if (instance.next().hasClass('datepickerNotInMonth')) {
+							if (instance.next().hasClass('pmu-not-in-month')) {
 								tmp.addMonths(val > 15 ? -1 : 1);
 							}
 							tmp.setDate(val);
@@ -507,14 +503,14 @@
 							options.current.setFullYear(parseInt(el.text(), 10));
 							root.get(0).className = 'pmu-view-months';
 						} else if (root.hasClass('pmu-view-months')) {
-							options.current.setMonth(root.find('tbody.pmu-months td').index(instance));
-							options.current.setFullYear(parseInt(root.find('thead th.pmu-month span').text(), 10));
+							options.current.setMonth(root.find('.pmu-months > div').index(instance));
+							options.current.setFullYear(parseInt(root.find('.pmu-month').text(), 10));
 							options.current.addMonths(Math.floor(options.calendars/2) - tblIndex);
 							root.get(0).className = 'pmu-view-days';
 						} else {
 							var val = parseInt(el.text(), 10);
 							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
-							if (instance.hasClass('datepickerNotInMonth')) {
+							if (instance.hasClass('pmu-not-in-month')) {
 								tmp.addMonths(val > 15 ? -1 : 1);
 							}
 							tmp.setDate(val);
@@ -604,11 +600,11 @@
 				return false;
 			},
 			show = function () {
-				var cal = $('#' + $(this).data('datepickerId'));
+				var cal = $('#' + $(this).data('pickmeupId'));
 				if (!cal.is(':visible')) {
 					var calEl = cal.get(0);
 					fill(cal);
-					var options = cal.data('datepicker');
+					var options = cal.data('pickmeup');
 					options.onBeforeShow.apply(this, [cal.get(0)]);
 					var pos = $(this).offset();
 					var viewPort = getViewport();
@@ -660,7 +656,7 @@
 			},
 			hide = function (ev) {
 				if (ev.target != ev.data.trigger && !isChildOf(ev.data.cal.get(0), ev.target, ev.data.cal.get(0))) {
-					if (ev.data.cal.data('datepicker').onHide.apply(this, [ev.data.cal.get(0)]) != false) {
+					if (ev.data.cal.data('pickmeup').onHide.apply(this, [ev.data.cal.get(0)]) != false) {
 						ev.data.cal.hide();
 					}
 					$(document).unbind('mousedown', hide);
@@ -673,7 +669,7 @@
 				options.calendars = Math.max(1, parseInt(options.calendars,10)||1);
 				options.mode = /single|multiple|range/.test(options.mode) ? options.mode : 'single';
 				return this.each(function(){
-					if (!$(this).data('datepicker')) {
+					if (!$(this).data('pickmeup')) {
 						options.el = this;
 						if (options.date.constructor == String) {
 							options.date = parseDate(options.date, options.format);
@@ -703,10 +699,10 @@
 						}
 						options.current.setDate(1);
 						options.current.setHours(0,0,0,0);
-						var id = 'datepicker_' + parseInt(Math.random() * 1000), cnt;
+						var id = 'pickmeup_' + parseInt(Math.random() * 1000), cnt;
 						options.id = id;
-						$(this).data('datepickerId', options.id);
-						var cal = $(tpl.wrapper).attr('id', id).bind('click', click).data('datepicker', options);
+						$(this).data('pickmeupId', options.id);
+						var cal = $(tpl.wrapper).attr('id', id).bind('click', click).data('pickmeup', options);
 						if (options.className) {
 							cal.addClass(options.className);
 						}
@@ -741,23 +737,23 @@
 			},
 			showPicker: function() {
 				return this.each( function () {
-					if ($(this).data('datepickerId')) {
+					if ($(this).data('pickmeupId')) {
 						show.apply(this);
 					}
 				});
 			},
 			hidePicker: function() {
 				return this.each( function () {
-					if ($(this).data('datepickerId')) {
-						$('#' + $(this).data('datepickerId')).hide();
+					if ($(this).data('pickmeupId')) {
+						$('#' + $(this).data('pickmeupId')).hide();
 					}
 				});
 			},
 			setDate: function(date, shiftTo){
 				return this.each(function(){
-					if ($(this).data('datepickerId')) {
-						var cal = $('#' + $(this).data('datepickerId'));
-						var options = cal.data('datepicker');
+					if ($(this).data('pickmeupId')) {
+						var cal = $('#' + $(this).data('pickmeupId'));
+						var options = cal.data('pickmeup');
 						options.date = date;
 						if (options.date.constructor == String) {
 							options.date = parseDate(options.date, options.format);
@@ -789,14 +785,14 @@
 			},
 			getDate: function(formated) {
 				if (this.size() > 0) {
-					return prepareDate($('#' + $(this).data('datepickerId')).data('datepicker'))[formated ? 0 : 1];
+					return prepareDate($('#' + $(this).data('pickmeupId')).data('pickmeup'))[formated ? 0 : 1];
 				}
 			},
 			clear: function(){
 				return this.each(function(){
-					if ($(this).data('datepickerId')) {
-						var cal = $('#' + $(this).data('datepickerId'));
-						var options = cal.data('datepicker');
+					if ($(this).data('pickmeupId')) {
+						var cal = $('#' + $(this).data('pickmeupId'));
+						var options = cal.data('pickmeup');
 						if (options.mode != 'single') {
 							options.date = [];
 							fill(cal);
@@ -806,9 +802,9 @@
 			},
 			fixLayout: function(){
 				return this.each(function(){
-					if ($(this).data('datepickerId')) {
-						var cal = $('#' + $(this).data('datepickerId'));
-						var options = cal.data('datepicker');
+					if ($(this).data('pickmeupId')) {
+						var cal = $('#' + $(this).data('pickmeupId'));
+						var options = cal.data('pickmeup');
 						if (options.flat) {
 							layout(cal.get(0));
 						}
@@ -818,13 +814,13 @@
 		};
 	}();
 	$.fn.extend({
-		DatePicker: DatePicker.init,
-		DatePickerHide: DatePicker.hidePicker,
-		DatePickerShow: DatePicker.showPicker,
-		DatePickerSetDate: DatePicker.setDate,
-		DatePickerGetDate: DatePicker.getDate,
-		DatePickerClear: DatePicker.clear,
-		DatePickerLayout: DatePicker.fixLayout
+		pickmeup: pickmeup.init,
+		pickmeupHide: pickmeup.hidePicker,
+		pickmeupShow: pickmeup.showPicker,
+		pickmeupSetDate: pickmeup.setDate,
+		pickmeupGetDate: pickmeup.getDate,
+		pickmeupClear: pickmeup.clear,
+		pickmeupLayout: pickmeup.fixLayout
 	});
 })(jQuery);
 

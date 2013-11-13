@@ -1,18 +1,18 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
-	<link rel="stylesheet" href="css/datepicker.css" type="text/css" />
+	<link rel="stylesheet" href="css/pickmeup.css" type="text/css" />
     <link rel="stylesheet" media="screen" type="text/css" href="css/layout.css" />
-    <title>DatePicker - jQuery plugin</title>
+    <title>PickMeUp - jQuery datepicker plugin</title>
 	<script type="text/javascript" src="js/jquery.js"></script>
-	<script type="text/javascript" src="js/datepicker.js"></script>
+	<script type="text/javascript" src="js/pickmeup.js"></script>
     <script type="text/javascript" src="js/eye.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/layout.js?ver=1.0.2"></script>
 </head>
 <body>
     <div class="wrapper">
-        <h1>Date Picker - jQuery plugin</h1>
+        <h1>PickMeUp - jQuery datepicker plugin</h1>
         <ul class="navigationTabs">
             <li><a href="#about" rel="about">About</a></li>
             <li><a href="#download" rel="download">Download</a></li>
@@ -40,7 +40,7 @@
                 <h3>Examples</h3>
 				<p id="date"></p>
 				<p>Flat mode, single selection, the week start monday.</p>
-			<pre>$('#date').DatePicker({
+			<pre>$('#date').pickmeup({
 	flat: true,
 	date: '2008-07-31',
 	current: '2008-07-31',
@@ -49,7 +49,7 @@
 });</pre>
 				<p>Flat mode, multiple selection, disabled dates, special day, the week start sunday.</p>
 				<p id="date2"></p>
-			<pre>$('#date2').DatePicker({
+			<pre>$('#date2').pickmeup({
 	flat: true,
 	date: ['2008-07-31', '2008-07-28'],
 	current: '2008-07-31',
@@ -59,16 +59,16 @@
 	onRender: function(date) {
 		return {
 			disabled: (date.valueOf() < now.valueOf()),
-			className: date.valueOf() == now2.valueOf() ? 'datepickerSpecial' : false
+			className: date.valueOf() == now2.valueOf() ? 'pickmeupSpecial' : false
 		}
 	},
 	starts: 0
 });</pre>
 				<p><a href="#" id="clearSelection">Clear selection</a></p>
-				<pre>$('#date3').DatePickerClear();</pre>
+				<pre>$('#date3').pickmeupClear();</pre>
 				<p>Flat mode, range selection, 3 calendars.</p>
 				<p id="date3"></p>
-			<pre>$('#date3').DatePicker({
+			<pre>$('#date3').pickmeup({
 	flat: true,
 	date: ['2008-07-28','2008-07-31'],
 	current: '2008-07-31',
@@ -81,19 +81,19 @@
 					<input class="inputDate" id="inputDate" value="06/14/2008" />
 					<label id="closeOnSelect"><input type="checkbox" /> Close on selection</label>
 				</p>
-			<pre>$('#inputDate').DatePicker({
+			<pre>$('#inputDate').pickmeup({
 	format:'m/d/Y',
 	date: $('#inputDate').val(),
 	current: $('#inputDate').val(),
 	starts: 1,
 	position: 'r',
 	onBeforeShow: function(){
-		$('#inputDate').DatePickerSetDate($('#inputDate').val(), true);
+		$('#inputDate').pickmeupSetDate($('#inputDate').val(), true);
 	},
 	onChange: function(formated, dates){
 		$('#inputDate').val(formated);
 		if ($('#closeOnSelect input').attr('checked')) {
-			$('#inputDate').DatePickerHide();
+			$('#inputDate').pickmeupHide();
 		}
 	}
 });</pre>
@@ -114,7 +114,7 @@
             </div>
             <div class="tab">
                 <h2>Download</h2>
-                <p><a href="datepicker.zip">datepicker.zip (50 kb)</a>: jQuery, Javscript files, CSS files, images, examples and instructions.</p>
+                <p><a href="pickmeup.zip">pickmeup.zip (50 kb)</a>: jQuery, Javscript files, CSS files, images, examples and instructions.</p>
                 <h3>Changelog</h3>
                 <dl>
 					<dt>22.05.2009</dt>
@@ -122,7 +122,7 @@
 					<dd>added: onChange has  new parameter: reference to related element</dd>
 					<dd>added: start view days, months, years</dd>
 					<dd>added: clear selection in multiple and range mode</dd>
-					<dd>fixed: datepicker hide and show methods</dd>
+					<dd>fixed: pickmeup hide and show methods</dd>
 					<dd>fixed: january selection (tahns to Konstantin Zavialov)</dd>
 					<dd>fixed: working with jQuery 1.3</dd>
 					<dd>fixed: deselecting a date in multiple mode (thanks to Geelen Sebastien)</dd>
@@ -130,7 +130,7 @@
 					<dd>Fixed bug: where some events were not canceled right on Safari</dd>
 					<dd>Fixed bug: where teh view port was not detected right on Safari</dd>
 					<dt>31.07.2008</dt>
-					<dd>Added new method: 'DatePickerGetDate'</dd>
+					<dd>Added new method: 'pickmeupGetDate'</dd>
 					<dd>Minor speed improvement</dd>
 					<dt>30.07.2008</dt>
 					<dd>The first release.</dd>
@@ -140,13 +140,13 @@
                 <h2>Implement</h2>
                 <p>Attach the Javascript and CSS files to your document. Edit CSS file and fix the paths to  images and change colors to fit your site theme.</p>
                 <pre>
-&lt;link rel="stylesheet" media="screen" type="text/css" href="css/datepicker.css" /&gt;
-&lt;script type="text/javascript" src="js/datepicker.js"&gt;&lt;/script&gt;
+&lt;link rel="stylesheet" media="screen" type="text/css" href="css/pickmeup.css" /&gt;
+&lt;script type="text/javascript" src="js/pickmeup.js"&gt;&lt;/script&gt;
                 </pre>
                 <h3>Invocation code</h3>
                 <p>All you have to do is to select the elements in a jQuery way and call the plugin.</p>
                 <pre>
- $('input').DatePicker(options);
+ $('input').pickmeup(options);
                 </pre>
                 <h3>Options</h3>
                 <p>A hash of parameters. All parameters are optional.</p>
@@ -239,19 +239,19 @@
                 </table>
                 <h3>Set date</h3>
                 <p>If you want to set a diferent date selection.</p>
-                <pre>$('input').DatePickerSetDate(date, shiftTo);</pre>
+                <pre>$('input').pickmeupSetDate(date, shiftTo);</pre>
 				<p>The 'date' argument is the same format as the option 'date' and the 'shiftTo' argument (boolean) moves the curent month view to the date selection provided.</p>
 				<h3>Get date</h3>
 				<p>Get date selection.</p>
-				<pre>$('input').DatePickerGetDate(formated);</pre>
+				<pre>$('input').pickmeupGetDate(formated);</pre>
 				<p>Set 'formated' to true if you whant to get teh selection formated.</p>
 				<h3>Show and hide date picker</h3>
                 <p>Show or hide a date picker.</p>
-				<pre>$('input').DatePickerShow();</pre>
-				<pre>$('input').DatePickerHide();</pre>
+				<pre>$('input').pickmeupShow();</pre>
+				<pre>$('input').pickmeupHide();</pre>
 				<h3>Clear multiple selection</h3>
 				<p>Clear selection in multiple and range mode</p>
-				<pre>$('#datepicker').DatePickerClear();</pre>
+				<pre>$('#pickmeup').pickmeupClear();</pre>
             </div>
         </div>
     </div>
