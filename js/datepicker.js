@@ -18,9 +18,9 @@
 				head: [
 					'<div class="pmu-instance">',
 						'<nav>' +
-							'<div class="pmu-prev" data-pmu-button><%=prev%></div>',
-							'<div class="pmu-next" data-pmu-button><%=next%></div>' +
-							'<div class="pmu-month" data-pmu-button></div>',
+							'<div class="pmu-prev pmu-button"><%=prev%></div>',
+							'<div class="pmu-next pmu-button"><%=next%></div>' +
+							'<div class="pmu-month pmu-button"></div>',
 						'</nav>',
 						'<table cellspacing="0" cellpadding="0">',
 							'<thead>',
@@ -159,7 +159,7 @@
 				for (var i = 0; i < options.calendars; i++) {
 					date = new Date(options.current);
 					date.addMonths(-currentCal + i);
-					tblCal = cal.find('.pmu-instance').eq(i);console.log(tblCal.get(0));
+					tblCal = cal.find('.pmu-instance').eq(i);
 					switch (cal[0].className.match(/datepickerViewDays|datepickerViewMonths|datepickerViewYears/)[0]) {
 						case 'datepickerViewDays':
 							dow = formatDate(date, 'B, Y');
@@ -452,28 +452,24 @@
 					height: height + 'px'
 				});
 			},
-			click = function(ev) {
-				if ($(ev.target).is('span')) {
-					ev.target = ev.target.parentNode;
-				}
-				var el = $(ev.target);
-				if (el.is('[data-pmu-button]')) {
-					ev.target.blur();
+			click = function(e) {
+				var el = $(e.target);
+				if (el.hasClass('pmu-button')) {
 					if (el.hasClass('datepickerDisabled')) {
 						return false;
 					}
 					var options = $(this).data('datepicker');
-					var parentEl = el.parent();
-					var tblEl = parentEl.parent().parent().parent();
-					var tblIndex = $('table', this).index(tblEl.get(0)) - 1;
+					var instance = el.parentsUntil('.datepicker');
+					var root = instance.parent();
+					var tblIndex = $('.pmu-instance', this).index(root.get(0)) - 1;
 					var tmp = new Date(options.current);
 					var changed = false;
 					var fillIt = false;
-					if (parentEl.is('nav')) {
-						if (parentEl.hasClass('datepickerWeek') && options.mode == 'range' && !parentEl.next().hasClass('datepickerDisabled')) {
-							var val = parseInt(parentEl.next().text(), 10);
+					if (el.parent().is('nav')) {
+						if (root.hasClass('datepickerWeek') && options.mode == 'range' && !el.next().hasClass('datepickerDisabled')) {
+							var val = parseInt(instance.next().text(), 10);
 							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
-							if (parentEl.next().hasClass('datepickerNotInMonth')) {
+							if (instance.next().hasClass('datepickerNotInMonth')) {
 								tmp.addMonths(val > 15 ? -1 : 1);
 							}
 							tmp.setDate(val);
@@ -484,52 +480,48 @@
 							fillIt = true;
 							changed = true;
 							options.lastSel = false;
-						} else if (parentEl.hasClass('pmu-month')) {
-							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
-							switch (tblEl.get(0).className) {
-								case 'datepickerViewDays':
-									tblEl.get(0).className = 'datepickerViewMonths';
-									el.find('span').text(tmp.getFullYear());
-									break;
-								case 'datepickerViewMonths':
-									tblEl.get(0).className = 'datepickerViewYears';
-									el.find('span').text((tmp.getFullYear()-6) + ' - ' + (tmp.getFullYear()+5));
-									break;
-								case 'datepickerViewYears':
-									tblEl.get(0).className = 'datepickerViewDays';
-									el.find('span').text(formatDate(tmp, 'B, Y'));
-									break;
+						} else if (el.hasClass('pmu-month')) {
+							tmp.addMonths(tblIndex - Math.floor(options.calendars / 2));
+							if (root.hasClass('datepickerViewDays')) {
+								root.removeClass('datepickerViewDays').addClass('datepickerViewMonths');
+								el.text(tmp.getFullYear());
+							} else if (root.hasClass('datepickerViewMonths')) {
+								root.removeClass('datepickerViewMonths').addClass('datepickerViewYears');
+								el.text((tmp.getFullYear()-6) + ' - ' + (tmp.getFullYear()+5));
+							} else if (root.hasClass('datepickerViewYears')) {
+								root.removeClass('datepickerViewYears').addClass('datepickerViewDays');
+								el.text(formatDate(tmp, 'B, Y'));
 							}
-						} else if (parentEl.parent().parent().is('thead')) {
-							switch (tblEl.get(0).className) {
+						} else {
+							switch (root.get(0).className.match(/datepickerViewDays|datepickerViewMonths|datepickerViewYears/)[0]) {
 								case 'datepickerViewDays':
-									options.current.addMonths(parentEl.hasClass('pmu-prev') ? -1 : 1);
+									options.current.addMonths(instance.hasClass('pmu-prev') ? -1 : 1);
 									break;
 								case 'datepickerViewMonths':
-									options.current.addYears(parentEl.hasClass('pmu-prev') ? -1 : 1);
+									options.current.addYears(instance.hasClass('pmu-prev') ? -1 : 1);
 									break;
 								case 'datepickerViewYears':
-									options.current.addYears(parentEl.hasClass('pmu-prev') ? -12 : 12);
+									options.current.addYears(instance.hasClass('pmu-prev') ? -12 : 12);
 									break;
 							}
 							fillIt = true;
 						}
-					} else if (parentEl.is('td') && !parentEl.hasClass('datepickerDisabled')) {
-						switch (tblEl.get(0).className) {
+					} else if (instance.is('td') && !instance.hasClass('datepickerDisabled')) {
+						switch (root.get(0).className.match(/datepickerViewDays|datepickerViewMonths|datepickerViewYears/)[0]) {
 							case 'datepickerViewMonths':
-								options.current.setMonth(tblEl.find('tbody.pmu-months td').index(parentEl));
-								options.current.setFullYear(parseInt(tblEl.find('thead th.pmu-month span').text(), 10));
+								options.current.setMonth(root.find('tbody.pmu-months td').index(instance));
+								options.current.setFullYear(parseInt(root.find('thead th.pmu-month span').text(), 10));
 								options.current.addMonths(Math.floor(options.calendars/2) - tblIndex);
-								tblEl.get(0).className = 'datepickerViewDays';
+								root.get(0).className = 'datepickerViewDays';
 								break;
 							case 'datepickerViewYears':
 								options.current.setFullYear(parseInt(el.text(), 10));
-								tblEl.get(0).className = 'datepickerViewMonths';
+								root.get(0).className = 'datepickerViewMonths';
 								break;
 							default:
 								var val = parseInt(el.text(), 10);
 								tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
-								if (parentEl.hasClass('datepickerNotInMonth')) {
+								if (instance.hasClass('datepickerNotInMonth')) {
 									tmp.addMonths(val > 15 ? -1 : 1);
 								}
 								tmp.setDate(val);

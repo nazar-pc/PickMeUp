@@ -14,13 +14,13 @@
 .pmu-instance {
 	display: inline-block;
 }
-.datepicker [data-pmu-button] {
+.datepicker .pmu-button {
 	color: #eee;
 	text-decoration: none;
 	cursor: default;
 	outline: none;
 }
-.datepicker [data-pmu-button]:hover {
+.datepicker .pmu-button:hover {
 	color: #88c5eb;
 }
 .datepicker table td {
