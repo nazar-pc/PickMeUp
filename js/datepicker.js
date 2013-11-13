@@ -8,23 +8,22 @@
  */
 (function ($) {
 	var DatePicker = function () {
-		var	ids = {},
-			views = {
+		var	views = {
 				years: 'datepickerViewYears',
 				moths: 'datepickerViewMonths',
 				days: 'datepickerViewDays'
 			},
 			tpl = {
-				wrapper: '<div class="datepicker"><div class="datepickerContainer"><table cellspacing="0" cellpadding="0"><tbody><tr></tr></tbody></table></div></div>',
+				wrapper: '<div class="datepicker"><div class="datepickerContainer"></div></div>',
 				head: [
-					'<td>',
+					'<div class="pmu-instance">',
+					'<nav>' +
+						'<div class="pmu-prev" data-pmu-button><%=prev%></div>',
+						'<div class="pmu-next" data-pmu-button><%=next%></div>' +
+						'<div class="pmu-month" data-pmu-button></div>',
+					'</nav>',
 					'<table cellspacing="0" cellpadding="0">',
 						'<thead>',
-							'<tr>',
-								'<th class="datepickerGoPrev"><a href="#"><span><%=prev%></span></a></th>',
-								'<th colspan="6" class="datepickerMonth"><a href="#"><span></span></a></th>',
-								'<th class="datepickerGoNext"><a href="#"><span><%=next%></span></a></th>',
-							'</tr>',
 							'<tr class="datepickerDoW">',
 								'<th><span><%=week%></span></th>',
 								'<th><span><%=day1%></span></th>',
@@ -36,9 +35,8 @@
 								'<th><span><%=day7%></span></th>',
 							'</tr>',
 						'</thead>',
-					'</table></td>'
+					'</table></div>'
 				],
-				space : '<td class="datepickerSpace"><div></div></td>',
 				days: [
 					'<tbody class="datepickerDays">',
 						'<tr>',
@@ -152,16 +150,16 @@
 					weekMin: 'wk'
 				}
 			},
-			fill = function(el) {
-				var options = $(el).data('datepicker');
-				var cal = $(el);
+			fill = function(cal) {
+				cal = $(cal);
+				var options = cal.data('datepicker');
 				var currentCal = Math.floor(options.calendars/2), date, data, dow, month, cnt = 0, week, days, indic, indic2, html, tblCal;
-				cal.find('td>table tbody').remove();
+				cal.find('.pmu-instance > :not(nav)').remove();
 				for (var i = 0; i < options.calendars; i++) {
 					date = new Date(options.current);
 					date.addMonths(-currentCal + i);
-					tblCal = cal.find('table').eq(i+1);
-					switch (tblCal[0].className) {
+					tblCal = cal.find('.pmu-instance').eq(i);console.log(tblCal.get(0));
+					switch (cal[0].className.match(/datepickerViewDays|datepickerViewMonths|datepickerViewYears/)[0]) {
 						case 'datepickerViewDays':
 							dow = formatDate(date, 'B, Y');
 							break;
@@ -172,12 +170,12 @@
 							dow = (date.getFullYear()-6) + ' - ' + (date.getFullYear()+5);
 							break;
 					}
-					tblCal.find('thead tr:first th:eq(1) span').text(dow);
+					tblCal.find('.pmu-month').text(dow);
 					dow = date.getFullYear()-6;
 					data = {
 						data: [],
 						className: 'datepickerYears'
-					}
+					};
 					for ( var j = 0; j < 12; j++) {
 						data.data.push(dow + j);
 					}
@@ -185,7 +183,7 @@
 					date.setDate(1);
 					data = {weeks:[], test: 10};
 					month = date.getMonth();
-					var dow = (date.getDay() - options.starts) % 7;
+					dow = (date.getDay() - options.starts) % 7;
 					date.addDays(-(dow + (dow < 0 ? 7 : 0)));
 					week = -1;
 					cnt = 0;
@@ -230,7 +228,7 @@
 					html = tmpl(tpl.days.join(''), data) + html;
 					data = {
 						data: options.locale.monthsShort,
-						className: 'datepickerMonths'
+						className: 'pmu-months'
 					};
 					html = tmpl(tpl.months.join(''), data) + html;
 					tblCal.append(html);
@@ -463,7 +461,7 @@
 					ev.target = ev.target.parentNode;
 				}
 				var el = $(ev.target);
-				if (el.is('a')) {
+				if (el.is('[data-pmu-button]')) {
 					ev.target.blur();
 					if (el.hasClass('datepickerDisabled')) {
 						return false;
@@ -475,7 +473,7 @@
 					var tmp = new Date(options.current);
 					var changed = false;
 					var fillIt = false;
-					if (parentEl.is('th')) {
+					if (parentEl.is('nav')) {
 						if (parentEl.hasClass('datepickerWeek') && options.mode == 'range' && !parentEl.next().hasClass('datepickerDisabled')) {
 							var val = parseInt(parentEl.next().text(), 10);
 							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
@@ -490,7 +488,7 @@
 							fillIt = true;
 							changed = true;
 							options.lastSel = false;
-						} else if (parentEl.hasClass('datepickerMonth')) {
+						} else if (parentEl.hasClass('pmu-month')) {
 							tmp.addMonths(tblIndex - Math.floor(options.calendars/2));
 							switch (tblEl.get(0).className) {
 								case 'datepickerViewDays':
@@ -509,13 +507,13 @@
 						} else if (parentEl.parent().parent().is('thead')) {
 							switch (tblEl.get(0).className) {
 								case 'datepickerViewDays':
-									options.current.addMonths(parentEl.hasClass('datepickerGoPrev') ? -1 : 1);
+									options.current.addMonths(parentEl.hasClass('pmu-prev') ? -1 : 1);
 									break;
 								case 'datepickerViewMonths':
-									options.current.addYears(parentEl.hasClass('datepickerGoPrev') ? -1 : 1);
+									options.current.addYears(parentEl.hasClass('pmu-prev') ? -1 : 1);
 									break;
 								case 'datepickerViewYears':
-									options.current.addYears(parentEl.hasClass('datepickerGoPrev') ? -12 : 12);
+									options.current.addYears(parentEl.hasClass('pmu-prev') ? -12 : 12);
 									break;
 							}
 							fillIt = true;
@@ -523,8 +521,8 @@
 					} else if (parentEl.is('td') && !parentEl.hasClass('datepickerDisabled')) {
 						switch (tblEl.get(0).className) {
 							case 'datepickerViewMonths':
-								options.current.setMonth(tblEl.find('tbody.datepickerMonths td').index(parentEl));
-								options.current.setFullYear(parseInt(tblEl.find('thead th.datepickerMonth span').text(), 10));
+								options.current.setMonth(tblEl.find('tbody.pmu-months td').index(parentEl));
+								options.current.setFullYear(parseInt(tblEl.find('thead th.pmu-month span').text(), 10));
 								options.current.addMonths(Math.floor(options.calendars/2) - tblIndex);
 								tblEl.get(0).className = 'datepickerViewDays';
 								break;
@@ -630,7 +628,7 @@
 				var cal = $('#' + $(this).data('datepickerId'));
 				if (!cal.is(':visible')) {
 					var calEl = cal.get(0);
-					fill(calEl);
+					fill(cal);
 					var options = cal.data('datepicker');
 					options.onBeforeShow.apply(this, [cal.get(0)]);
 					var pos = $(this).offset();
@@ -737,9 +735,6 @@
 						var html = '';
 						for (var i = 0; i < options.calendars; i++) {
 							cnt = options.starts;
-							if (i > 0) {
-								html += tpl.space;
-							}
 							html += tmpl(tpl.head.join(''), {
 									week: options.locale.weekMin,
 									prev: options.prev,
@@ -754,9 +749,9 @@
 								});
 						}
 						cal
-							.find('tr:first').append(html)
-								.find('table').addClass(views[options.view]);
-						fill(cal.get(0));
+							.addClass(views[options.view])
+							.find('.datepickerContainer').append(html);
+						fill(cal);
 						if (options.flat) {
 							cal.appendTo(this).show().css('position', 'relative');
 							layout(cal.get(0));
@@ -811,7 +806,7 @@
 						if (shiftTo) {
 							options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
 						}
-						fill(cal.get(0));
+						fill(cal);
 					}
 				});
 			},
@@ -827,7 +822,7 @@
 						var options = cal.data('datepicker');
 						if (options.mode != 'single') {
 							options.date = [];
-							fill(cal.get(0));
+							fill(cal);
 						}
 					}
 				});
