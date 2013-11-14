@@ -39,7 +39,7 @@
 			starts: 0
 		});
 		$('#clearSelection').bind('click', function(){
-			$('#date3').pickmeupClear();
+			$('#date3').pickmeup('clear');
 			return false;
 		});
 		$('#date3').pickmeup({
@@ -57,14 +57,16 @@
 			starts: 1,
 			position: 'right',
 			onBeforeShow: function(){
-				$('#inputDate').pickmeupSetDate($('#inputDate').val(), true);
+				$('#inputDate').pickmeup('set_date', $('#inputDate').val(), true);
 			},
 			onChange: function(formated, dates){
 				$('#inputDate').val(formated);
 				if ($('#closeOnSelect input').prop('checked')) {
-					$('#inputDate').pickmeupHide();
+					$('#inputDate').pickmeup('hide');
 				}
 			}
+		}).on('keyup update', function () {
+			$(this).pickmeup('update');
 		});
 		var now3 = new Date();
 		now3.addDays(-4);
