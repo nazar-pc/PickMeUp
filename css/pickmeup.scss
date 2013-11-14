@@ -47,7 +47,6 @@
 		.pmu-button {
 			color           : $color;
 			cursor          : pointer;
-			display         : inline-block;
 			outline         : none;
 			text-decoration : none;
 		}
@@ -75,6 +74,7 @@
 		}
 
 		nav {
+			display     : flex;
 			line-height : 2em;
 
 			.pmu-button {
@@ -82,23 +82,31 @@
 			}
 
 			.pmu-next {
-				float : right;
-				width : 20px;
+				float  : right;
+				height : 1em;
+				width  : 1em;
 			}
 			.pmu-month {
 				display : block;
+				margin  : 0 -1em;
+				width   : 100%;
 			}
 			.pmu-prev {
-				float : left;
-				width : 20px;
+				float  : left;
+				height : 1em;
+				width  : 1em;
 			}
 		}
 
 		.pmu-years,
 		.pmu-months {
-			.pmu-button {
-				padding : .9em 0;
-				width   : 3.5rem;
+			> div {
+				display : flex;
+
+				.pmu-button {
+					padding : .9em 0;
+					width   : 3.5em;
+				}
 			}
 		}
 
@@ -109,12 +117,12 @@
 
 		.pmu-day-of-week,
 		.pmu-days > div {
+			display     : flex;
 			line-height : 1em;
 
 			div {
-				display : inline-block;
-				padding : .2em 0;
-				width   : 2rem;
+				line-height : 1.6em;
+				width       : 2em;
 			}
 		}
 	}

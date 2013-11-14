@@ -31,7 +31,6 @@
     .pickmeup .pmu-instance .pmu-button {
       color: #eeeeee;
       cursor: pointer;
-      display: inline-block;
       outline: none;
       text-decoration: none; }
     .pickmeup .pmu-instance .pmu-button:hover {
@@ -47,29 +46,37 @@
     .pickmeup .pmu-instance .pmu-not-in-month.pmu-selected {
       background: #17384d; }
     .pickmeup .pmu-instance nav {
+      display: flex;
       line-height: 2em; }
       .pickmeup .pmu-instance nav .pmu-button {
         color: #eeeeee; }
       .pickmeup .pmu-instance nav .pmu-next {
         float: right;
-        width: 20px; }
+        height: 1em;
+        width: 1em; }
       .pickmeup .pmu-instance nav .pmu-month {
-        display: block; }
+        display: block;
+        margin: 0 -1em;
+        width: 100%; }
       .pickmeup .pmu-instance nav .pmu-prev {
         float: left;
-        width: 20px; }
-    .pickmeup .pmu-instance .pmu-years .pmu-button,
-    .pickmeup .pmu-instance .pmu-months .pmu-button {
-      padding: 0.9em 0;
-      width: 3.5rem; }
+        height: 1em;
+        width: 1em; }
+    .pickmeup .pmu-instance .pmu-years > div,
+    .pickmeup .pmu-instance .pmu-months > div {
+      display: flex; }
+      .pickmeup .pmu-instance .pmu-years > div .pmu-button,
+      .pickmeup .pmu-instance .pmu-months > div .pmu-button {
+        padding: 0.9em 0;
+        width: 3.5em; }
     .pickmeup .pmu-instance .pmu-day-of-week {
       color: #999999;
       cursor: default; }
     .pickmeup .pmu-instance .pmu-day-of-week,
     .pickmeup .pmu-instance .pmu-days > div {
+      display: flex;
       line-height: 1em; }
       .pickmeup .pmu-instance .pmu-day-of-week div,
       .pickmeup .pmu-instance .pmu-days > div div {
-        display: inline-block;
-        padding: 0.2em 0;
-        width: 2rem; }
+        line-height: 1.6em;
+        width: 2em; }

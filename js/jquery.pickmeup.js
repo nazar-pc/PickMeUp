@@ -47,8 +47,8 @@
 					return '<div class="pmu-instance">' +
 						'<nav>' +
 							'<div class="pmu-prev pmu-button">' + d_.prev + '</div>' +
-							'<div class="pmu-next pmu-button">' + d_.next + '</div>' +
 							'<div class="pmu-month pmu-button" />' +
+							'<div class="pmu-next pmu-button">' + d_.next + '</div>' +
 						'</nav>' +
 						'<nav class="pmu-day-of-week">' + d(0) + d(1) + d(2) + d(3) + d(4) + d(5) + d(6) + '</nav>' +
 					'</div>';
