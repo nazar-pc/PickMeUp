@@ -10,8 +10,8 @@
 	$.pickmeup = {
 		flat			: false,
 		starts			: 1,
-		prev			: '◀',
-		next			: '▶',
+		prev			: '&#9664;',
+		next			: '&#9654;',
 		lastSel			: false,
 		mode			: 'single',
 		view			: 'days',
@@ -19,11 +19,11 @@
 		format			: 'd-m-Y',
 		position		: 'bottom',
 		eventName		: 'click',
-		onRender		: function(){return {};},
-		onChange		: function(){return true;},
-		onShow			: function(){return true;},
-		onBeforeShow	: function(){return true;},
-		onHide			: function(){return true;},
+		onRender		: function () {return {};},
+		onChange		: function () {return true;},
+		onShow			: function () {return true;},
+		onBeforeShow	: function () {return true;},
+		onHide			: function () {return true;},
 		locale			: {
 			days		: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 			daysShort	: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -34,9 +34,9 @@
 	};
 	var pickmeup = function () {
 		var	views = {
-				years: 'pmu-view-years',
-				moths: 'pmu-view-months',
-				days: 'pmu-view-days'
+				years	: 'pmu-view-years',
+				moths	: 'pmu-view-months',
+				days	: 'pmu-view-days'
 			},
 			tpl = {
 				wrapper	: '<div class="pickmeup" />',
@@ -79,106 +79,130 @@
 				}
 			};
 		function fill (cal) {
-			cal = $(cal);
-			var options = cal.data('pickmeup');
-			var currentCal = Math.floor(options.calendars / 2), date, data, dow, month, cnt = 0, days, week_row, day_of_week, html, tblCal;
+			var options		= cal.data('pickmeup');
+			var current_cal	= Math.floor(options.calendars / 2),
+				date,
+				data,
+				header,
+				year,
+				day,
+				month,
+				count			= 0,
+				days,
+				week_row,
+				html,
+				instance;
+			/**
+			 * Remove old content except header navigation
+			 */
 			cal.find('.pmu-instance > :not(nav)').remove();
+			/**
+			 * If several calendars should be shown
+			 */
 			for (var i = 0; i < options.calendars; i++) {
-				date = new Date(options.current);
-				date.addMonths(-currentCal + i);
-				tblCal = cal.find('.pmu-instance').eq(i);
+				date		= new Date(options.current);
+				date.addMonths(-current_cal + i);
+				instance	= cal.find('.pmu-instance').eq(i);
 				if (cal.hasClass('pmu-view-years')) {
-					dow = (date.getFullYear() - 6) + ' - ' + (date.getFullYear()+5);
+					header = (date.getFullYear() - 6) + ' - ' + (date.getFullYear()+5);
 				} else if (cal.hasClass('pmu-view-months')) {
-					dow = date.getFullYear();
+					header = date.getFullYear();
 				} else  if (cal.hasClass('pmu-view-days')) {
-					dow = formatDate(date, 'B, Y');
+					header = formatDate(date, 'B, Y');
 				}
-				tblCal.find('.pmu-month').text(dow);
-				dow = date.getFullYear() - 6;
-				data = {
+				instance
+					.find('.pmu-month')
+					.text(header);
+				year		= date.getFullYear() - 6;
+				data		= {
 					data		: [],
 					class_name	: 'pmu-years'
 				};
 				for ( var j = 0; j < 12; j++) {
-					data.data.push(dow + j);
+					data.data.push(year + j);
 				}
-				html = tpl.months(data);
+				html		= tpl.months(data);
 				date.setDate(1);
-				data = [];
-				month = date.getMonth();
-				dow = (date.getDay() - options.starts) % 7;
-				date.addDays(-(dow + (dow < 0 ? 7 : 0)));
-				cnt = 0;
-				while (cnt < 42) {
-					week_row = parseInt(cnt / 7,10);
-					day_of_week = cnt % 7;
+				data		= [];
+				month		= date.getMonth();
+				day			= (date.getDay() - options.starts) % 7;
+				date.addDays(-(day + (day < 0 ? 7 : 0)));
+				count		= 0;
+				while (count < 42) {
+					week_row	= parseInt(count / 7, 10);
 					if (!data[week_row]) {
 						data[week_row] = [];
 					}
-					data[week_row][day_of_week] = {
-						text: date.getDate(),
-						class_name: []
+					day	= {
+						text		: date.getDate(),
+						class_name	: []
 					};
 					if (month != date.getMonth()) {
-						data[week_row][day_of_week].class_name.push('pmu-not-in-month');
+						day.class_name.push('pmu-not-in-month');
 					}
 					if (date.getDay() == 0) {
-						data[week_row][day_of_week].class_name.push('pmu-sunday');
+						day.class_name.push('pmu-sunday');
+					} else if (date.getDay() == 6) {
+						day.class_name.push('pmu-saturday');
 					}
-					if (date.getDay() == 6) {
-						data[week_row][day_of_week].class_name.push('pmu-saturday');
-					}
-					var fromUser = options.onRender(date);
-					var val = date.valueOf();
-					if (fromUser.selected || options.date == val || $.inArray(val, options.date) > -1 || (options.mode == 'range' && val >= options.date[0] && val <= options.date[1])) {
-						data[week_row][day_of_week].class_name.push('pmu-selected');
+					var fromUser	= options.onRender(date);
+					var val			= date.valueOf();
+					if (
+						fromUser.selected ||
+						options.date == val ||
+						$.inArray(val, options.date) > -1 ||
+						(
+							options.mode == 'range' && val >= options.date[0] && val <= options.date[1]
+						)
+					) {
+						day.class_name.push('pmu-selected');
 					}
 					if (fromUser.disabled) {
-						data[week_row][day_of_week].class_name.push('pmu-disabled');
+						day.class_name.push('pmu-disabled');
 					}
 					if (fromUser.className) {
-						data[week_row][day_of_week].class_name.push(fromUser.className);
+						day.class_name.push(fromUser.className);
 					}
-					data[week_row][day_of_week].class_name = data[week_row][day_of_week].class_name.join(' ');
-					cnt++;
+					day.class_name = day.class_name.join(' ');
+					data[week_row][count % 7]	= day;
+					count++;
 					date.addDays(1);
 				}
-				html = tpl.days(data) + html;
-				data = {
+				html	= tpl.days(data) + html;
+				data	= {
 					data		: options.locale.monthsShort,
 					class_name	: 'pmu-months'
 				};
-				html = tpl.months(data) + html;
-				tblCal.append(html);
+				html	= tpl.months(data) + html;
+				instance.append(html);
 			}
 		}
 		function parseDate (date, format) {
 			if (date.constructor == Date) {
 				return new Date(date);
 			}
-			var parts = date.split(/\W+/);
-			var against = format.split(/\W+/), d, m, y, h, min, now = new Date();
+			var parts	= date.split(/\W+/);
+			var against	= format.split(/\W+/), d, m, y, h, min, now = new Date();
 			for (var i = 0; i < parts.length; i++) {
 				switch (against[i]) {
 					case 'd':
 					case 'e':
 						d = parseInt(parts[i],10);
-						break;
+					break;
 					case 'm':
 						m = parseInt(parts[i], 10)-1;
-						break;
+					break;
 					case 'Y':
 					case 'y':
 						y = parseInt(parts[i], 10);
 						y += y > 100 ? 0 : (y < 29 ? 2000 : 1900);
-						break;
+					break;
 					case 'H':
 					case 'I':
 					case 'k':
 					case 'l':
 						h = parseInt(parts[i], 10);
-						break;
+					break;
 					case 'P':
 					case 'p':
 						if (/pm/i.test(parts[i]) && h < 12) {
@@ -186,10 +210,10 @@
 						} else if (/am/i.test(parts[i]) && h >= 12) {
 							h -= 12;
 						}
-						break;
+					break;
 					case 'M':
 						min = parseInt(parts[i], 10);
-						break;
+					break;
 				}
 			}
 			return new Date(
@@ -222,68 +246,68 @@
 				switch (part) {
 					case 'a':
 						part = date.getDayName(false);
-						break;
+					break;
 					case 'A':
 						part = date.getDayName(true);
-						break;
+					break;
 					case 'b':
 						part = date.getMonthName(false);
-						break;
+					break;
 					case 'B':
 						part = date.getMonthName(true);
-						break;
+					break;
 					case 'C':
 						part = 1 + Math.floor(y / 100);
-						break;
+					break;
 					case 'd':
 						part = (d < 10) ? ("0" + d) : d;
-						break;
+					break;
 					case 'e':
 						part = d;
-						break;
+					break;
 					case 'H':
 						part = (hr < 10) ? ("0" + hr) : hr;
-						break;
+					break;
 					case 'I':
 						part = (ir < 10) ? ("0" + ir) : ir;
-						break;
+					break;
 					case 'j':
 						part = (dy < 100) ? ((dy < 10) ? ("00" + dy) : ("0" + dy)) : dy;
-						break;
+					break;
 					case 'k':
 						part = hr;
-						break;
+					break;
 					case 'l':
 						part = ir;
-						break;
+					break;
 					case 'm':
 						part = (m < 9) ? ("0" + (1+m)) : (1+m);
-						break;
+					break;
 					case 'M':
 						part = (min < 10) ? ("0" + min) : min;
-						break;
+					break;
 					case 'p':
 					case 'P':
 						part = pm ? "PM" : "AM";
-						break;
+					break;
 					case 's':
 						part = Math.floor(date.getTime() / 1000);
-						break;
+					break;
 					case 'S':
 						part = (sec < 10) ? ("0" + sec) : sec;
-						break;
+					break;
 					case 'u':
 						part = w + 1;
-						break;
+					break;
 					case 'w':
 						part = w;
-						break;
+					break;
 					case 'y':
 						part = ('' + y).substr(2, 2);
-						break;
+					break;
 					case 'Y':
 						part = y;
-						break;
+					break;
 				}
 				parts[i] = part;
 			}
@@ -293,48 +317,49 @@
 			if (Date.prototype.tempDate) {
 				return;
 			}
-			Date.prototype.tempDate = null;
-			Date.prototype.months = options.months;
-			Date.prototype.monthsShort = options.monthsShort;
-			Date.prototype.days = options.days;
-			Date.prototype.daysShort = options.daysShort;
-			Date.prototype.getMonthName = function(fullName) {
+			Date.prototype.tempDate		= null;
+			Date.prototype.months		= options.months;
+			Date.prototype.monthsShort	= options.monthsShort;
+			Date.prototype.days			= options.days;
+			Date.prototype.daysShort	= options.daysShort;
+			Date.prototype.getMonthName	= function(fullName) {
 				return this[fullName ? 'months' : 'monthsShort'][this.getMonth()];
 			};
-			Date.prototype.getDayName = function(fullName) {
+			Date.prototype.getDayName	= function(fullName) {
 				return this[fullName ? 'days' : 'daysShort'][this.getDay()];
 			};
-			Date.prototype.addDays = function (n) {
+			Date.prototype.addDays		= function (n) {
 				this.setDate(this.getDate() + n);
-				this.tempDate = this.getDate();
+				this.tempDate	= this.getDate();
 			};
-			Date.prototype.addMonths = function (n) {
+			Date.prototype.addMonths	= function (n) {
 				if (this.tempDate == null) {
-					this.tempDate = this.getDate();
+					this.tempDate	= this.getDate();
 				}
 				this.setDate(1);
 				this.setMonth(this.getMonth() + n);
 				this.setDate(Math.min(this.tempDate, this.getMaxDays()));
 			};
-			Date.prototype.addYears = function (n) {
+			Date.prototype.addYears		= function (n) {
 				if (this.tempDate == null) {
-					this.tempDate = this.getDate();
+					this.tempDate	= this.getDate();
 				}
 				this.setDate(1);
 				this.setFullYear(this.getFullYear() + n);
 				this.setDate(Math.min(this.tempDate, this.getMaxDays()));
 			};
-			Date.prototype.getMaxDays = function() {
-				var tmpDate = new Date(),
-					d = 28, m;
-				m = tmpDate.getMonth();
+			Date.prototype.getMaxDays	= function() {
+				var tmpDate	= new Date(),
+					d		= 28,
+					m;
+				m	= tmpDate.getMonth();
 				while (tmpDate.getMonth() == m) {
-					d ++;
+					++d;
 					tmpDate.setDate(d);
 				}
 				return d - 1;
 			};
-			Date.prototype.getDayOfYear = function() {
+			Date.prototype.getDayOfYear	= function() {
 				var now = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
 				var then = new Date(this.getFullYear(), 0, 0, 0, 0, 0);
 				var time = now - then;
@@ -342,16 +367,14 @@
 			};
 		}
 		function layout (cal) {
-			cal = $(cal);
-			var instance = cal.find('.pmu-instance');
-			var width = 0;
+			var instance	= cal.find('.pmu-instance'),
+				width		= 0;
 			instance.each(function () {
 				width	+= $(this).outerWidth();
 			});
-			var height = instance.outerHeight();
 			cal.css({
-				width: width + 'px',
-				height: height + 'px'
+				width	: width + 'px',
+				height	: instance.outerHeight() + 'px'
 			});
 		}
 		function click (e) {
@@ -360,26 +383,26 @@
 				if (el.hasClass('pmu-disabled')) {
 					return false;
 				}
-				var options = $(this).data('pickmeup');
-				var instance = el.parents('.pmu-instance').eq(0);
-				var root = instance.parent();
-				var tblIndex = $('.pmu-instance', root).index(instance);
-				var tmp = new Date(options.current);
-				var changed = false;
-				var fillIt = false;
+				var options			= $(this).data('pickmeup');
+				var instance		= el.parents('.pmu-instance').eq(0);
+				var root			= instance.parent();
+				var instance_index	= $('.pmu-instance', root).index(instance);
+				var current_date	= new Date(options.current);
+				var changed			= false;
+				var fill_it			= false;
 				var val;
 				if (el.parent().is('nav')) {
 					if (el.hasClass('pmu-month')) {
-						tmp.addMonths(tblIndex - Math.floor(options.calendars / 2));
+						current_date.addMonths(instance_index - Math.floor(options.calendars / 2));
 						if (root.hasClass('pmu-view-years')) {
 							root.removeClass('pmu-view-years').addClass('pmu-view-days');
-							el.text(formatDate(tmp, 'B, Y'));
+							el.text(formatDate(current_date, 'B, Y'));
 						} else if (root.hasClass('pmu-view-months')) {
 							root.removeClass('pmu-view-months').addClass('pmu-view-years');
-							el.text((tmp.getFullYear()-6) + ' - ' + (tmp.getFullYear()+5));
+							el.text((current_date.getFullYear() - 6) + ' - ' + (current_date.getFullYear()+5));
 						} else if (root.hasClass('pmu-view-days')) {
 							root.removeClass('pmu-view-days').addClass('pmu-view-months');
-							el.text(tmp.getFullYear());
+							el.text(current_date.getFullYear());
 						}
 					} else {
 						if (root.hasClass('pmu-view-years')) {
@@ -389,7 +412,7 @@
 						} else if (root.hasClass('pmu-view-days')) {
 							options.current.addMonths(instance.hasClass('pmu-prev') ? -1 : 1);
 						}
-						fillIt = true;
+						fill_it = true;
 					}
 				} else if (!el.hasClass('pmu-disabled')) {
 					if (root.hasClass('pmu-view-years')) {
@@ -398,18 +421,18 @@
 					} else if (root.hasClass('pmu-view-months')) {
 						options.current.setMonth(root.find('.pmu-months .pmu-button').index(el));
 						options.current.setFullYear(parseInt(root.find('.pmu-month').text(), 10));
-						options.current.addMonths(Math.floor(options.calendars / 2) - tblIndex);
+						options.current.addMonths(Math.floor(options.calendars / 2) - instance_index);
 						root.removeClass('pmu-view-months').addClass('pmu-view-days');
 					} else {
-						val = parseInt(el.text(), 10);
-						tmp.addMonths(tblIndex - Math.floor(options.calendars / 2));
+						val	= parseInt(el.text(), 10);
+						current_date.addMonths(instance_index - Math.floor(options.calendars / 2));
 						if (el.hasClass('pmu-not-in-month')) {
-							tmp.addMonths(val > 15 ? -1 : 1);
+							current_date.addMonths(val > 15 ? -1 : 1);
 						}
-						tmp.setDate(val);
+						current_date.setDate(val);
 						switch (options.mode) {
 							case 'multiple':
-								val = (tmp.setHours(0,0,0,0)).valueOf();
+								val = (current_date.setHours(0,0,0,0)).valueOf();
 								if ($.inArray(val, options.date) > -1) {
 									$.each(options.date, function (nr, dat){
 										if (dat == val) {
@@ -424,26 +447,26 @@
 								break;
 							case 'range':
 								if (!options.lastSel) {
-									options.date[0] = (tmp.setHours(0,0,0,0)).valueOf();
+									options.date[0]	= (current_date.setHours(0,0,0,0)).valueOf();
 								}
-								val = (tmp.setHours(23,59,59,0)).valueOf();
+								val				= (current_date.setHours(23,59,59,0)).valueOf();
 								if (val < options.date[0]) {
-									options.date[1] = options.date[0] + 86399000;
-									options.date[0] = val - 86399000;
+									options.date[1]	= options.date[0] + 86399000;
+									options.date[0]	= val - 86399000;
 								} else {
-									options.date[1] = val;
+									options.date[1]	= val;
 								}
-								options.lastSel = !options.lastSel;
+								options.lastSel	= !options.lastSel;
 								break;
 							default:
-								options.date = tmp.valueOf();
+								options.date	= current_date.valueOf();
 								break;
 						}
 					}
-					fillIt = true;
-					changed = true;
+					fill_it	= true;
+					changed	= true;
 				}
-				if (fillIt) {
+				if (fill_it) {
 					fill(root);
 				}
 				if (changed) {
@@ -453,27 +476,19 @@
 			return false;
 		}
 		function prepareDate (options) {
-			var tmp;
+			var result;
 			if (options.mode == 'single') {
-				tmp = new Date(options.date);
-				return [formatDate(tmp, options.format), tmp];
+				result = new Date(options.date);
+				return [formatDate(result, options.format), result];
 			} else {
-				tmp = [[],[]];
+				result = [[],[]];
 				$.each(options.date, function(nr, val){
 					var date = new Date(val);
-					tmp[0].push(formatDate(date, options.format));
-					tmp[1].push(date);
+					result[0].push(formatDate(date, options.format));
+					result[1].push(date);
 				});
-				return tmp;
+				return result;
 			}
-		}
-		function getViewport () {
-			return {
-				l : window.pageXOffset || document.documentElement.scrollLeft,
-				t : window.pageYOffset || document.documentElement.scrollTop,
-				w : window.innerWidth || document.documentElement.clientWidth,
-				h : window.innerHeight || document.documentElement.clientHeight
-			};
 		}
 		function isChildOf (parentEl, el, container) {
 			if (parentEl == el) {
@@ -494,18 +509,23 @@
 			return false;
 		}
 		function show (force) {
-			var cal = this.pickmeup;
+			var cal	= this.pickmeup;
 			if (force || !cal.is(':visible')) {
 				fill(cal);
-				var options = cal.data('pickmeup');
+				var options		= cal.data('pickmeup');
+				var pos			= $(this).offset();
+				var viewport	= {
+					l : document.documentElement.scrollLeft,
+					t : document.documentElement.scrollTop,
+					w : document.documentElement.clientWidth,
+					h : document.documentElement.clientHeight
+				};
+				var top			= pos.top;
+				var left		= pos.left;
 				options.onBeforeShow.call(this, cal);
-				var pos = $(this).offset();
-				var viewPort = getViewport();
-				var top = pos.top;
-				var left = pos.left;
 				cal.css({
-					visibility: 'hidden',
-					display: 'block'
+					visibility	: 'hidden',
+					display		: 'block'
 				});
 				layout(cal);
 				switch (options.position){
@@ -522,33 +542,40 @@
 						top += this.offsetHeight;
 						break;
 				}
-				if (top + cal.offsetHeight > viewPort.t + viewPort.h) {
+				if (top + cal.offsetHeight > viewport.t + viewport.h) {
 					top = pos.top  - cal.offsetHeight;
 				}
-				if (top < viewPort.t) {
+				if (top < viewport.t) {
 					top = pos.top + this.offsetHeight + cal.offsetHeight;
 				}
-				if (left + cal.offsetWidth > viewPort.l + viewPort.w) {
+				if (left + cal.offsetWidth > viewport.l + viewport.w) {
 					left = pos.left - cal.offsetWidth;
 				}
-				if (left < viewPort.l) {
+				if (left < viewport.l) {
 					left = pos.left + this.offsetWidth
 				}
 				cal.css({
-					visibility: 'visible',
-					display: 'block',
-					top: top + 'px',
-					left: left + 'px'
+					visibility	: 'visible',
+					display		: 'block',
+					top			: top + 'px',
+					left		: left + 'px'
 				});
-				if (options.onShow.apply(this, [cal.get(0)]) != false) {
+				if (options.onShow.call(this, cal) != false) {
 					cal.show();
 				}
-				$(document).on('mousedown', {cal: cal, trigger: this}, hide);
+				$(document).on(
+					'mousedown',
+					{
+						cal		: cal,
+						trigger	: this
+					},
+					hide
+				);
 			}
 		}
 		function hide (ev) {
 			if (!ev.target || ev.target != ev.data.trigger && !isChildOf(ev.data.cal.get(0), ev.target, ev.data.cal.get(0))) {
-				if (ev.data.cal.data('pickmeup').onHide.apply(this, [ev.data.cal.get(0)]) != false) {
+				if (ev.data.cal.data('pickmeup').onHide.apply(this, ev.data.cal) != false) {
 					ev.data.cal.hide();
 				}
 				$(document).off('mousedown', hide);
