@@ -7,6 +7,31 @@
  * @license		MIT License, see license.txt
  */
 (function ($) {
+	$.pickmeup = {
+		flat			: false,
+		starts			: 1,
+		prev			: '◀',
+		next			: '▶',
+		lastSel			: false,
+		mode			: 'single',
+		view			: 'days',
+		calendars		: 1,
+		format			: 'd-m-Y',
+		position		: 'bottom',
+		eventName		: 'click',
+		onRender		: function(){return {};},
+		onChange		: function(){return true;},
+		onShow			: function(){return true;},
+		onBeforeShow	: function(){return true;},
+		onHide			: function(){return true;},
+		locale			: {
+			days		: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+			daysShort	: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+			daysMin		: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+			months		: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+			monthsShort	: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+		}
+	};
 	var pickmeup = function () {
 		var	views = {
 				years: 'pmu-view-years',
@@ -14,129 +39,43 @@
 				days: 'pmu-view-days'
 			},
 			tpl = {
-				wrapper: '<div class="pickmeup"></div>',
-				head: [
-					'<div class="pmu-instance">',
+				wrapper	: '<div class="pickmeup" />',
+				head	: function (d_) {
+					function d (i) {
+						return '<div>' + d_.day[i] + '</div>';
+					}
+					return '<div class="pmu-instance">' +
 						'<nav>' +
-							'<div class="pmu-prev pmu-button"><%=prev%></div>',
-							'<div class="pmu-next pmu-button"><%=next%></div>' +
-							'<div class="pmu-month pmu-button"></div>',
-						'</nav>',
-						'<nav class="pmu-day-of-week">',
-							'<div><%=day1%></div>',
-							'<div><%=day2%></div>',
-							'<div><%=day3%></div>',
-							'<div><%=day4%></div>',
-							'<div><%=day5%></div>',
-							'<div><%=day6%></div>',
-							'<div><%=day7%></div>',
-						'</nav>',
-					'</div>'
-				],
-				days: [
-					'<div class="pmu-days">',
-						'<div>',
-							'<div class="<%=days[0][0].class_name%> pmu-button"><%=days[0][0].text%></div>',
-							'<div class="<%=days[0][1].class_name%> pmu-button"><%=days[0][1].text%></div>',
-							'<div class="<%=days[0][2].class_name%> pmu-button"><%=days[0][2].text%></div>',
-							'<div class="<%=days[0][3].class_name%> pmu-button"><%=days[0][3].text%></div>',
-							'<div class="<%=days[0][4].class_name%> pmu-button"><%=days[0][4].text%></div>',
-							'<div class="<%=days[0][5].class_name%> pmu-button"><%=days[0][5].text%></div>',
-							'<div class="<%=days[0][6].class_name%> pmu-button"><%=days[0][6].text%></div>',
-						'</div>',
-						'<div>',
-							'<div class="<%=days[1][0].class_name%> pmu-button"><%=days[1][0].text%></div>',
-							'<div class="<%=days[1][1].class_name%> pmu-button"><%=days[1][1].text%></div>',
-							'<div class="<%=days[1][2].class_name%> pmu-button"><%=days[1][2].text%></div>',
-							'<div class="<%=days[1][3].class_name%> pmu-button"><%=days[1][3].text%></div>',
-							'<div class="<%=days[1][4].class_name%> pmu-button"><%=days[1][4].text%></div>',
-							'<div class="<%=days[1][5].class_name%> pmu-button"><%=days[1][5].text%></div>',
-							'<div class="<%=days[1][6].class_name%> pmu-button"><%=days[1][6].text%></div>',
-						'</div>',
-						'<div>',
-							'<div class="<%=days[2][0].class_name%> pmu-button"><%=days[2][0].text%></div>',
-							'<div class="<%=days[2][1].class_name%> pmu-button"><%=days[2][1].text%></div>',
-							'<div class="<%=days[2][2].class_name%> pmu-button"><%=days[2][2].text%></div>',
-							'<div class="<%=days[2][3].class_name%> pmu-button"><%=days[2][3].text%></div>',
-							'<div class="<%=days[2][4].class_name%> pmu-button"><%=days[2][4].text%></div>',
-							'<div class="<%=days[2][5].class_name%> pmu-button"><%=days[2][5].text%></div>',
-							'<div class="<%=days[2][6].class_name%> pmu-button"><%=days[2][6].text%></div>',
-						'</div>',
-						'<div>',
-							'<div class="<%=days[3][0].class_name%> pmu-button"><%=days[3][0].text%></div>',
-							'<div class="<%=days[3][1].class_name%> pmu-button"><%=days[3][1].text%></div>',
-							'<div class="<%=days[3][2].class_name%> pmu-button"><%=days[3][2].text%></div>',
-							'<div class="<%=days[3][3].class_name%> pmu-button"><%=days[3][3].text%></div>',
-							'<div class="<%=days[3][4].class_name%> pmu-button"><%=days[3][4].text%></div>',
-							'<div class="<%=days[3][5].class_name%> pmu-button"><%=days[3][5].text%></div>',
-							'<div class="<%=days[3][6].class_name%> pmu-button"><%=days[3][6].text%></div>',
-						'</div>',
-						'<div>',
-							'<div class="<%=days[4][0].class_name%> pmu-button"><%=days[4][0].text%></div>',
-							'<div class="<%=days[4][1].class_name%> pmu-button"><%=days[4][1].text%></div>',
-							'<div class="<%=days[4][2].class_name%> pmu-button"><%=days[4][2].text%></div>',
-							'<div class="<%=days[4][3].class_name%> pmu-button"><%=days[4][3].text%></div>',
-							'<div class="<%=days[4][4].class_name%> pmu-button"><%=days[4][4].text%></div>',
-							'<div class="<%=days[4][5].class_name%> pmu-button"><%=days[4][5].text%></div>',
-							'<div class="<%=days[4][6].class_name%> pmu-button"><%=days[4][6].text%></div>',
-						'</div>',
-						'<div>',
-							'<div class="<%=days[5][0].class_name%> pmu-button"><%=days[5][0].text%></div>',
-							'<div class="<%=days[5][1].class_name%> pmu-button"><%=days[5][1].text%></div>',
-							'<div class="<%=days[5][2].class_name%> pmu-button"><%=days[5][2].text%></div>',
-							'<div class="<%=days[5][3].class_name%> pmu-button"><%=days[5][3].text%></div>',
-							'<div class="<%=days[5][4].class_name%> pmu-button"><%=days[5][4].text%></div>',
-							'<div class="<%=days[5][5].class_name%> pmu-button"><%=days[5][5].text%></div>',
-							'<div class="<%=days[5][6].class_name%> pmu-button"><%=days[5][6].text%></div>',
-						'</div>',
-					'</div>'
-				],
-				months: [
-					'<div class="<%=className%>">',
-						'<div>',
-							'<div class="pmu-button"><%=data[0]%></div>',
-							'<div class="pmu-button"><%=data[1]%></div>',
-							'<div class="pmu-button"><%=data[2]%></div>',
-							'<div class="pmu-button"><%=data[3]%></div>',
-						'</div>',
-						'<div>',
-							'<div class="pmu-button"><%=data[4]%></div>',
-							'<div class="pmu-button"><%=data[5]%></div>',
-							'<div class="pmu-button"><%=data[6]%></div>',
-							'<div class="pmu-button"><%=data[7]%></div>',
-						'</div>',
-						'<div>',
-							'<div class="pmu-button"><%=data[8]%></div>',
-							'<div class="pmu-button"><%=data[9]%></div>',
-							'<div class="pmu-button"><%=data[10]%></div>',
-							'<div class="pmu-button"><%=data[11]%></div>',
-						'</div>',
-					'</div>'
-				]
-			},
-			defaults = {
-				flat			: false,
-				starts			: 1,
-				prev			: '◀',
-				next			: '▶',
-				lastSel			: false,
-				mode			: 'single',
-				view			: 'days',
-				calendars		: 1,
-				format			: 'Y-m-d',
-				position		: 'bottom',
-				eventName		: 'click',
-				onRender		: function(){return {};},
-				onChange		: function(){return true;},
-				onShow			: function(){return true;},
-				onBeforeShow	: function(){return true;},
-				onHide			: function(){return true;},
-				locale			: {
-					days		: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-					daysShort	: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-					daysMin		: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
-					months		: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-					monthsShort	: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+							'<div class="pmu-prev pmu-button">' + d_.prev + '</div>' +
+							'<div class="pmu-next pmu-button">' + d_.next + '</div>' +
+							'<div class="pmu-month pmu-button" />' +
+						'</nav>' +
+						'<nav class="pmu-day-of-week">' + d(0) + d(1) + d(2) + d(3) + d(4) + d(5) + d(6) + '</nav>' +
+					'</div>';
+				},
+				days	: function (days) {
+					var	week,
+						day,
+						result	= [];
+					for (week in days) {
+						result[week]	= '';
+						for (day in days[week]) {
+							day				= days[week][day];
+							result[week]	+= '<div class="' + day.class_name + ' pmu-button">' + day.text + '</div>'
+						}
+						result[week]	= '<div>' + result[week] + '</div>'
+					}
+					return '<div class="pmu-days">' + result.join('') + '</div>';
+				},
+				months	: function (d_) {
+					function d (i) {
+						return '<div class="pmu-button">' + d_.data[i] + '</div>';
+					}
+					return '<div class="' + d_.class_name + '">' +
+						'<div>' + d(0) + d(1) + d(2) + d(3) + '</div>' +
+						'<div>' + d(4) + d(5) + d(6) + d(7) + '</div>' +
+						'<div>' + d(8) + d(9) + d(10) + d(11) + '</div>' +
+					'</div>';
 				}
 			};
 		function fill (cal) {
@@ -158,15 +97,15 @@
 				tblCal.find('.pmu-month').text(dow);
 				dow = date.getFullYear() - 6;
 				data = {
-					data: [],
-					className: 'pmu-years'
+					data		: [],
+					class_name	: 'pmu-years'
 				};
 				for ( var j = 0; j < 12; j++) {
 					data.data.push(dow + j);
 				}
-				html = tmpl(tpl.months.join(''), data);
+				html = tpl.months(data);
 				date.setDate(1);
-				data = {days:[], test: 10};
+				data = [];
 				month = date.getMonth();
 				dow = (date.getDay() - options.starts) % 7;
 				date.addDays(-(dow + (dow < 0 ? 7 : 0)));
@@ -174,43 +113,43 @@
 				while (cnt < 42) {
 					week_row = parseInt(cnt / 7,10);
 					day_of_week = cnt % 7;
-					if (!data.days[week_row]) {
-						data.days[week_row] = [];
+					if (!data[week_row]) {
+						data[week_row] = [];
 					}
-					data.days[week_row][day_of_week] = {
+					data[week_row][day_of_week] = {
 						text: date.getDate(),
 						class_name: []
 					};
 					if (month != date.getMonth()) {
-						data.days[week_row][day_of_week].class_name.push('pmu-not-in-month');
+						data[week_row][day_of_week].class_name.push('pmu-not-in-month');
 					}
 					if (date.getDay() == 0) {
-						data.days[week_row][day_of_week].class_name.push('pmu-sunday');
+						data[week_row][day_of_week].class_name.push('pmu-sunday');
 					}
 					if (date.getDay() == 6) {
-						data.days[week_row][day_of_week].class_name.push('pmu-saturday');
+						data[week_row][day_of_week].class_name.push('pmu-saturday');
 					}
 					var fromUser = options.onRender(date);
 					var val = date.valueOf();
 					if (fromUser.selected || options.date == val || $.inArray(val, options.date) > -1 || (options.mode == 'range' && val >= options.date[0] && val <= options.date[1])) {
-						data.days[week_row][day_of_week].class_name.push('pmu-selected');
+						data[week_row][day_of_week].class_name.push('pmu-selected');
 					}
 					if (fromUser.disabled) {
-						data.days[week_row][day_of_week].class_name.push('pmu-disabled');
+						data[week_row][day_of_week].class_name.push('pmu-disabled');
 					}
 					if (fromUser.className) {
-						data.days[week_row][day_of_week].class_name.push(fromUser.className);
+						data[week_row][day_of_week].class_name.push(fromUser.className);
 					}
-					data.days[week_row][day_of_week].class_name = data.days[week_row][day_of_week].class_name.join(' ');
+					data[week_row][day_of_week].class_name = data[week_row][day_of_week].class_name.join(' ');
 					cnt++;
 					date.addDays(1);
 				}
-				html = tmpl(tpl.days.join(''), data) + html;
+				html = tpl.days(data) + html;
 				data = {
-					data: options.locale.monthsShort,
-					className: 'pmu-months'
+					data		: options.locale.monthsShort,
+					class_name	: 'pmu-months'
 				};
-				html = tmpl(tpl.months.join(''), data) + html;
+				html = tpl.months(data) + html;
 				tblCal.append(html);
 			}
 		}
@@ -604,7 +543,7 @@
 				if (options.onShow.apply(this, [cal.get(0)]) != false) {
 					cal.show();
 				}
-				$(document).bind('mousedown', {cal: cal, trigger: this}, hide);
+				$(document).on('mousedown', {cal: cal, trigger: this}, hide);
 			}
 		}
 		function hide (ev) {
@@ -612,12 +551,12 @@
 				if (ev.data.cal.data('pickmeup').onHide.apply(this, [ev.data.cal.get(0)]) != false) {
 					ev.data.cal.hide();
 				}
-				$(document).unbind('mousedown', hide);
+				$(document).off('mousedown', hide);
 			}
 		}
 		return {
 			init: function(options){
-				options = $.extend({}, defaults, options||{});
+				options = $.extend({}, $.pickmeup, options||{});
 				extendDate(options.locale);
 				options.calendars = Math.max(1, parseInt(options.calendars,10)||1);
 				options.mode = /single|multiple|range/.test(options.mode) ? options.mode : 'single';
@@ -653,24 +592,26 @@
 						options.current.setDate(1);
 						options.current.setHours(0,0,0,0);
 						var cnt;
-						var cal = $(tpl.wrapper).bind('click', click).data('pickmeup', options);
+						var cal = $(tpl.wrapper).on('click', click).data('pickmeup', options);
 						if (options.className) {
 							cal.addClass(options.className);
 						}
 						var html = '';
 						for (i = 0; i < options.calendars; i++) {
 							cnt = options.starts;
-							html += tmpl(tpl.head.join(''), {
-									prev: options.prev,
-									next: options.next,
-									day1: options.locale.daysMin[(cnt++)%7],
-									day2: options.locale.daysMin[(cnt++)%7],
-									day3: options.locale.daysMin[(cnt++)%7],
-									day4: options.locale.daysMin[(cnt++)%7],
-									day5: options.locale.daysMin[(cnt++)%7],
-									day6: options.locale.daysMin[(cnt++)%7],
-									day7: options.locale.daysMin[(cnt++)%7]
-								});
+							html += tpl.head({
+								prev	: options.prev,
+								next	: options.next,
+								day		: [
+									options.locale.daysMin[(cnt++) % 7],
+									options.locale.daysMin[(cnt++) %7],
+									options.locale.daysMin[(cnt++) %7],
+									options.locale.daysMin[(cnt++) %7],
+									options.locale.daysMin[(cnt++) % 7],
+									options.locale.daysMin[(cnt++) % 7],
+									options.locale.daysMin[(cnt++) % 7]
+								]
+							});
 						}
 						cal
 							.addClass(views[options.view]).append(html);
@@ -681,7 +622,7 @@
 							layout(cal);
 						} else {
 							cal.appendTo(document.body);
-							$(this).bind(options.eventName, show);
+							$(this).on(options.eventName, show);
 						}
 					}
 				});
@@ -707,7 +648,7 @@
 			update: function() {
 				return this.each( function () {
 					if (this.pickmeup) {
-						$(document).unbind('mousedown', hide);
+						$(document).off('mousedown', hide);
 						show.call(this, true);
 					}
 				});
@@ -801,36 +742,3 @@
 		return this;
 	};
 })(jQuery);
-
-(function(){
-  var cache = {};
-  this.tmpl = function tmpl(str, data){
-    // Figure out if we're getting a template, or if we need to
-    // load the template - and be sure to cache the result.
-    var fn = !/\W/.test(str) ?
-      cache[str] = cache[str] ||
-        tmpl(document.getElementById(str).innerHTML) :
-
-      // Generate a reusable function that will serve as a template
-      // generator (and which will be cached).
-      new Function("obj",
-        "var p=[],print=function(){p.push.apply(p,arguments);};" +
-
-        // Introduce the data as local variables using with(){}
-        "with(obj){p.push('" +
-
-        // Convert the template into pure JavaScript
-        str
-          .replace(/[\r\t\n]/g, " ")
-          .split("<%").join("\t")
-          .replace(/((^|%>)[^\t]*)'/g, "$1\r")
-          .replace(/\t=(.*?)%>/g, "',$1,'")
-          .split("\t").join("');")
-          .split("%>").join("p.push('")
-          .split("\r").join("\\'")
-      + "');}return p.join('');");
-
-    // Provide some basic currying to the user
-    return data ? fn( data ) : fn;
-  };
-})();
