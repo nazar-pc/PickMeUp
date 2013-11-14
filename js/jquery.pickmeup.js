@@ -600,7 +600,9 @@
 				return this.each(function(){
 					if (!$(this).data('pickmeup')) {
 						var i;
-						if (options.date.constructor == String) {
+						if (!options.date) {
+							options.date	= new Date;
+						} else if (options.date.constructor == String) {
 							options.date = parseDate(options.date, options.format);
 							options.date.setHours(0,0,0,0);
 						}

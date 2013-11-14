@@ -1,3 +1,11 @@
+/**
+ * @package		PickMeUp - jQuery datepicker plugin
+ * @author		Nazar Mokrynskyi <nazar@mokrynskyi.com>
+ * @author		Stefan Petre <www.eyecon.ro>
+ * @copyright	Copyright (c) 2013, Nazar Mokrynskyi
+ * @copyright	Copyright (c) 2008-2009, Stefan Petre
+ * @license		MIT License, see license.txt
+ */
 .pickmeup {
   background: black;
   border-radius: 0.4em;
@@ -18,7 +26,8 @@
     display: none; }
   .pickmeup .pmu-instance {
     display: inline-block;
-    padding: .5em; }
+    padding: .5em;
+    text-align: center; }
     .pickmeup .pmu-instance .pmu-button {
       color: #eeeeee;
       cursor: pointer;
@@ -39,10 +48,8 @@
       background: #17384d; }
     .pickmeup .pmu-instance nav {
       line-height: 2em; }
-      .pickmeup .pmu-instance nav .pmu-next,
-      .pickmeup .pmu-instance nav .pmu-prev,
-      .pickmeup .pmu-instance nav .pmu-month {
-        text-align: center; }
+      .pickmeup .pmu-instance nav .pmu-button {
+        color: #eeeeee; }
       .pickmeup .pmu-instance nav .pmu-next {
         float: right;
         width: 20px; }
@@ -54,7 +61,6 @@
     .pickmeup .pmu-instance .pmu-years .pmu-button,
     .pickmeup .pmu-instance .pmu-months .pmu-button {
       padding: 0.9em 0;
-      text-align: center;
       width: 3.5rem; }
     .pickmeup .pmu-instance .pmu-day-of-week {
       color: #999999;
@@ -66,5 +72,4 @@
       .pickmeup .pmu-instance .pmu-days > div div {
         display: inline-block;
         padding: 0.2em 0;
-        text-align: center;
         width: 2rem; }
