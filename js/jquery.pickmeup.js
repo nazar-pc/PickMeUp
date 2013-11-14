@@ -563,14 +563,22 @@
 				if (options.onShow.call(this, cal) != false) {
 					cal.show();
 				}
-				$(document).on(
-					'mousedown',
-					{
-						cal		: cal,
-						trigger	: this
-					},
-					hide
-				);
+				$(document)
+					.on(
+						'mousedown',
+						{
+							cal		: cal,
+							trigger	: this
+						},
+						hide
+					)
+					.on(
+						'resize',
+						[
+							true
+						],
+						show
+					);
 			}
 		}
 		function hide (ev) {
@@ -578,7 +586,9 @@
 				if (ev.data.cal.data('pickmeup').onHide.apply(this, ev.data.cal) != false) {
 					ev.data.cal.hide();
 				}
-				$(document).off('mousedown', hide);
+				$(document)
+					.off('mousedown', hide)
+					.off('resize', show);
 			}
 		}
 		return {
@@ -675,7 +685,9 @@
 			update: function() {
 				return this.each( function () {
 					if (this.pickmeup) {
-						$(document).off('mousedown', hide);
+						$(document)
+							.off('mousedown', hide)
+							.off('resize', show);
 						show.call(this, true);
 					}
 				});
