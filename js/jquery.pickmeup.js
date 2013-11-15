@@ -6,6 +6,39 @@
  * @copyright	Copyright (c) 2008-2009, Stefan Petre
  * @license		MIT License, see license.txt
  */
+(function (d) {
+	d.addDays		= function (n) {
+		this.setDate(this.getDate() + n);
+	};
+	d.addMonths	= function (n) {
+		var day	= this.getDate();
+		this.setDate(1);
+		this.setMonth(this.getMonth() + n);
+		this.setDate(Math.min(day, this.getMaxDays()));
+	};
+	d.addYears		= function (n) {
+		var day	= this.getDate();
+		this.setDate(1);
+		this.setFullYear(this.getFullYear() + n);
+		this.setDate(Math.min(day, this.getMaxDays()));
+	};
+	d.getMaxDays	= function() {
+		var tmpDate	= new Date(this.toString()),
+			d		= 28,
+			m		= tmpDate.getMonth();
+		while (tmpDate.getMonth() == m) {
+			++d;
+			tmpDate.setDate(d);
+		}
+		return d - 1;
+	};
+	d.getDayOfYear	= function() {
+		var now		= new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
+		var then	= new Date(this.getFullYear(), 0, 0, 0, 0, 0);
+		var time	= now - then;
+		return Math.floor(time / 24*60*60*1000);
+	};
+})(Date.prototype);
 (function ($) {
 	$.pickmeup = {
 		flat			: false,
@@ -313,49 +346,6 @@
 			}
 			return parts.join('');
 		}
-		function extendDate () {
-			if (Date.prototype.tempDate) {
-				return;
-			}
-			Date.prototype.tempDate		= null;
-			Date.prototype.addDays		= function (n) {
-				this.setDate(this.getDate() + n);
-				this.tempDate	= this.getDate();
-			};
-			Date.prototype.addMonths	= function (n) {
-				if (this.tempDate == null) {
-					this.tempDate	= this.getDate();
-				}
-				this.setDate(1);
-				this.setMonth(this.getMonth() + n);
-				this.setDate(Math.min(this.tempDate, this.getMaxDays()));
-			};
-			Date.prototype.addYears		= function (n) {
-				if (this.tempDate == null) {
-					this.tempDate	= this.getDate();
-				}
-				this.setDate(1);
-				this.setFullYear(this.getFullYear() + n);
-				this.setDate(Math.min(this.tempDate, this.getMaxDays()));
-			};
-			Date.prototype.getMaxDays	= function() {
-				var tmpDate	= new Date(),
-					d		= 28,
-					m;
-				m	= tmpDate.getMonth();
-				while (tmpDate.getMonth() == m) {
-					++d;
-					tmpDate.setDate(d);
-				}
-				return d - 1;
-			};
-			Date.prototype.getDayOfYear	= function() {
-				var now = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-				var then = new Date(this.getFullYear(), 0, 0, 0, 0, 0);
-				var time = now - then;
-				return Math.floor(time / 24*60*60*1000);
-			};
-		}
 		function layout (cal) {
 			var instance	= cal.find('.pmu-instance'),
 				width		= 0;
@@ -378,7 +368,6 @@
 				var root			= instance.parent();
 				var instance_index	= $('.pmu-instance', root).index(instance);
 				var current_date	= new Date(options.current);
-				var changed			= false;
 				var fill_it			= false;
 				var val;
 				if (el.parent().is('nav')) {
@@ -452,15 +441,12 @@
 								options.date	= current_date.valueOf();
 								break;
 						}
+						options.onChange.apply(this, prepareDate(options));
 					}
 					fill_it	= true;
-					changed	= true;
 				}
 				if (fill_it) {
 					fill(root);
-				}
-				if (changed) {
-					options.onChange.apply(this, prepareDate(options));
 				}
 			}
 			return false;
@@ -588,7 +574,6 @@
 		return {
 			init		: function(options){
 				options				= $.extend({}, $.pickmeup, options || {});
-				extendDate(options.locale);
 				options.calendars	= Math.max(1, parseInt(options.calendars,10)||1);
 				options.mode		= /single|multiple|range/.test(options.mode) ? options.mode : 'single';
 				return this.each(function(){
