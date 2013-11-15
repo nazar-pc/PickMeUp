@@ -63,7 +63,7 @@ h1 {
 }
 .navigationTabs li a{
 	float: left;
-	dispaly: block;
+	display: block;
 	height: 23px;
 	line-height: 23px;
 	padding: 0 10px;
