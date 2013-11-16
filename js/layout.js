@@ -40,13 +40,11 @@ $(function () {
 		format: 'Y-m-d',
 		calendars: 1,
 		mode: 'multiple',
-		onRender: function(date) {
+		render: function(date) {
 			return {
 				disabled: (date.valueOf() < now.valueOf()),
 				className: date.valueOf() == now2.valueOf() ? 'pickmeupSpecial' : false
 			}
-		},
-		onChange: function(formated, dates) {
 		},
 		starts: 0
 	});
@@ -68,10 +66,10 @@ $(function () {
 		current: $('#inputDate').val(),
 		starts: 1,
 		position: 'right',
-		onBeforeShow: function(){
+		before_show: function(){
 			$('#inputDate').pickmeup('set_date', $('#inputDate').val(), true);
 		},
-		onChange: function(formated, dates){
+		change: function(formated, dates){
 			$('#inputDate').val(formated);
 			if ($('#closeOnSelect input').prop('checked')) {
 				$('#inputDate').pickmeup('hide');
@@ -90,7 +88,7 @@ $(function () {
 		calendars: 3,
 		mode: 'range',
 		starts: 1,
-		onChange: function(formated) {
+		change: function(formated) {
 			$('#widgetField').find('span').get(0).innerHTML = formated.join(' &divide; ');
 		}
 	});
