@@ -7,22 +7,7 @@
  * @license		MIT License, see license.txt
  */
 (function (d) {
-	d.addDays		= function (n) {
-		this.setDate(this.getDate() + n);
-	};
-	d.addMonths	= function (n) {
-		var day	= this.getDate();
-		this.setDate(1);
-		this.setMonth(this.getMonth() + n);
-		this.setDate(Math.min(day, this.getMaxDays()));
-	};
-	d.addYears		= function (n) {
-		var day	= this.getDate();
-		this.setDate(1);
-		this.setFullYear(this.getFullYear() + n);
-		this.setDate(Math.min(day, this.getMaxDays()));
-	};
-	d.getMaxDays	= function() {
+	function getMaxDays () {
 		var tmpDate	= new Date(this.toString()),
 			d		= 28,
 			m		= tmpDate.getMonth();
@@ -31,6 +16,21 @@
 			tmpDate.setDate(d);
 		}
 		return d - 1;
+	}
+	d.addDays		= function (n) {
+		this.setDate(this.getDate() + n);
+	};
+	d.addMonths	= function (n) {
+		var day	= this.getDate();
+		this.setDate(1);
+		this.setMonth(this.getMonth() + n);
+		this.setDate(Math.min(day, getMaxDays.apply(this)));
+	};
+	d.addYears		= function (n) {
+		var day	= this.getDate();
+		this.setDate(1);
+		this.setFullYear(this.getFullYear() + n);
+		this.setDate(Math.min(day, getMaxDays.apply(this)));
 	};
 	d.getDayOfYear	= function() {
 		var now		= new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
@@ -42,21 +42,21 @@
 (function ($) {
 	$.pickmeup = {
 		flat			: false,
-		starts			: 1,
+		first_day		: 1,
 		prev			: '&#9664;',
 		next			: '&#9654;',
-		lastSel			: false,
 		mode			: 'single',
 		view			: 'days',
 		calendars		: 1,
 		format			: 'd-m-Y',
 		position		: 'bottom',
-		eventName		: 'click',
-		onRender		: function () {return {};},
-		onChange		: function () {return true;},
-		onShow			: function () {return true;},
-		onBeforeShow	: function () {return true;},
-		onHide			: function () {return true;},
+		trigger_event	: 'click',
+		class_name		: '',
+		render			: function () {},
+		change			: function () {return true;},
+		before_show		: function () {return true;},
+		show			: function () {return true;},
+		hide			: function () {return true;},
 		locale			: {
 			days		: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
 			daysShort	: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -158,7 +158,7 @@
 				date.setDate(1);
 				data		= [];
 				month		= date.getMonth();
-				day			= (date.getDay() - options.starts) % 7;
+				day			= (date.getDay() - options.first_day) % 7;
 				date.addDays(-(day + (day < 0 ? 7 : 0)));
 				count		= 0;
 				while (count < 42) {
@@ -178,10 +178,10 @@
 					} else if (date.getDay() == 6) {
 						day.class_name.push('pmu-saturday');
 					}
-					var fromUser	= options.onRender(date);
+					var from_user	= options.render(date) || {};
 					var val			= date.valueOf();
 					if (
-						fromUser.selected ||
+						from_user.selected ||
 						options.date == val ||
 						$.inArray(val, options.date) > -1 ||
 						(
@@ -190,11 +190,11 @@
 					) {
 						day.class_name.push('pmu-selected');
 					}
-					if (fromUser.disabled) {
+					if (from_user.disabled) {
 						day.class_name.push('pmu-disabled');
 					}
-					if (fromUser.className) {
-						day.class_name.push(fromUser.className);
+					if (from_user.class_name) {
+						day.class_name.push(from_user.class_name);
 					}
 					day.class_name = day.class_name.join(' ');
 					data[week_row][count % 7]	= day;
@@ -346,17 +346,6 @@
 			}
 			return parts.join('');
 		}
-		function layout (cal) {
-			var instance	= cal.find('.pmu-instance'),
-				width		= 0;
-			instance.each(function () {
-				width	+= $(this).outerWidth();
-			});
-			cal.css({
-				width	: width + 'px',
-				height	: instance.outerHeight() + 'px'
-			});
-		}
 		function click (e) {
 			var el = $(e.target);
 			if (el.hasClass('pmu-button')) {
@@ -441,7 +430,7 @@
 								options.date	= current_date.valueOf();
 								break;
 						}
-						options.onChange.apply(this, prepareDate(options));
+						options.change.apply(this, prepareDate(options));
 					}
 					fill_it	= true;
 				}
@@ -498,12 +487,7 @@
 				};
 				var top			= pos.top;
 				var left		= pos.left;
-				options.onBeforeShow.call(this, cal);
-				cal.css({
-					visibility	: 'hidden',
-					display		: 'block'
-				});
-				layout(cal);
+				options.before_show.call(this, cal);
 				switch (options.position){
 					case 'top':
 						top -= cal.offsetHeight;
@@ -530,14 +514,12 @@
 				if (left < viewport.l) {
 					left = pos.left + this.offsetWidth
 				}
-				cal.css({
-					visibility	: 'visible',
-					display		: 'block',
-					top			: top + 'px',
-					left		: left + 'px'
-				});
-				if (options.onShow.call(this, cal) != false) {
-					cal.show();
+				if (options.show.call(this, cal) != false) {
+					cal.css({
+						display	: 'inline-block',
+						top		: top + 'px',
+						left	: left + 'px'
+					});
 				}
 				$(document)
 					.on(
@@ -561,7 +543,7 @@
 			if (!ev.target || ev.target != ev.data.trigger && !isChildOf(ev.data.cal.get(0), ev.target, ev.data.cal.get(0))) {
 				var cal		= ev.data.cal,
 					options	= cal.data('pickmeup');
-				if (options.onHide.apply(this, cal) != false) {
+				if (options.hide.apply(this, cal) != false) {
 					cal.hide();
 					$(document)
 						.off('mousedown', hide)
@@ -572,11 +554,12 @@
 			}
 		}
 		return {
-			init		: function(options){
-				options				= $.extend({}, $.pickmeup, options || {});
-				options.calendars	= Math.max(1, parseInt(options.calendars,10)||1);
-				options.mode		= /single|multiple|range/.test(options.mode) ? options.mode : 'single';
+			init		: function(options_){
+				options_			= $.extend({}, $.pickmeup, options_ || {});
+				options_.calendars	= Math.max(1, parseInt(options_.calendars, 10)||1);
+				options_.mode		= /single|multiple|range/.test(options_.mode) ? options_.mode : 'single';
 				return this.each(function(){
+					var options	= $.extend({}, options_);
 					if (!$(this).data('pickmeup')) {
 						var i;
 						if (!options.date) {
@@ -611,12 +594,12 @@
 						options.current.setHours(0,0,0,0);
 						var cnt;
 						var cal = $(tpl.wrapper).on('click', click).data('pickmeup', options);
-						if (options.className) {
-							cal.addClass(options.className);
+						if (options.class_name) {
+							cal.addClass(options.class_name);
 						}
 						var html = '';
 						for (i = 0; i < options.calendars; i++) {
-							cnt = options.starts;
+							cnt = options.first_day;
 							html += tpl.head({
 								prev	: options.prev,
 								next	: options.next,
@@ -637,11 +620,13 @@
 						fill(cal);
 						this.pickmeup	= cal;
 						if (options.flat) {
-							cal.appendTo(this).show().css('position', 'relative');
-							layout(cal);
+							cal.appendTo(this).css({
+								position	: 'relative',
+								display		: 'inline-block'
+							});
 						} else {
 							cal.appendTo(document.body);
-							$(this).on(options.eventName, show);
+							$(this).on(options.trigger_event, show);
 						}
 					}
 				});
@@ -725,17 +710,6 @@
 						}
 					}
 				});
-			},
-			fix_layout	: function(){
-				return this.each(function(){
-					if (this.pickmeup) {
-						var cal = $(this);
-						var options = this.pickmeup;
-						if (options.flat) {
-							layout(cal);
-						}
-					}
-				});
 			}
 		};
 	}();
@@ -754,8 +728,6 @@
 					return pickmeup.set_date.apply(this, Array.prototype.slice.call(arguments, 1));
 				case 'clear':
 					return pickmeup.clear.apply(this);
-				case 'fix_layout':
-					return pickmeup.fix_layout.apply(this);
 				case 'update':
 					return pickmeup.update.apply(this);
 			}

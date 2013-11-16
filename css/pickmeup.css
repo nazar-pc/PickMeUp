@@ -11,23 +11,12 @@
   border-radius: 0.4em;
   display: none;
   position: absolute; }
-  .pickmeup.pmu-hidden {
-    display: none; }
-  .pickmeup.pmu-view-days .pmu-months,
-  .pickmeup.pmu-view-days .pmu-years {
-    display: none; }
-  .pickmeup.pmu-view-months .pmu-days,
-  .pickmeup.pmu-view-months .pmu-years,
-  .pickmeup.pmu-view-months .pmu-day-of-week {
-    display: none; }
-  .pickmeup.pmu-view-years .pmu-days,
-  .pickmeup.pmu-view-years .pmu-months,
-  .pickmeup.pmu-view-years .pmu-day-of-week {
-    display: none; }
   .pickmeup .pmu-instance {
     display: inline-block;
+    height: 12.5em;
     padding: .5em;
-    text-align: center; }
+    text-align: center;
+    width: 14em; }
     .pickmeup .pmu-instance .pmu-button {
       color: #eeeeee;
       cursor: pointer;
@@ -50,24 +39,18 @@
       line-height: 2em; }
       .pickmeup .pmu-instance nav .pmu-button {
         color: #eeeeee; }
+      .pickmeup .pmu-instance nav .pmu-prev,
       .pickmeup .pmu-instance nav .pmu-next {
-        float: right;
-        height: 1em;
+        height: 2em;
         width: 1em; }
       .pickmeup .pmu-instance nav .pmu-month {
-        display: block;
-        margin: 0 -1em;
-        width: 100%; }
-      .pickmeup .pmu-instance nav .pmu-prev {
-        float: left;
-        height: 1em;
-        width: 1em; }
+        width: 12em; }
     .pickmeup .pmu-instance .pmu-years > div,
     .pickmeup .pmu-instance .pmu-months > div {
       display: flex; }
       .pickmeup .pmu-instance .pmu-years > div .pmu-button,
       .pickmeup .pmu-instance .pmu-months > div .pmu-button {
-        padding: 0.9em 0;
+        line-height: 3.5em;
         width: 3.5em; }
     .pickmeup .pmu-instance .pmu-day-of-week {
       color: #999999;
@@ -75,8 +58,10 @@
     .pickmeup .pmu-instance .pmu-day-of-week,
     .pickmeup .pmu-instance .pmu-days > div {
       display: flex;
-      line-height: 1em; }
+      line-height: 1.5em; }
       .pickmeup .pmu-instance .pmu-day-of-week div,
       .pickmeup .pmu-instance .pmu-days > div div {
-        line-height: 1.6em;
+        vertical-align: middle;
         width: 2em; }
+  .pickmeup:not(.pmu-view-days) .pmu-days, .pickmeup:not(.pmu-view-days) .pmu-day-of-week, .pickmeup:not(.pmu-view-months) .pmu-months, .pickmeup:not(.pmu-view-years) .pmu-years {
+    display: none; }

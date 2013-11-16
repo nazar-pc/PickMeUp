@@ -6,7 +6,17 @@
  * @copyright	Copyright (c) 2008-2009, Stefan Petre
  * @license		MIT License, see license.txt
  */
-@import 'config';
+$border-radius						: .4em;
+$background							: #000;
+$color								: #eee;
+$color-hover						: #88c5eb;
+$nav-color							: $color;
+$not-in-month						: #666;
+$not-in-month-hover					: #999;
+$disabled							: #333;
+$selected-background 				: #136a9f;
+$not-in-month-selected-background	: #17384d;
+$day-of-week						: $not-in-month-hover;
 
 .pickmeup {
 	background    : $background;
@@ -14,35 +24,12 @@
 	display       : none;
 	position      : absolute;
 
-	&.pmu-hidden {
-		display : none;
-	}
-
-	&.pmu-view-days {
-		.pmu-months,
-		.pmu-years {
-			display : none;
-		}
-	}
-	&.pmu-view-months {
-		.pmu-days,
-		.pmu-years,
-		.pmu-day-of-week {
-			display : none;
-		}
-	}
-	&.pmu-view-years {
-		.pmu-days,
-		.pmu-months,
-		.pmu-day-of-week {
-			display : none;
-		}
-	}
-
 	.pmu-instance {
 		display    : inline-block;
+		height     : 12.5em;
 		padding    : .5em;
 		text-align : center;
+		width      : 14em;
 
 		.pmu-button {
 			color           : $color;
@@ -81,20 +68,13 @@
 				color : $nav-color;
 			}
 
+			.pmu-prev,
 			.pmu-next {
-				float  : right;
-				height : 1em;
+				height : 2em;
 				width  : 1em;
 			}
 			.pmu-month {
-				display : block;
-				margin  : 0 -1em;
-				width   : 100%;
-			}
-			.pmu-prev {
-				float  : left;
-				height : 1em;
-				width  : 1em;
+				width : 12em;
 			}
 		}
 
@@ -104,8 +84,8 @@
 				display : flex;
 
 				.pmu-button {
-					padding : .9em 0;
-					width   : 3.5em;
+					line-height : 3.5em;
+					width       : 3.5em;
 				}
 			}
 		}
@@ -118,12 +98,19 @@
 		.pmu-day-of-week,
 		.pmu-days > div {
 			display     : flex;
-			line-height : 1em;
+			line-height : 1.5em;
 
 			div {
-				line-height : 1.6em;
-				width       : 2em;
+				vertical-align : middle;
+				width          : 2em;
 			}
 		}
+	}
+
+	&:not(.pmu-view-days) .pmu-days,
+	&:not(.pmu-view-days) .pmu-day-of-week,
+	&:not(.pmu-view-months) .pmu-months,
+	&:not(.pmu-view-years) .pmu-years {
+		display : none;
 	}
 }
