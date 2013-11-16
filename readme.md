@@ -42,7 +42,7 @@ or with data-attributes with `pmu-` prefix:
 ## Configuration options
 | Option        | Value                 | Default | Description                                                                                               |
 |---------------|-----------------------|---------|-----------------------------------------------------------------------------------------------------------|
-| date          | array|object|string   |         | Selected date after initialization. Can be single date string/object or array depending on selection mode |
+| date          | array/object/string   |         | Selected date after initialization. Can be single date string/object or array depending on selection mode |
 | flat          | boolean               | false   | Whatever if the date picker is appended to the element or triggered by an event                           |
 | first_day     | 0/1                   | 1       | First day of week: 0 - Sunday, 1 - Monday                                                                 |
 | prev          | string                | &#9664; | Previous button content                                                                                   |
