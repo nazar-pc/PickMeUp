@@ -37,6 +37,7 @@
 	],
 	"bugs"         : "https://github.com/nazar-pc/PickMeUp/issues",
 	"docs"         : "https://github.com/nazar-pc/PickMeUp",
+	"demo"         : "http://nazar-pc.github.io/PickMeUp",
 	"download"     : "https://github.com/nazar-pc/PickMeUp",
 	"dependencies" : {
 		"jquery" : "*"

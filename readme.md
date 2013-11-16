@@ -16,6 +16,8 @@ Browser support:
 * Opera 12.1+
 * Latest versions of Firefox and Chrome
 
+## [Demo](http://nazar-pc.github.io/PickMeUp)
+
 ## Getting started
 You need only 2 files: `js/jquery.pickmeup.min.js` and `css/pickmeup.min.css`.
 
