@@ -33,12 +33,12 @@ $day-of-week						: $not-in-month-hover;
 
 	* {
 		-moz-box-sizing : border-box;
-		box-sizing : border-box;
+		box-sizing      : border-box;
 	}
 
 	.pmu-instance {
 		display    : inline-block;
-		height     : 14em;
+		height     : 13.8em;
 		padding    : .5em;
 		text-align : center;
 		width      : 15em;
@@ -95,7 +95,7 @@ $day-of-week						: $not-in-month-hover;
 		.pmu-months {
 			* {
 				display     : inline-block;
-				line-height : 3.7em;
+				line-height : 3.6em;
 				width       : 3.5em;
 			}
 		}
@@ -107,13 +107,15 @@ $day-of-week						: $not-in-month-hover;
 
 		.pmu-day-of-week,
 		.pmu-days {
-			line-height : 1.5em;
-
 			* {
-				display        : inline-block;
-				vertical-align : middle;
-				width          : 2em;
+				display     : inline-block;
+				line-height : 1.5em;
+				width       : 2em;
 			}
+		}
+
+		.pmu-day-of-week * {
+			line-height : 1.8em;
 		}
 	}
 

@@ -1,0 +1,14 @@
+html,
+body {
+	font-size : 14px;
+}
+* {
+	-moz-box-sizing : border-box;
+	box-sizing      : border-box;
+}
+input {
+	border        : .2em solid #000;
+	border-radius : .3em;
+	padding       : 0.5em;
+	width         : 17.5em;
+}

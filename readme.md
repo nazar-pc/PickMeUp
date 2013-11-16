@@ -8,7 +8,7 @@ Based on DatePicker by Stefan Petre
 
 It is very small:
 * 14.8 KiB minified JavaScript (4.2 KiB gzip)
-* 1.9 KiB minified CSS (662 B gzip)
+* 1.8 KiB minified CSS (650 B gzip)
 * 0 KiB images
 
 Browser support:
@@ -36,20 +36,21 @@ or with data-attributes with `pmu-` prefix:
 ```
 
 ## Configuration options
-| Option        | Value                 | Default | Description                                                                     |
-|---------------|-----------------------|---------|---------------------------------------------------------------------------------|
-| flat          | boolean               | false   | Whatever if the date picker is appended to the element or triggered by an event |
-| first_day     | 0/1                   | 1       | First day of week: 0 - Sunday, 1 - Monday                                       |
-| prev          | string                | &#9664; | Previous button content                                                         |
-| next          | string                | &#9654; | Next button content                                                             |
-| mode          | single/multiple/range | single  | Date selection mode                                                             |
-| view          | days/months/years     | days    | View mode after initialization                                                  |
-| calendars     | int                   | 1       | Number of calendars, that will be rendered                                      |
-| format        | string                | d-m-Y   | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                              |
-| position      | top/right/bottom/left | bottom  | Date picker's position relative to the triggered element                        |
-| trigger_event | string                | click   | Event to trigger the date picker                                                |
-| class_name    | string                |         | Class to be added to root datepicker element                                    |
-| locale        | object                |         | Object, that contains localized days of week names and months                   |
+| Option        | Value                 | Default | Description                                                                                               |
+|---------------|-----------------------|---------|-----------------------------------------------------------------------------------------------------------|
+| date          | array|object|string   |         | Selected date after initialization. Can be single date string/object or array depending on selection mode |
+| flat          | boolean               | false   | Whatever if the date picker is appended to the element or triggered by an event                           |
+| first_day     | 0/1                   | 1       | First day of week: 0 - Sunday, 1 - Monday                                                                 |
+| prev          | string                | &#9664; | Previous button content                                                                                   |
+| next          | string                | &#9654; | Next button content                                                                                       |
+| mode          | single/multiple/range | single  | Date selection mode                                                                                       |
+| view          | days/months/years     | days    | View mode after initialization                                                                            |
+| calendars     | int                   | 1       | Number of calendars, that will be rendered                                                                |
+| format        | string                | d-m-Y   | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                        |
+| position      | top/right/bottom/left | bottom  | Date picker's position relative to the triggered element                                                  |
+| trigger_event | string                | click   | Event to trigger the date picker                                                                          |
+| class_name    | string                |         | Class to be added to root datepicker element                                                              |
+| locale        | object                |         | Object, that contains localized days of week names and months                                             |
 
 ## Events callbacks
 Also are specified as regular options:
@@ -93,11 +94,9 @@ $.('.date').pickmeup('get_date', formatted);
 
 ##### Set date
 ```javascript
-$.('.date').pickmeup('set_date', date, shift_to);
+$.('.date').pickmeup('set_date', date);
 ```
-`date` - string of `Date` object
-
-`shift_to` - if true - datepicker will change currently displayed month to provided date
+`date` - can be single date string/object or array depending on selection mode
 
 ##### Clear multiple selection
 ```javascript

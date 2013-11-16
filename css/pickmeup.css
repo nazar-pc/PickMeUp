@@ -16,7 +16,7 @@
     box-sizing: border-box; }
   .pickmeup .pmu-instance {
     display: inline-block;
-    height: 14em;
+    height: 13.8em;
     padding: .5em;
     text-align: center;
     width: 15em; }
@@ -54,18 +54,17 @@
     .pickmeup .pmu-instance .pmu-years *,
     .pickmeup .pmu-instance .pmu-months * {
       display: inline-block;
-      line-height: 3.7em;
+      line-height: 3.6em;
       width: 3.5em; }
     .pickmeup .pmu-instance .pmu-day-of-week {
       color: #999999;
       cursor: default; }
-    .pickmeup .pmu-instance .pmu-day-of-week,
-    .pickmeup .pmu-instance .pmu-days {
-      line-height: 1.5em; }
-      .pickmeup .pmu-instance .pmu-day-of-week *,
-      .pickmeup .pmu-instance .pmu-days * {
-        display: inline-block;
-        vertical-align: middle;
-        width: 2em; }
+    .pickmeup .pmu-instance .pmu-day-of-week *,
+    .pickmeup .pmu-instance .pmu-days * {
+      display: inline-block;
+      line-height: 1.5em;
+      width: 2em; }
+    .pickmeup .pmu-instance .pmu-day-of-week * {
+      line-height: 1.8em; }
   .pickmeup:not(.pmu-view-days) .pmu-days, .pickmeup:not(.pmu-view-days) .pmu-day-of-week, .pickmeup:not(.pmu-view-months) .pmu-months, .pickmeup:not(.pmu-view-years) .pmu-years {
     display: none; }

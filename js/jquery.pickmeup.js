@@ -41,6 +41,7 @@
 })(Date.prototype);
 (function ($) {
 	$.pickmeup = $.extend($.pickmeup || {}, {
+		date			: new Date,
 		flat			: false,
 		first_day		: 1,
 		prev			: '&#9664;',
@@ -444,7 +445,7 @@
 			if (force || !cal.is(':visible')) {
 				fill(cal);
 				var options		= cal.data('pickmeup');
-				var pos			= $(this).offset();
+				var pos			= $(this).position();
 				var viewport	= {
 					l : document.documentElement.scrollLeft,
 					t : document.documentElement.scrollTop,
@@ -456,10 +457,10 @@
 				options.before_show.call(this, cal);
 				switch (options.position){
 					case 'top':
-						top -= cal.offsetHeight;
+						top -= cal.outerHeight();
 						break;
 					case 'left':
-						left -= cal.offsetWidth;
+						left -= cal.outerWidth();
 						break;
 					case 'right':
 						left += this.offsetWidth;
@@ -541,10 +542,9 @@
 								options[i]	= option;
 							}
 						}
-						if (!options.date) {
-							options.date = new Date;
-						} else if (options.date.constructor == String) {
-							options.date = parseDate(options.date, options.format);
+						if (options.date.constructor == String) {
+							options.date = parseDate(options.date, options.format).setHours(0,0,0,0);
+						} else if (options.date.constructor == Date) {
 							options.date.setHours(0,0,0,0);
 						}
 						if (options.mode != 'single') {
@@ -561,13 +561,10 @@
 									options.date[1] = ((new Date(options.date[1])).setHours(23,59,59,0)).valueOf();
 								}
 							}
+							options.current	= new Date(options.date[0]);
 						} else {
-							options.date = options.date.valueOf();
-						}
-						if (!options.current) {
-							options.current = new Date();
-						} else {
-							options.current = parseDate(options.current, options.format);
+							options.date	= options.date.valueOf();
+							options.current	= new Date(options.date);
 						}
 						options.current.setDate(1);
 						options.current.setHours(0,0,0,0);
@@ -638,14 +635,15 @@
 					}
 				});
 			},
-			set_date	: function(date, shift_to){
+			set_date	: function(date){
 				return this.each(function(){
 					if (this.pickmeup) {
 						var cal = this.pickmeup;
 						var options = cal.data('pickmeup');
 						options.date = date;
 						if (options.date.constructor == String) {
-							options.date = parseDate(options.date, options.format);
+							options.date = parseDate(options.date, options.format).setHours(0,0,0,0);
+						} else if (options.date.constructor == Date) {
 							options.date.setHours(0,0,0,0);
 						}
 						if (options.mode != 'single') {
@@ -665,9 +663,7 @@
 						} else {
 							options.date = options.date.valueOf();
 						}
-						if (shift_to) {
-							options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
-						}
+						options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
 						fill(cal);
 					}
 				});
