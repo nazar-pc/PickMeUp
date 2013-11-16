@@ -80,35 +80,35 @@ Methods allows external control on datepicker
 
 ##### Hide
 ```javascript
-$.('.date').pickmeup('hide');
+$('.date').pickmeup('hide');
 ```
 
 ##### Show
 ```javascript
-$.('.date').pickmeup('show');
+$('.date').pickmeup('show');
 ```
 
 ##### Get date
 ```javascript
-$.('.date').pickmeup('get_date', formatted);
+$('.date').pickmeup('get_date', formatted);
 ```
 `formatted` - boolean (default `false`)
 
 ##### Set date
 ```javascript
-$.('.date').pickmeup('set_date', date);
+$('.date').pickmeup('set_date', date);
 ```
 `date` - can be single date string/object or array depending on selection mode
 
 ##### Clear multiple selection
 ```javascript
-$.('.date').pickmeup('clear');
+$('.date').pickmeup('clear');
 ```
 
 ##### Update datepicker
 Is useful, for example, after input field change
 ```javascript
-$.('.date').pickmeup('update');
+$('.date').pickmeup('update');
 ```
 
 ## Styling
