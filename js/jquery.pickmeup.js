@@ -73,42 +73,33 @@
 			},
 			tpl		= {
 				wrapper	: '<div class="pickmeup" />',
-				head	: function (d_) {
-					function d (i) {
-						return '<div>' + d_.day[i] + '</div>';
+				head	: function (d) {
+					var result	= '';
+					for (var i = 0; i < 7; ++i) {
+						result	+= '<div>' + d.day[i] + '</div>'
 					}
 					return '<div class="pmu-instance">' +
 						'<nav>' +
-							'<div class="pmu-prev pmu-button">' + d_.prev + '</div>' +
+							'<div class="pmu-prev pmu-button">' + d.prev + '</div>' +
 							'<div class="pmu-month pmu-button" />' +
-							'<div class="pmu-next pmu-button">' + d_.next + '</div>' +
+							'<div class="pmu-next pmu-button">' + d.next + '</div>' +
 						'</nav>' +
-						'<nav class="pmu-day-of-week">' + d(0) + d(1) + d(2) + d(3) + d(4) + d(5) + d(6) + '</nav>' +
+						'<nav class="pmu-day-of-week">' + result + '</nav>' +
 					'</div>';
 				},
 				days	: function (days) {
-					var	week,
-						day,
-						result	= [];
-					for (week in days) {
-						result[week]	= '';
-						for (day in days[week]) {
-							day				= days[week][day];
-							result[week]	+= '<div class="' + day.class_name + ' pmu-button">' + day.text + '</div>'
-						}
-						result[week]	= '<div>' + result[week] + '</div>'
+					var result	= '';
+					for (var i = 0; i < 42; ++i) {
+						result	+= '<div class="' + days[i].class_name + ' pmu-button">' + days[i].text + '</div>'
 					}
-					return '<div class="pmu-days">' + result.join('') + '</div>';
+					return '<div class="pmu-days">' + result + '</div>';
 				},
-				months	: function (d_) {
-					function d (i) {
-						return '<div class="pmu-button">' + d_.data[i] + '</div>';
+				months	: function (d) {
+					var result	= '';
+					for (var i = 0; i < 12; ++i) {
+						result	+= '<div class="pmu-button">' + d.data[i] + '</div>'
 					}
-					return '<div class="' + d_.class_name + '">' +
-						'<div>' + d(0) + d(1) + d(2) + d(3) + '</div>' +
-						'<div>' + d(4) + d(5) + d(6) + d(7) + '</div>' +
-						'<div>' + d(8) + d(9) + d(10) + d(11) + '</div>' +
-					'</div>';
+					return '<div class="' + d.class_name + '">' + result + '</div>';
 				}
 			};
 		function fill (cal) {
@@ -122,7 +113,6 @@
 				month,
 				count		= 0,
 				days,
-				week_row,
 				html,
 				instance;
 			/**
@@ -134,13 +124,15 @@
 			 */
 			for (var i = 0; i < options.calendars; i++) {
 				date		= new Date(options.current);
-				date.addMonths(-current_cal + i);
 				instance	= cal.find('.pmu-instance').eq(i);
 				if (cal.hasClass('pmu-view-years')) {
+					date.addYears((i - current_cal) * 12);
 					header = (date.getFullYear() - 6) + ' - ' + (date.getFullYear()+5);
 				} else if (cal.hasClass('pmu-view-months')) {
+					date.addYears(i - current_cal);
 					header = date.getFullYear();
 				} else if (cal.hasClass('pmu-view-days')) {
+					date.addMonths(i - current_cal);
 					header = formatDate(date, 'B, Y', options.locale);
 				}
 				instance
@@ -162,10 +154,6 @@
 				date.addDays(-(day + (day < 0 ? 7 : 0)));
 				count		= 0;
 				while (count < 42) {
-					week_row	= parseInt(count / 7, 10);
-					if (!data[week_row]) {
-						data[week_row] = [];
-					}
 					day	= {
 						text		: date.getDate(),
 						class_name	: []
@@ -197,9 +185,9 @@
 						day.class_name.push(from_user.class_name);
 					}
 					day.class_name = day.class_name.join(' ');
-					data[week_row][count % 7]	= day;
-					count++;
+					data.push(day);
 					date.addDays(1);
+					count++;
 				}
 				html	= tpl.days(data) + html;
 				data	= {
@@ -357,7 +345,6 @@
 				var root			= instance.parent();
 				var instance_index	= $('.pmu-instance', root).index(instance);
 				var current_date	= new Date(options.current);
-				var fill_it			= false;
 				var val;
 				if (el.parent().is('nav')) {
 					if (el.hasClass('pmu-month')) {
@@ -373,22 +360,22 @@
 							el.text(current_date.getFullYear());
 						}
 					} else {
+						var prev	= el.hasClass('pmu-prev');
 						if (root.hasClass('pmu-view-years')) {
-							options.current.addYears(instance.hasClass('pmu-prev') ? -12 : 12);
+							options.current.addYears(prev ? -12 : 12);
 						} else if (root.hasClass('pmu-view-months')) {
-							options.current.addYears(instance.hasClass('pmu-prev') ? -1 : 1);
+							options.current.addYears(prev ? -1 : 1);
 						} else if (root.hasClass('pmu-view-days')) {
-							options.current.addMonths(instance.hasClass('pmu-prev') ? -1 : 1);
+							options.current.addMonths(prev ? -1 : 1);
 						}
-						fill_it = true;
 					}
 				} else if (!el.hasClass('pmu-disabled')) {
 					if (root.hasClass('pmu-view-years')) {
 						options.current.setFullYear(parseInt(el.text(), 10));
 						root.removeClass('pmu-view-years').addClass('pmu-view-months');
 					} else if (root.hasClass('pmu-view-months')) {
-						options.current.setMonth(root.find('.pmu-months .pmu-button').index(el));
-						options.current.setFullYear(parseInt(root.find('.pmu-month').text(), 10));
+						options.current.setMonth(instance.find('.pmu-months .pmu-button').index(el));
+						options.current.setFullYear(parseInt(instance.find('.pmu-month').text(), 10));
 						options.current.addMonths(Math.floor(options.calendars / 2) - instance_index);
 						root.removeClass('pmu-view-months').addClass('pmu-view-days');
 					} else {
@@ -432,11 +419,8 @@
 						}
 						options.change.apply(this, prepareDate(options));
 					}
-					fill_it	= true;
 				}
-				if (fill_it) {
-					fill(root);
-				}
+				fill(root);
 			}
 			return false;
 		}
@@ -454,24 +438,6 @@
 				});
 				return result;
 			}
-		}
-		function isChildOf (parentEl, el, container) {
-			if (parentEl == el) {
-				return true;
-			}
-			if (parentEl.contains) {
-				return parentEl.contains(el);
-			}
-			if ( parentEl.compareDocumentPosition ) {
-				return !!(parentEl.compareDocumentPosition(el) & 16);
-			}
-			var prEl = el.parentNode;
-			while(prEl && prEl != container) {
-				if (prEl == parentEl)
-					return true;
-				prEl = prEl.parentNode;
-			}
-			return false;
 		}
 		function show (force) {
 			var cal	= this.pickmeup;
@@ -540,7 +506,13 @@
 			}
 		}
 		function hide (ev) {
-			if (!ev.target || ev.target != ev.data.trigger && !isChildOf(ev.data.cal.get(0), ev.target, ev.data.cal.get(0))) {
+			if (
+				!ev.target ||														//Called directly
+				(
+					ev.target != ev.data.trigger &&									//Clicked not on element itself
+					!(ev.data.cal.get(0).compareDocumentPosition(ev.target) & 16)	//And not o its children
+				)
+			) {
 				var cal		= ev.data.cal,
 					options	= cal.data('pickmeup');
 				if (options.hide.apply(this, cal) != false) {

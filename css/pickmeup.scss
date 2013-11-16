@@ -11,6 +11,7 @@ $background							: #000;
 $color								: #eee;
 $color-hover						: #88c5eb;
 $nav-color							: $color;
+$nav-color-hover					: $color-hover;
 $not-in-month						: #666;
 $not-in-month-hover					: #999;
 $disabled							: #333;
@@ -61,11 +62,12 @@ $day-of-week						: $not-in-month-hover;
 		}
 
 		nav {
+			color       : $nav-color;
 			display     : flex;
 			line-height : 2em;
 
-			.pmu-button {
-				color : $nav-color;
+			*:hover {
+				color : $nav-color-hover;
 			}
 
 			.pmu-prev,
@@ -80,13 +82,12 @@ $day-of-week						: $not-in-month-hover;
 
 		.pmu-years,
 		.pmu-months {
-			> div {
-				display : flex;
+			display   : flex;
+			flex-wrap : wrap;
 
-				.pmu-button {
-					line-height : 3.5em;
-					width       : 3.5em;
-				}
+			.pmu-button {
+				line-height : 3.5em;
+				width       : 3.5em;
 			}
 		}
 
@@ -96,8 +97,9 @@ $day-of-week						: $not-in-month-hover;
 		}
 
 		.pmu-day-of-week,
-		.pmu-days > div {
+		.pmu-days {
 			display     : flex;
+			flex-wrap   : wrap;
 			line-height : 1.5em;
 
 			div {
