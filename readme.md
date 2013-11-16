@@ -25,9 +25,11 @@ Then you can apply datepicker to any element:
 ```javascript
 $('.date').pickmeup();
 ```
-Global default settings are stored in `$.pickmeup`. They can be redefined during initialization:
+Global default settings are stored in `$.pickmeup`
+
+They can be redefined during initialization:
 ```javascript
-$('.date').pickmeup{
+$('.date').pickmeup({
 	format	: 'Y-m-d'
 });
 ```
