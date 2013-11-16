@@ -638,7 +638,7 @@
 					}
 				});
 			},
-			set_date	: function(date, shiftTo){
+			set_date	: function(date, shift_to){
 				return this.each(function(){
 					if (this.pickmeup) {
 						var cal = this.pickmeup;
@@ -665,7 +665,7 @@
 						} else {
 							options.date = options.date.valueOf();
 						}
-						if (shiftTo) {
+						if (shift_to) {
 							options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
 						}
 						fill(cal);

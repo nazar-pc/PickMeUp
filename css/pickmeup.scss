@@ -19,16 +19,26 @@ $selected-background 				: #136a9f;
 $not-in-month-selected-background	: #17384d;
 $day-of-week						: $not-in-month-hover;
 
+@mixin display-flex() {
+	display : -ms-flexbox;
+	display : -webkit-flex;
+	display : flex;
+}
+
 .pickmeup {
 	background    : $background;
 	border-radius : $border-radius;
 	display       : none;
 	position      : absolute;
 
-	.pmu-instance {
+	* {
+		-moz-box-sizing : border-box;
 		box-sizing : border-box;
+	}
+
+	.pmu-instance {
 		display    : inline-block;
-		height     : 13.5em;
+		height     : 14em;
 		padding    : .5em;
 		text-align : center;
 		width      : 15em;
@@ -63,8 +73,8 @@ $day-of-week						: $not-in-month-hover;
 		}
 
 		nav {
+			@include display-flex();
 			color       : $nav-color;
-			display     : flex;
 			line-height : 2em;
 
 			*:hover {
@@ -83,11 +93,9 @@ $day-of-week						: $not-in-month-hover;
 
 		.pmu-years,
 		.pmu-months {
-			display   : flex;
-			flex-wrap : wrap;
-
-			.pmu-button {
-				line-height : 3.5em;
+			* {
+				display     : inline-block;
+				line-height : 3.7em;
 				width       : 3.5em;
 			}
 		}
@@ -99,11 +107,10 @@ $day-of-week						: $not-in-month-hover;
 
 		.pmu-day-of-week,
 		.pmu-days {
-			display     : flex;
-			flex-wrap   : wrap;
 			line-height : 1.5em;
 
-			div {
+			* {
+				display        : inline-block;
 				vertical-align : middle;
 				width          : 2em;
 			}
