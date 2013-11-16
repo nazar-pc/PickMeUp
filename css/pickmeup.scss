@@ -26,11 +26,12 @@ $day-of-week						: $not-in-month-hover;
 	position      : absolute;
 
 	.pmu-instance {
+		box-sizing : border-box;
 		display    : inline-block;
-		height     : 12.5em;
+		height     : 13.5em;
 		padding    : .5em;
 		text-align : center;
-		width      : 14em;
+		width      : 15em;
 
 		.pmu-button {
 			color           : $color;

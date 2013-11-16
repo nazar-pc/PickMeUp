@@ -40,7 +40,7 @@
 	};
 })(Date.prototype);
 (function ($) {
-	$.pickmeup = {
+	$.pickmeup = $.extend($.pickmeup || {}, {
 		flat			: false,
 		first_day		: 1,
 		prev			: '&#9664;',
@@ -64,7 +64,7 @@
 			months		: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			monthsShort	: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 		}
-	};
+	});
 	var pickmeup = function () {
 		var	views	= {
 				years	: 'pmu-view-years',
@@ -533,7 +533,14 @@
 				return this.each(function(){
 					var options	= $.extend({}, options_);
 					if (!$(this).data('pickmeup')) {
-						var i;
+						var i,
+							option;
+						for (i in options) {
+							option	= $(this).data('pmu-' + i);
+							if (typeof option !== 'undefined') {
+								options[i]	= option;
+							}
+						}
 						if (!options.date) {
 							options.date = new Date;
 						} else if (options.date.constructor == String) {
