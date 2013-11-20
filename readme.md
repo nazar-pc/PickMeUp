@@ -7,8 +7,8 @@ Author - Nazar Mokrynskyi
 Based on DatePicker by Stefan Petre
 
 It is very small:
-* 14.8 KiB minified JavaScript (4.2 KiB gzip)
-* 1.8 KiB minified CSS (650 B gzip)
+* 15.1 KiB minified JavaScript (4.3 KiB gzip)
+* 1.9 KiB minified CSS (659 B gzip)
 * 0 KiB images
 
 Browser support:
@@ -57,7 +57,8 @@ or with data-attributes with `pmu-` prefix:
 | locale        | object                |          | Object, that contains localized days of week names and months                                             |
 
 ## Events callbacks
-Also are specified as regular options:
+`this` in any callback will be the same element, on which pickmeup() was called.
+Events are specified as regular options:
 
 ##### object render (date)
 Triggered on day element rendering, accepts date as argument and may return object with next properties:
@@ -68,14 +69,14 @@ Triggered on day element rendering, accepts date as argument and may return obje
 ##### change (formatted_date)
 Triggered at date change, accepts formatted date as argument
 
-##### before_show (jQuery pickmeup_datepicker_element)
-Triggered before showing, accepts jQuery collection with root datepicker element
+##### before_show ()
+Triggered before showing
 
-##### bool show (jQuery pickmeup_datepicker_element)
-Triggered at showing, accepts jQuery collection with root datepicker element, if not `true` returned - datepicker will not be shown
+##### bool show ()
+Triggered at showing, if not `true` returned - datepicker will not be shown
 
-##### bool hide (jQuery pickmeup_datepicker_element)
-Triggered at hiding, accepts jQuery collection with root datepicker element, if not `true` returned - datepicker will not be hidden
+##### bool hide ()
+Triggered at hiding, if not `true` returned - datepicker will not be hidden
 
 ## Methods
 Methods allows external control on datepicker
@@ -112,6 +113,11 @@ Is useful, for example, after input field change
 ```javascript
 $('.date').pickmeup('update');
 ```
+
+## Other
+Current options (for whatever reason) can be accessed as `$('...').data('pickmeup-options')`.
+
+Root pickmeup element (jQuery collection object) can be accessed as `$('...').get(0).pickmeup` or directly `this.pickmeup` if inside callback.
 
 ## Styling
 If you want other colors - just change several variables in scss file.

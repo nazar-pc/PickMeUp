@@ -77,7 +77,7 @@ $day-of-week						: $not-in-month-hover;
 			color       : $nav-color;
 			line-height : 2em;
 
-			*:hover {
+			*:first-child :hover {
 				color : $nav-color-hover;
 			}
 

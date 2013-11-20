@@ -21,14 +21,14 @@ $(function () {
 		mode		: 'range',
 		calendars	: 3
 	});
-	var input	= $('input');
-	input.pickmeup({
-		position: 'right',
-		before_show: function(){
-			input.pickmeup('set_date', input.val(), true);
+	$('input').pickmeup({
+		position	: 'right',
+		before_show	: function () {
+			var $this	= $(this);
+			$this.pickmeup('set_date', $this.val());
 		},
-		change: function(formated){
-			input.val(formated);
+		change		: function (formatted) {
+			$(this).val(formatted);
 		}
 	});
 });
