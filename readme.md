@@ -55,6 +55,8 @@ or with data-attributes with `pmu-` prefix:
 | trigger_event   | string                | click    | Event to trigger the date picker                                                                           |
 | class_name      | string                |          | Class to be added to root datepicker element                                                               |
 | hide_on_select  | boolean               | false    | If `true` - datepicker will be hidden after selection (for range mode allows to select first and last days |
+| min             | null/object/string    | null     | Min date available for selection, `null` means no limitation                                               |
+| max             | null/object/string    | null     | Max date available for selection, `null` means no limitation                                               |
 | locale          | object                |          | Object, that contains localized days of week names and months                                              |
 
 ## Events callbacks

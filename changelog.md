@@ -1,3 +1,4 @@
+New `min` and `max` options
 New `hide_on_select` option
 
 2.0.1 (November 21, 2013)

@@ -54,6 +54,8 @@
 		trigger_event	: 'click',
 		class_name		: '',
 		hide_on_select	: false,
+		min				: null,
+		max				: null,
 		render			: function () {},
 		change			: function () {return true;},
 		before_show		: function () {return true;},
@@ -168,19 +170,23 @@
 				} else if (date.getDay() == 6) {
 					day.class_name.push('pmu-saturday');
 				}
-				var from_user	= options.render(date) || {};
-				var val			= date.valueOf();
+				var from_user	= options.render(date) || {},
+					val			= date.valueOf(),
+					disabled	= (options.min && options.min > date) || (options.max && options.max < date);
 				if (
-					from_user.selected ||
-					options.date == val ||
-					$.inArray(val, options.date) > -1 ||
+					disabled &&
 					(
-						options.mode == 'range' && val >= options.date[0] && val <= options.date[1]
+						from_user.selected ||
+						options.date == val ||
+						$.inArray(val, options.date) > -1 ||
+						(
+							options.mode == 'range' && val >= options.date[0] && val <= options.date[1]
+						)
 					)
 				) {
 					day.class_name.push('pmu-selected');
 				}
-				if (from_user.disabled) {
+				if (from_user.disabled || disabled) {
 					day.class_name.push('pmu-disabled');
 				}
 				if (from_user.class_name) {
@@ -635,7 +641,17 @@
 			}
 			options.calendars	= Math.max(1, parseInt(options.calendars, 10) || 1);
 			options.mode		= /single|multiple|range/.test(options.mode) ? options.mode : 'single';
-			if (options.date.constructor == String) {
+			if (typeof options.min === 'string') {
+				options.min = parseDate(options.min, options.format).setHours(0,0,0,0);
+			} else if (options.min && options.min.constructor == Date) {
+				options.min.setHours(0,0,0,0);
+			}
+			if (typeof options.max === 'string') {
+				options.max = parseDate(options.max, options.format).setHours(23,59,59,0);
+			} else if (options.max && options.max.constructor == Date) {
+				options.max.setHours(23,59,59,0);
+			}
+			if (typeof options.date === 'string') {
 				options.date = parseDate(options.date, options.format).setHours(0,0,0,0);
 			} else if (options.date.constructor == Date) {
 				options.date.setHours(0,0,0,0);
