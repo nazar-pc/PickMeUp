@@ -1,3 +1,5 @@
+2.1.0 (November 21, 2013)
+* Current day marked with class `pmu-today` and has its own color settings
 * Bad input ignored, today's date assumed
 * Disabled text selection
 * Arrows only on first and last calendars

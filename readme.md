@@ -7,8 +7,8 @@ Author - Nazar Mokrynskyi
 Based on DatePicker by Stefan Petre
 
 It is very small:
-* 15.1 KiB minified JavaScript (4.3 KiB gzip)
-* 1.9 KiB minified CSS (659 B gzip)
+* 16.1 KiB minified JavaScript (4.5 KiB gzip)
+* 2.2 KiB minified CSS (703 B gzip)
 * 0 KiB images
 
 Browser support:

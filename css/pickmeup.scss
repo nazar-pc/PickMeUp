@@ -18,6 +18,8 @@ $disabled							: #333;
 $selected-background 				: #136a9f;
 $not-in-month-selected-background	: #17384d;
 $day-of-week						: $not-in-month-hover;
+$today-background					: $not-in-month-selected-background;
+$today-color						: $color-hover;
 
 @mixin display-flex() {
 	display : -ms-flexbox;
@@ -48,6 +50,11 @@ $day-of-week						: $not-in-month-hover;
 			cursor          : pointer;
 			outline         : none;
 			text-decoration : none;
+		}
+
+		.pmu-today {
+			background : $today-background;
+			color      : $today-color;
 		}
 
 		.pmu-button:hover {

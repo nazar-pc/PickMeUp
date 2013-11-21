@@ -118,7 +118,8 @@
 			count		= 0,
 			days,
 			html,
-			instance;
+			instance,
+			today		= (new Date).setHours(0,0,0,0).valueOf();
 		/**
 		 * Remove old content except header navigation
 		 */
@@ -185,6 +186,9 @@
 					)
 				) {
 					day.class_name.push('pmu-selected');
+				}
+				if (val == today) {
+					day.class_name.push('pmu-today');
 				}
 				if (from_user.disabled || disabled) {
 					day.class_name.push('pmu-disabled');
