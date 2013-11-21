@@ -1,3 +1,4 @@
+* Disabled text selection
 * Arrows only on first and last calendars
 * New `min` and `max` options
 * New `hide_on_select` option

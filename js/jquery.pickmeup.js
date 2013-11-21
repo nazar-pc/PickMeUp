@@ -174,7 +174,7 @@
 					val			= date.valueOf(),
 					disabled	= (options.min && options.min > date) || (options.max && options.max < date);
 				if (
-					disabled &&
+					!disabled &&
 					(
 						from_user.selected ||
 						options.date == val ||
@@ -720,7 +720,13 @@
 			pickmeup
 				.on('click', options.binded.click)
 				.addClass(views[options.view])
-				.append(html);
+				.append(html)
+				.on(
+					$.support.selectstart ? 'selectstart' : 'mousedown',
+					function(e){
+						e.preventDefault();
+					}
+				);
 			options.binded.fill();
 			if (options.flat) {
 				pickmeup.appendTo(this).css({
