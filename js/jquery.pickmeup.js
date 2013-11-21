@@ -546,7 +546,7 @@
 	}
 	function set_date (date) {
 		var options = $(this).data('pickmeup-options');
-		options.date = date;console.log(date);
+		options.date = date;
 		if (typeof options.date === 'string') {
 			options.date = parseDate(options.date, options.format).setHours(0,0,0,0);
 		} else if (options.date.constructor == Date) {
@@ -674,7 +674,7 @@
 			}
 			$this.data('pickmeup-options', options);
 			for (i in options) {
-				if (i in ['render', 'change', 'before_show', 'show', 'hide']) {
+				if ($.inArray(i, ['render', 'change', 'before_show', 'show', 'hide']) != -1) {
 					options[i]	= options[i].bind(this);
 				}
 			}
