@@ -570,7 +570,7 @@
 		} else if (options.date.constructor == Date) {
 			options.date.setHours(0,0,0,0);
 		}
-		if (isNaN(options.date)) {
+		if (!options.date) {
 			options.date = new Date;
 			options.date.setHours(0,0,0,0);
 		}
@@ -660,7 +660,7 @@
 			} else if (options.date.constructor == Date) {
 				options.date.setHours(0,0,0,0);
 			}
-			if (isNaN(options.date)) {
+			if (!options.date) {
 				options.date = new Date;
 				options.date.setHours(0,0,0,0);
 			}
