@@ -83,11 +83,12 @@ $day-of-week						: $not-in-month-hover;
 
 			.pmu-prev,
 			.pmu-next {
-				height : 2em;
-				width  : 1em;
+				display : none;
+				height  : 2em;
+				width   : 1em;
 			}
 			.pmu-month {
-				width : 12em;
+				width : 14em;
 			}
 		}
 
@@ -117,6 +118,22 @@ $day-of-week						: $not-in-month-hover;
 		.pmu-day-of-week * {
 			line-height : 1.8em;
 		}
+	}
+
+	.pmu-instance:first-child .pmu-prev,
+	.pmu-instance:last-child .pmu-next {
+		display : block;
+	}
+
+	.pmu-instance:first-child,
+	.pmu-instance:last-child {
+		.pmu-month {
+			width : 13em;
+		}
+	}
+
+	.pmu-instance:first-child:last-child .pmu-month {
+		width : 12em;
 	}
 
 	&:not(.pmu-view-days) .pmu-days,

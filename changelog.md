@@ -1,5 +1,6 @@
-New `min` and `max` options
-New `hide_on_select` option
+* Arrows only on first and last calendars
+* New `min` and `max` options
+* New `hide_on_select` option
 
 2.0.1 (November 21, 2013)
 * Large internal refactoring, hopefully code now is more clear,  consistent and understandable.
