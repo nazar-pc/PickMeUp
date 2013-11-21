@@ -570,6 +570,10 @@
 		} else if (options.date.constructor == Date) {
 			options.date.setHours(0,0,0,0);
 		}
+		if (isNaN(options.date)) {
+			options.date = new Date;
+			options.date.setHours(0,0,0,0);
+		}
 		if (options.mode != 'single') {
 			if (options.date.constructor != Array) {
 				options.date = [options.date.valueOf()];
@@ -654,6 +658,10 @@
 			if (typeof options.date === 'string') {
 				options.date = parseDate(options.date, options.format).setHours(0,0,0,0);
 			} else if (options.date.constructor == Date) {
+				options.date.setHours(0,0,0,0);
+			}
+			if (isNaN(options.date)) {
+				options.date = new Date;
 				options.date.setHours(0,0,0,0);
 			}
 			if (options.mode != 'single') {

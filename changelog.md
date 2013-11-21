@@ -1,3 +1,4 @@
+* Bad input ignored, today's date assumed
 * Disabled text selection
 * Arrows only on first and last calendars
 * New `min` and `max` options
