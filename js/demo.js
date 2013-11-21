@@ -22,12 +22,13 @@ $(function () {
 		calendars	: 3
 	});
 	$('input').pickmeup({
-		position	: 'right',
-		before_show	: function () {
+		position		: 'right',
+		hide_on_select	: true,
+		before_show		: function () {
 			var $this	= $(this);
 			$this.pickmeup('set_date', $this.val());
 		},
-		change		: function (formatted) {
+		change			: function (formatted) {
 			$(this).val(formatted);
 		}
 	});

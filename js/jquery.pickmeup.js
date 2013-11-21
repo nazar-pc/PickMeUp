@@ -53,6 +53,7 @@
 		position		: 'bottom',
 		trigger_event	: 'click',
 		class_name		: '',
+		hide_on_select	: false,
 		render			: function () {},
 		change			: function () {return true;},
 		before_show		: function () {return true;},
@@ -419,6 +420,16 @@
 							break;
 					}
 					options.change.apply(this, prepareDate(options));
+					if (
+						options.hide_on_select &&
+						(
+							options.mode != 'range' ||
+							!options.lastSel
+						)
+					) {
+						options.binded.hide();
+						return false;
+					}
 				}
 			}
 			options.binded.fill();
@@ -509,6 +520,7 @@
 	}
 	function hide (e) {
 		if (
+			!e ||
 			!e.target ||														//Called directly
 			(
 				e.target != this &&												//Clicked not on element itself

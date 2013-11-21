@@ -1,3 +1,5 @@
+New `hide_on_select` option
+
 2.0.1 (November 21, 2013)
 * Large internal refactoring, hopefully code now is more clear,  consistent and understandable.
 * `this` in any callback will be the same element, on which pickmeup() was called (actually, the same for internal functions).
