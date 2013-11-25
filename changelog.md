@@ -1,3 +1,6 @@
+2.1.1 (November 25, 2013)
+Fixed typo
+
 2.1.0 (November 21, 2013)
 * Current day marked with class `pmu-today` and has its own color settings
 * Bad input ignored, today's date assumed

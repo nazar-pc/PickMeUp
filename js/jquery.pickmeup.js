@@ -71,7 +71,7 @@
 	});
 	var	views	= {
 			years	: 'pmu-view-years',
-			moths	: 'pmu-view-months',
+			months	: 'pmu-view-months',
 			days	: 'pmu-view-days'
 		},
 		tpl		= {
