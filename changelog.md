@@ -1,3 +1,6 @@
+2.1.2 (November 29, 2013)
+Positioning fix
+
 2.1.1 (November 25, 2013)
 Fixed typo
 
