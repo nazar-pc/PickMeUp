@@ -1,3 +1,6 @@
+2.2.1 (January 08, 2014)
+Fix for issue [#4](https://github.com/nazar-pc/PickMeUp/issues/4)): Callbacks only apply to first of original selector
+
 2.2.0 (January 08, 2014)
 Automatic getting and setting value when applied to input (fixes issue [#3](https://github.com/nazar-pc/PickMeUp/issues/3))
 New `separator` option.

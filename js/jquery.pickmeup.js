@@ -621,24 +621,24 @@
 		options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
 		options.binded.fill();
 	}
-	$.fn.pickmeup	= function (options) {
-		if (typeof options === 'string') {
+	$.fn.pickmeup	= function (initial_options) {
+		if (typeof initial_options === 'string') {
 			var data,
 				parameters	= Array.prototype.slice.call(arguments, 1);
-			switch (options) {
+			switch (initial_options) {
 				case 'hide':
 				case 'show':
 				case 'clear':
 				case 'update':
 					this.each(function () {
-						data	= $(this).data('pickmeup-options');
+						data	= $(this).data('pickmeup-initial_options');
 						if (data) {
-							data.binded[options]();
+							data.binded[initial_options]();
 						}
 					});
 				break;
 				case 'get_date':
-					data	= this.data('pickmeup-options');
+					data	= this.data('pickmeup-initial_options');
 					if (data) {
 						return data.binded.get_date(parameters[0]);
 					} else {
@@ -647,23 +647,22 @@
 				break;
 				case 'set_date':
 					this.each(function () {
-						data	= $(this).data('pickmeup-options');
+						data	= $(this).data('pickmeup-initial_options');
 						if (data) {
-							data.binded[options].apply(this, parameters);
+							data.binded[initial_options].apply(this, parameters);
 						}
 					});
 			}
 			return this;
 		}
 		return this.each(function () {
-			var	$this			= $(this),
-				current_options	= $this.data('pickmeup-options');
-			if (current_options) {
+			var	$this			= $(this);
+			if ($this.data('pickmeup-options')) {
 				return;
 			}
 			var i,
-				option;
-			options				= $.extend({}, $.pickmeup, options || {});
+				option,
+				options	= $.extend({}, $.pickmeup, initial_options || {});
 			for (i in options) {
 				option	= $this.data('pmu-' + i);
 				if (typeof option !== 'undefined') {
