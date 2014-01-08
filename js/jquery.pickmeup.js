@@ -736,9 +736,9 @@
 				});
 			}
 			$this.data('pickmeup-options', options);
-			for (i in options) {
+			for (var i in options) {
 				if ($.inArray(i, ['render', 'change', 'before_show', 'show', 'hide']) != -1) {
-					options[i]	= options[i].bind(this);
+					$this.bind(options[i]);
 				}
 			}
 			options.binded	= {
