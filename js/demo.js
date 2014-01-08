@@ -23,13 +23,6 @@ $(function () {
 	});
 	$('input').pickmeup({
 		position		: 'right',
-		hide_on_select	: true,
-		before_show		: function () {
-			var $this	= $(this);
-			$this.pickmeup('set_date', $this.val());
-		},
-		change			: function (formatted) {
-			$(this).val(formatted);
-		}
+		hide_on_select	: true
 	});
 });

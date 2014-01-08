@@ -1,3 +1,7 @@
+2.2.0 (January 08, 2014)
+Automatic getting and setting value when applied to input (fixes issue [#3](https://github.com/nazar-pc/PickMeUp/issues/3))
+New `separator` option.
+
 2.1.2 (November 29, 2013)
 Positioning fix
 

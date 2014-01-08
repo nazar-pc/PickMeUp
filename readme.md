@@ -7,7 +7,7 @@ Author - Nazar Mokrynskyi
 Based on DatePicker by Stefan Petre
 
 It is very small:
-* 16.1 KiB minified JavaScript (4.5 KiB gzip)
+* 16.7 KiB minified JavaScript (4.7 KiB gzip)
 * 2.2 KiB minified CSS (703 B gzip)
 * 0 KiB images
 
@@ -40,24 +40,25 @@ or with data-attributes with `pmu-` prefix:
 ```
 
 ## Configuration options
-| Option          | Value                 | Default  | Description                                                                                                |
-|-----------------|-----------------------|----------|------------------------------------------------------------------------------------------------------------|
-| date            | array/object/string   | new Date | Selected date after initialization. Can be single date string/object or array depending on selection mode  |
-| flat            | boolean               | false    | Whatever if the date picker is appended to the element or triggered by an event                            |
-| first_day       | 0/1                   | 1        | First day of week: 0 - Sunday, 1 - Monday                                                                  |
-| prev            | string                | &#9664;  | Previous button content                                                                                    |
-| next            | string                | &#9654;  | Next button content                                                                                        |
-| mode            | single/multiple/range | single   | Date selection mode                                                                                        |
-| view            | days/months/years     | days     | View mode after initialization                                                                             |
-| calendars       | int                   | 1        | Number of calendars, that will be rendered                                                                 |
-| format          | string                | d-m-Y    | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                         |
-| position        | top/right/bottom/left | bottom   | Date picker's position relative to the triggered element                                                   |
-| trigger_event   | string                | click    | Event to trigger the date picker                                                                           |
-| class_name      | string                |          | Class to be added to root datepicker element                                                               |
-| hide_on_select  | boolean               | false    | If `true` - datepicker will be hidden after selection (for range mode allows to select first and last days |
-| min             | null/object/string    | null     | Min date available for selection, `null` means no limitation                                               |
-| max             | null/object/string    | null     | Max date available for selection, `null` means no limitation                                               |
-| locale          | object                |          | Object, that contains localized days of week names and months                                              |
+| Option          | Value                 | Default  | Description                                                                                                 |
+|-----------------|-----------------------|----------|-------------------------------------------------------------------------------------------------------------|
+| date            | array/object/string   | new Date | Selected date after initialization. Can be single date string/object or array depending on selection mode   |
+| flat            | boolean               | false    | Whatever if the date picker is appended to the element or triggered by an event                             |
+| first_day       | 0/1                   | 1        | First day of week: 0 - Sunday, 1 - Monday                                                                   |
+| prev            | string                | &#9664;  | Previous button content                                                                                     |
+| next            | string                | &#9654;  | Next button content                                                                                         |
+| mode            | single/multiple/range | single   | Date selection mode                                                                                         |
+| view            | days/months/years     | days     | View mode after initialization                                                                              |
+| calendars       | int                   | 1        | Number of calendars, that will be rendered                                                                  |
+| format          | string                | d-m-Y    | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                          |
+| position        | top/right/bottom/left | bottom   | Date picker's position relative to the triggered element                                                    |
+| trigger_event   | string                | click    | Event to trigger the date picker                                                                            |
+| class_name      | string                |          | Class to be added to root datepicker element                                                                |
+| hide_on_select  | boolean               | false    | If `true` - datepicker will be hidden after selection (for range mode allows to select first and last days) |
+| min             | null/object/string    | null     | Min date available for selection, `null` means no limitation                                                |
+| max             | null/object/string    | null     | Max date available for selection, `null` means no limitation                                                |
+| separator       | string                | ` - `    | Is used for joining separate dates in multiple mode and first/last dates in range mode                      |
+| locale          | object                |          | Object, that contains localized days of week names and months                                               |
 
 ## Events callbacks
 `this` in any callback will be the same element, on which pickmeup() was called.
