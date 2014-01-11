@@ -631,14 +631,14 @@
 				case 'clear':
 				case 'update':
 					this.each(function () {
-						data	= $(this).data('pickmeup-initial_options');
+						data	= $(this).data('pickmeup-options');
 						if (data) {
 							data.binded[initial_options]();
 						}
 					});
 				break;
 				case 'get_date':
-					data	= this.data('pickmeup-initial_options');
+					data	= this.data('pickmeup-options');
 					if (data) {
 						return data.binded.get_date(parameters[0]);
 					} else {
@@ -647,7 +647,7 @@
 				break;
 				case 'set_date':
 					this.each(function () {
-						data	= $(this).data('pickmeup-initial_options');
+						data	= $(this).data('pickmeup-options');
 						if (data) {
 							data.binded[initial_options].apply(this, parameters);
 						}
