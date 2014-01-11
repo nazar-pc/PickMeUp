@@ -1,3 +1,6 @@
+2.2.2 (January 11, 2014)
+update, get_date, set_date methods are not working
+
 2.2.1 (January 08, 2014)
 Fix for issue [#4](https://github.com/nazar-pc/PickMeUp/issues/4)): Callbacks only apply to first of original selector
 
