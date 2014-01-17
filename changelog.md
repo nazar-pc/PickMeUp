@@ -1,3 +1,7 @@
+2.2.3 (January 18, 2014)
+Fix for issue [#7](https://github.com/nazar-pc/PickMeUp/issues/7): Doesn't close when focus is lost from input field
+Fix for issue [#8](https://github.com/nazar-pc/PickMeUp/issues/8): NaN is appearing instead of numbers
+
 2.2.2 (January 11, 2014)
 update, get_date, set_date methods are not working
 
