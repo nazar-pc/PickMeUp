@@ -499,7 +499,13 @@
 				left		= pos.left;
 			options.binded.fill();
 			if ($this.is('input')) {
-				$this.pickmeup('set_date', parseDate($this.val(), options.format, options.separator));
+				$this
+					.pickmeup('set_date', parseDate($this.val(), options.format, options.separator))
+					.keydown(function (e) {
+						if (e.which == 9) {
+							$this.pickmeup('hide');
+						}
+					});
 			}
 			options.before_show();
 			switch (options.position){
