@@ -214,6 +214,8 @@
 	function parseDate (date, format, separator) {
 		if (date.constructor == Date) {
 			return date;
+		} else if (!date) {
+			return new Date;
 		}
 		var splitted_date	= date.split(separator);
 		if (splitted_date.length > 1) {
