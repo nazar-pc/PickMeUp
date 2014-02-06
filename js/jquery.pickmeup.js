@@ -62,6 +62,7 @@
 		before_show		: function () {return true;},
 		show			: function () {return true;},
 		hide			: function () {return true;},
+		fill			: function () {return true;},
 		locale			: {
 			days		: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
 			daysShort	: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -210,6 +211,7 @@
 			html	= tpl.months(data) + html;
 			instance.append(html);
 		}
+		options.fill.apply(this);
 	}
 	function parseDate (date, format, separator) {
 		if (date.constructor == Date) {

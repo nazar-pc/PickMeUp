@@ -1,22 +1,27 @@
+2.3.x (Unreleased yet)
+* New event `fill` event added
+* New scss parameter for color of selected date
+* UIkit integration
+
 2.2.3 (January 18, 2014)
-Fix for issue [#7](https://github.com/nazar-pc/PickMeUp/issues/7): Doesn't close when focus is lost from input field
-Fix for issue [#8](https://github.com/nazar-pc/PickMeUp/issues/8): NaN is appearing instead of numbers
+* Fix for issue [#7](https://github.com/nazar-pc/PickMeUp/issues/7): Doesn't close when focus is lost from input field
+* Fix for issue [#8](https://github.com/nazar-pc/PickMeUp/issues/8): NaN is appearing instead of numbers
 
 2.2.2 (January 11, 2014)
-update, get_date, set_date methods are not working
+* update, get_date, set_date methods are not working
 
 2.2.1 (January 08, 2014)
-Fix for issue [#4](https://github.com/nazar-pc/PickMeUp/issues/4)): Callbacks only apply to first of original selector
+* Fix for issue [#4](https://github.com/nazar-pc/PickMeUp/issues/4)): Callbacks only apply to first of original selector
 
 2.2.0 (January 08, 2014)
-Automatic getting and setting value when applied to input (fixes issue [#3](https://github.com/nazar-pc/PickMeUp/issues/3))
-New `separator` option.
+* Automatic getting and setting value when applied to input (fixes issue [#3](https://github.com/nazar-pc/PickMeUp/issues/3))
+* New `separator` option.
 
 2.1.2 (November 29, 2013)
-Positioning fix
+* Positioning fix
 
 2.1.1 (November 25, 2013)
-Fixed typo
+* Fixed typo
 
 2.1.0 (November 21, 2013)
 * Current day marked with class `pmu-today` and has its own color settings
@@ -33,4 +38,4 @@ Fixed typo
 * Root pickmeup element (jQuery collection object) can be accessed as `$('...').get(0).pickmeup` or directly `this.pickmeup` if inside callback.
 
 1.0.0 (November 16, 2013)
-Initial release
+* Initial release

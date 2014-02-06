@@ -15,23 +15,20 @@ $nav-color-hover					: $color-hover;
 $not-in-month						: #666;
 $not-in-month-hover					: #999;
 $disabled							: #333;
-$selected-background 				: #136a9f;
+$selected							: $color;
+$selected-background				: #136a9f;
 $not-in-month-selected-background	: #17384d;
 $day-of-week						: $not-in-month-hover;
 $today-background					: $not-in-month-selected-background;
 $today-color						: $color-hover;
 
-@mixin display-flex() {
-	display : -ms-flexbox;
-	display : -webkit-flex;
-	display : flex;
-}
-
 .pickmeup {
-	background    : $background;
-	border-radius : $border-radius;
-	display       : none;
-	position      : absolute;
+	background      : $background;
+	border-radius   : $border-radius;
+	-moz-box-sizing : content-box;
+	box-sizing      : content-box;
+	display         : none;
+	position        : absolute;
 
 	* {
 		-moz-box-sizing : border-box;
@@ -73,6 +70,7 @@ $today-color						: $color-hover;
 
 		.pmu-selected {
 			background : $selected-background;
+			color      : $selected;
 		}
 
 		.pmu-not-in-month.pmu-selected {
@@ -80,8 +78,10 @@ $today-color						: $color-hover;
 		}
 
 		nav {
-			@include display-flex();
 			color       : $nav-color;
+			display     : -ms-flexbox;
+			display     : -webkit-flex;
+			display     : flex;
 			line-height : 2em;
 
 			*:first-child :hover {
