@@ -1,5 +1,6 @@
 2.3.x (Unreleased yet)
 * new options `select_year` and `select_month`
+* bower config added
 * New event `fill` event added
 * New scss parameter for color of selected date
 * UIkit integration
