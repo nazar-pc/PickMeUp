@@ -47,6 +47,8 @@
 		prev			: '&#9664;',
 		next			: '&#9654;',
 		mode			: 'single',
+		select_year		: true,
+		select_month	: true,
 		view			: 'days',
 		calendars		: 1,
 		format			: 'd-m-Y',
@@ -384,9 +386,14 @@
 						root.removeClass('pmu-view-years').addClass('pmu-view-days');
 						el.text(formatDate(current_date, 'B, Y', options.locale));
 					} else if (root.hasClass('pmu-view-months')) {
-						root.removeClass('pmu-view-months').addClass('pmu-view-years');
-						el.text((current_date.getFullYear() - 6) + ' - ' + (current_date.getFullYear()+5));
-					} else if (root.hasClass('pmu-view-days')) {
+						if (options.select_year) {
+							root.removeClass('pmu-view-months').addClass('pmu-view-years');
+							el.text((current_date.getFullYear() - 6) + ' - ' + (current_date.getFullYear() + 5));
+						} else {
+							root.removeClass('pmu-view-months').addClass('pmu-view-days');
+							el.text(formatDate(current_date, 'B, Y', options.locale));
+						}
+					} else if (root.hasClass('pmu-view-days') && options.select_month) {
 						root.removeClass('pmu-view-days').addClass('pmu-view-months');
 						el.text(current_date.getFullYear());
 					}
