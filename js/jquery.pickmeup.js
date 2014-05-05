@@ -599,7 +599,8 @@
 	function clear () {
 		var options = $(this).data('pickmeup-options');
 		if (options.mode != 'single') {
-			options.date = [];
+			options.date	= [];
+			options.lastSel	= false;
 			options.binded.fill();
 		}
 	}

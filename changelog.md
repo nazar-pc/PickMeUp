@@ -4,6 +4,7 @@
 * New event `fill` event added
 * New scss parameter for color of selected date
 * UIkit integration
+* Fix for issue [#20](https://github.com/nazar-pc/PickMeUp/issues/20): Invoking clear in range mode
 
 2.2.3 (January 18, 2014)
 * Fix for issue [#7](https://github.com/nazar-pc/PickMeUp/issues/7): Doesn't close when focus is lost from input field
