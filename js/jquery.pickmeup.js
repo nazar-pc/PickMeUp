@@ -215,7 +215,7 @@
 		}
 		options.fill.apply(this);
 	}
-	function parseDate (date, format, separator) {
+	function parseDate (date, format, separator, locale) {
 		if (date.constructor == Date) {
 			return date;
 		} else if (!date) {
@@ -224,7 +224,7 @@
 		var splitted_date	= date.split(separator);
 		if (splitted_date.length > 1) {
 			splitted_date.forEach(function (element, index, array) {
-				array[index]	= parseDate(element, format, separator);
+				array[index]	= parseDate(element, format, separator, locale);
 			});
 			return splitted_date;
 		}
@@ -238,6 +238,12 @@
 			now = new Date();
 		for (var i = 0; i < parts.length; i++) {
 			switch (against[i]) {
+				case 'b':
+					m = locale.monthsShort.indexOf(parts[i]);
+					break;
+				case 'B':
+					m = locale.months.indexOf(parts[i]);
+					break;
 				case 'd':
 				case 'e':
 					d = parseInt(parts[i],10);
@@ -509,7 +515,7 @@
 			options.binded.fill();
 			if ($this.is('input')) {
 				$this
-					.pickmeup('set_date', parseDate($this.val(), options.format, options.separator))
+					.pickmeup('set_date', parseDate($this.val(), options.format, options.separator, options.locale))
 					.keydown(function (e) {
 						if (e.which == 9) {
 							$this.pickmeup('hide');
@@ -611,7 +617,7 @@
 		var options = $(this).data('pickmeup-options');
 		options.date = date;
 		if (typeof options.date === 'string') {
-			options.date = parseDate(options.date, options.format, options.separator).setHours(0,0,0,0);
+			options.date = parseDate(options.date, options.format, options.separator, options.locale).setHours(0,0,0,0);
 		} else if (options.date.constructor == Date) {
 			options.date.setHours(0,0,0,0);
 		}
@@ -627,7 +633,7 @@
 				}
 			} else {
 				for (var i = 0; i < options.date.length; i++) {
-					options.date[i] = (parseDate(options.date[i], options.format, options.separator).setHours(0,0,0,0)).valueOf();
+					options.date[i] = (parseDate(options.date[i], options.format, options.separator, options.locale).setHours(0,0,0,0)).valueOf();
 				}
 				if (options.mode == 'range') {
 					options.date[1] = ((new Date(options.date[1])).setHours(23,59,59,0)).valueOf();
@@ -690,17 +696,17 @@
 			options.calendars	= Math.max(1, parseInt(options.calendars, 10) || 1);
 			options.mode		= /single|multiple|range/.test(options.mode) ? options.mode : 'single';
 			if (typeof options.min === 'string') {
-				options.min = parseDate(options.min, options.format, options.separator).setHours(0,0,0,0);
+				options.min = parseDate(options.min, options.format, options.separator, options.locale).setHours(0,0,0,0);
 			} else if (options.min && options.min.constructor == Date) {
 				options.min.setHours(0,0,0,0);
 			}
 			if (typeof options.max === 'string') {
-				options.max = parseDate(options.max, options.format, options.separator).setHours(23,59,59,0);
+				options.max = parseDate(options.max, options.format, options.separator, options.locale).setHours(23,59,59,0);
 			} else if (options.max && options.max.constructor == Date) {
 				options.max.setHours(23,59,59,0);
 			}
 			if (typeof options.date === 'string') {
-				options.date = parseDate(options.date, options.format, options.separator).setHours(0,0,0,0);
+				options.date = parseDate(options.date, options.format, options.separator, options.locale).setHours(0,0,0,0);
 			} else if (options.date.constructor == Date) {
 				options.date.setHours(0,0,0,0);
 			}
@@ -716,7 +722,7 @@
 					}
 				} else {
 					for (i = 0; i < options.date.length; i++) {
-						options.date[i] = (parseDate(options.date[i], options.format, options.separator).setHours(0,0,0,0)).valueOf();
+						options.date[i] = (parseDate(options.date[i], options.format, options.separator, options.locale).setHours(0,0,0,0)).valueOf();
 					}
 					if (options.mode == 'range') {
 						options.date[1] = ((new Date(options.date[1])).setHours(23,59,59,0)).valueOf();
