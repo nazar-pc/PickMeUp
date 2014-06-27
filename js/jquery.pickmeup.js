@@ -229,7 +229,7 @@
 			return splitted_date;
 		}
 		var months_text	= locale.monthsShort.join(')(') + ')(' + locale.months.join(')('),
-			separator	= new RegExp('[^0-9(' + months_text + ')]+'),
+			separator	= new RegExp('[^0-9a-zA-Z(' + months_text + ')]+'),
 			parts	= date.split(separator),
 			against	= format.split(separator),
 			d,
