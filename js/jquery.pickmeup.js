@@ -224,12 +224,14 @@
 		var splitted_date	= date.split(separator);
 		if (splitted_date.length > 1) {
 			splitted_date.forEach(function (element, index, array) {
-				array[index]	= parseDate(element, format, separator, locale);
+				array[index]	= parseDate($.trim(element), format, separator, locale);
 			});
 			return splitted_date;
 		}
-		var parts	= date.split(/\W+/),
-			against	= format.split(/\W+/),
+		var months_text	= locale.monthsShort.join(')(') + ')(' + locale.months.join(')('),
+			separator	= new RegExp('[^0-9(' + months_text + ')]+'),
+			parts	= date.split(separator),
+			against	= format.split(separator),
 			d,
 			m,
 			y,
@@ -240,10 +242,10 @@
 			switch (against[i]) {
 				case 'b':
 					m = locale.monthsShort.indexOf(parts[i]);
-					break;
+				break;
 				case 'B':
 					m = locale.months.indexOf(parts[i]);
-					break;
+				break;
 				case 'd':
 				case 'e':
 					d = parseInt(parts[i],10);
