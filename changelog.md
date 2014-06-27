@@ -7,6 +7,7 @@
 * Fix for issue [#20](https://github.com/nazar-pc/PickMeUp/issues/20): Invoking clear in range mode
 * Fix for parsing formatted date when using months
 * Correct cyrillic and any other symbols support in months names
+* Added support of custom format in `formatted` argument for `get_date` method
 
 2.2.3 (January 18, 2014)
 * Fix for issue [#7](https://github.com/nazar-pc/PickMeUp/issues/7): Doesn't close when focus is lost from input field

@@ -613,7 +613,19 @@
 		}
 	}
 	function get_date (formatted) {
-		return prepareDate($(this).data('pickmeup-options'))[formatted ? 0 : 1];
+		if (typeof formatted === 'string') {
+			var options = $(this).data('pickmeup-options'),
+				date = prepareDate($(this).data('pickmeup-options'))[1];
+			if (date.constructor == Date) {
+				return formatDate(date, formatted, options.locale)
+			} else {
+				return date.map(function (value) {
+					return formatDate(value, formatted, options.locale);
+				});
+			}
+		} else {
+			return prepareDate($(this).data('pickmeup-options'))[formatted ? 0 : 1];
+		}
 	}
 	function set_date (date) {
 		var options = $(this).data('pickmeup-options');
