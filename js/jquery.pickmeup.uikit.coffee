@@ -39,7 +39,7 @@ do ($ = jQuery) ->
 			$today_background					: '$not_in_month_selected_background'
 			$today_color						: '$color_hover'
 		###
-			Style string obtained from scss style, before convertion to css file was processed with regular expression replacement
+			Style string obtained from scss style, before conversion to css file was processed with regular expression replacement
 			Find	: ((\$[a-z-]+)\t+: )(.*);
 			Replace	: $1'$2';
 			Resulting css was minified
