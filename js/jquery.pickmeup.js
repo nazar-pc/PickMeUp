@@ -123,7 +123,9 @@
 			days,
 			html,
 			instance,
-			today		= (new Date).setHours(0,0,0,0).valueOf();
+			today		= (new Date).setHours(0,0,0,0).valueOf(),
+			shown_date_from,
+			shown_date_to;
 		/**
 		 * Remove old content except header navigation
 		 */
@@ -144,6 +146,10 @@
 				date.addMonths(i - current_cal);
 				header = formatDate(date, 'B, Y', options.locale);
 			}
+			if (!shown_date_from) {
+				shown_date_from = new Date(date);
+			}
+			shown_date_to = new Date(date);
 			instance
 				.find('.pmu-month')
 				.text(header);
@@ -213,6 +219,18 @@
 			html	= tpl.months(data) + html;
 			instance.append(html);
 		}
+		shown_date_from.setDate(1);
+		shown_date_to.setDate(1);
+		shown_date_to.addMonths(1);
+		shown_date_to.addDays(-1);
+		pickmeup.find('.pmu-prev').css(
+			'visibility',
+			options.min && options.min > shown_date_from ? 'hidden' : 'visible'
+		);
+		pickmeup.find('.pmu-next').css(
+			'visibility',
+			options.max && options.max < shown_date_to ? 'hidden' : 'visible'
+		);
 		options.fill.apply(this);
 	}
 	function parseDate (date, format, separator, locale) {
@@ -230,8 +248,8 @@
 		}
 		var months_text	= locale.monthsShort.join(')(') + ')(' + locale.months.join(')('),
 			separator	= new RegExp('[^0-9a-zA-Z(' + months_text + ')]+'),
-			parts	= date.split(separator),
-			against	= format.split(separator),
+			parts		= date.split(separator),
+			against		= format.split(separator),
 			d,
 			m,
 			y,
