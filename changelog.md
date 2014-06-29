@@ -1,4 +1,4 @@
-2.3.x (Unreleased yet)
+2.3.0 (29 June, 2014)
 * new options `select_year` and `select_month`
 * bower config added
 * New event `fill` event added

@@ -6,11 +6,6 @@ Author - Nazar Mokrynskyi
 
 Based on DatePicker by Stefan Petre
 
-It is very small:
-* 16.7 KiB minified JavaScript (4.7 KiB gzip)
-* 2.2 KiB minified CSS (703 B gzip)
-* 0 KiB images
-
 Browser support:
 * IE 10+
 * Opera 12.1+
@@ -39,6 +34,27 @@ or with data-attributes with `pmu-` prefix:
 <div class="date" data-pmu-format="Y-m-d"></div>
 ```
 
+## Twitter Bootstrap integration
+For Twitter Bootstrap integration you do not need to include style file, but you need to include `jquery.pickmeup.twitter-bootstrap.js` instead,
+that will read settings of current Bootstrap theme and apply them to PickMeUp, so that it will look similar to native Bootstrap elements.
+
+To apply integrated version, replace `pickmeup` with `pickmeup_twitter_bootstrap` in initialization:
+```javascript
+$('.date').pickmeup_twitter_bootstrap();
+```
+All options and events are the same.
+
+## UIkit integration
+For UIkit integration you do not need to include style file, but you need to include `jquery.pickmeup.uikit.js` instead,
+that will read settings of current UIkit theme and apply them to PickMeUp, so that it will look similar to native UIkit elements.
+
+To apply integrated version, replace `pickmeup` with `pickmeup_uikit` in initialization:
+```javascript
+$('.date').pickmeup_uikit();
+```
+All options and events are the same.
+
+
 ## Configuration options
 | Option          | Value                 | Default  | Description                                                                                                 |
 |-----------------|-----------------------|----------|-------------------------------------------------------------------------------------------------------------|
@@ -48,6 +64,8 @@ or with data-attributes with `pmu-` prefix:
 | prev            | string                | &#9664;  | Previous button content                                                                                     |
 | next            | string                | &#9654;  | Next button content                                                                                         |
 | mode            | single/multiple/range | single   | Date selection mode                                                                                         |
+| select_month    | boolean               | true     | Allow or deny months selection                                                                              |
+| select_year     | boolean               | true     | Allow or deny year selection (obviously, depends on `select_month` option)                                  |
 | view            | days/months/years     | days     | View mode after initialization                                                                              |
 | calendars       | int                   | 1        | Number of calendars, that will be rendered                                                                  |
 | format          | string                | d-m-Y    | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                          |
@@ -82,6 +100,10 @@ Triggered at showing, if not `true` returned - datepicker will not be shown
 ##### bool hide ()
 Triggered at hiding, if not `true` returned - datepicker will not be hidden
 
+##### fill()
+Triggered after filling of PickMeUp container with new markup of days, months, years.
+May be needed for inner datepicker markup editing.
+
 ## Methods
 Methods allows external control on datepicker
 
@@ -99,7 +121,10 @@ $('.date').pickmeup('show');
 ```javascript
 $('.date').pickmeup('get_date', formatted);
 ```
-`formatted` - boolean (default `false`)
+`formatted` - boolean or string (default `false`)
+* `false` - `Date` object
+* `true` - string formatted in accordance with `format` option
+* string is used to specify custom format instead if given during initialization
 
 ##### Set date
 ```javascript
