@@ -121,10 +121,12 @@ $('.date').pickmeup('show');
 ```javascript
 $('.date').pickmeup('prev');
 ```
+
 ##### Next
 ```javascript
 $('.date').pickmeup('next');
 ```
+
 ##### Get date
 ```javascript
 $('.date').pickmeup('get_date', formatted);

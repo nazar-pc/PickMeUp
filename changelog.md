@@ -1,3 +1,6 @@
+2.4.0 (01 July, 2014)
+* Add methods prev/next for external call
+
 2.3.0 (29 June, 2014)
 * new options `select_year` and `select_month`
 * bower config added
