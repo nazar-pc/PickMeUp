@@ -425,12 +425,11 @@
 					}
 				} else {
 					var prev	= el.hasClass('pmu-prev');
-					if (root.hasClass('pmu-view-years')) {
-						options.current.addYears(prev ? -12 : 12);
-					} else if (root.hasClass('pmu-view-months')) {
-						options.current.addYears(prev ? -1 : 1);
-					} else if (root.hasClass('pmu-view-days')) {
-						options.current.addMonths(prev ? -1 : 1);
+					
+					if (prev) {
+						options.binded.prev();
+					} else {
+						options.binded.next();
 					}
 				}
 			} else if (!el.hasClass('pmu-disabled')) {
@@ -630,6 +629,34 @@
 			options.binded.fill();
 		}
 	}
+	function prev () {
+		var root		= this.pickmeup;
+		var options	= $(this).data('pickmeup-options');
+		
+		if (root.hasClass('pmu-view-years')) {
+			options.current.addYears(-12);
+		} else if (root.hasClass('pmu-view-months')) {
+			options.current.addYears(-1);
+		} else if (root.hasClass('pmu-view-days')) {
+			options.current.addMonths(-1);
+		}
+		
+		options.binded.fill();
+	}
+	function next () {
+		var root		= this.pickmeup;
+		var options	= $(this).data('pickmeup-options');
+		
+		if (root.hasClass('pmu-view-years')) {
+			options.current.addYears(12);
+		} else if (root.hasClass('pmu-view-months')) {
+			options.current.addYears(1);
+		} else if (root.hasClass('pmu-view-days')) {
+			options.current.addMonths(1);
+		}
+		
+		options.binded.fill();
+	}
 	function get_date (formatted) {
 		if (typeof formatted === 'string') {
 			var options = $(this).data('pickmeup-options'),
@@ -686,6 +713,8 @@
 				case 'show':
 				case 'clear':
 				case 'update':
+				case 'prev':
+				case 'next':
 					this.each(function () {
 						data	= $(this).data('pickmeup-options');
 						if (data) {
@@ -804,6 +833,8 @@
 				hide		: hide.bind(this),
 				update		: update.bind(this),
 				clear		: clear.bind(this),
+				prev		: prev.bind(this),
+				next		: next.bind(this),
 				get_date	: get_date.bind(this),
 				set_date	: set_date.bind(this)
 			};

@@ -117,6 +117,14 @@ $('.date').pickmeup('hide');
 $('.date').pickmeup('show');
 ```
 
+##### Prev
+```javascript
+$('.date').pickmeup('prev');
+```
+##### Next
+```javascript
+$('.date').pickmeup('next');
+```
 ##### Get date
 ```javascript
 $('.date').pickmeup('get_date', formatted);
