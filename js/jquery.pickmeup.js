@@ -424,9 +424,7 @@
 						el.text(current_date.getFullYear());
 					}
 				} else {
-					var prev	= el.hasClass('pmu-prev');
-					
-					if (prev) {
+					if (el.hasClass('pmu-prev')) {
 						options.binded.prev(false);
 					} else {
 						options.binded.next(false);
@@ -633,10 +631,8 @@
 		if (typeof fill == 'undefined') {
 			fill = true;
 		}
-		
-		var root		= this.pickmeup;
+		var root	= this.pickmeup;
 		var options	= $(this).data('pickmeup-options');
-		
 		if (root.hasClass('pmu-view-years')) {
 			options.current.addYears(-12);
 		} else if (root.hasClass('pmu-view-months')) {
@@ -644,7 +640,6 @@
 		} else if (root.hasClass('pmu-view-days')) {
 			options.current.addMonths(-1);
 		}
-		
 		if (fill) {
 			options.binded.fill();
 		}
@@ -653,10 +648,8 @@
 		if (typeof fill == 'undefined') {
 			fill = true;
 		}
-		
-		var root		= this.pickmeup;
+		var root	= this.pickmeup;
 		var options	= $(this).data('pickmeup-options');
-		
 		if (root.hasClass('pmu-view-years')) {
 			options.current.addYears(12);
 		} else if (root.hasClass('pmu-view-months')) {
@@ -664,7 +657,6 @@
 		} else if (root.hasClass('pmu-view-days')) {
 			options.current.addMonths(1);
 		}
-		
 		if (fill) {
 			options.binded.fill();
 		}
