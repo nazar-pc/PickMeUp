@@ -427,9 +427,9 @@
 					var prev	= el.hasClass('pmu-prev');
 					
 					if (prev) {
-						options.binded.prev();
+						options.binded.prev(false);
 					} else {
-						options.binded.next();
+						options.binded.next(false);
 					}
 				}
 			} else if (!el.hasClass('pmu-disabled')) {
@@ -629,7 +629,11 @@
 			options.binded.fill();
 		}
 	}
-	function prev () {
+	function prev (fill) {
+		if (typeof fill == 'undefined') {
+			fill = true;
+		}
+		
 		var root		= this.pickmeup;
 		var options	= $(this).data('pickmeup-options');
 		
@@ -641,9 +645,15 @@
 			options.current.addMonths(-1);
 		}
 		
-		options.binded.fill();
+		if (fill) {
+			options.binded.fill();
+		}
 	}
-	function next () {
+	function next (fill) {
+		if (typeof fill == 'undefined') {
+			fill = true;
+		}
+		
 		var root		= this.pickmeup;
 		var options	= $(this).data('pickmeup-options');
 		
@@ -655,7 +665,9 @@
 			options.current.addMonths(1);
 		}
 		
-		options.binded.fill();
+		if (fill) {
+			options.binded.fill();
+		}
 	}
 	function get_date (formatted) {
 		if (typeof formatted === 'string') {
