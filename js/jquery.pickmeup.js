@@ -238,6 +238,8 @@
 			return date;
 		} else if (!date) {
 			return new Date;
+		} else if (isNaN(Date.parse(date))) {
+			return new Date;
 		}
 		var splitted_date	= date.split(separator);
 		if (splitted_date.length > 1) {
