@@ -295,7 +295,7 @@
 				break;
 			}
 		}
-		return new Date(
+		var parsed_date = new Date(
 			y === undefined ? now.getFullYear() : y,
 			m === undefined ? now.getMonth() : m,
 			d === undefined ? now.getDate() : d,
@@ -303,6 +303,10 @@
 			min === undefined ? now.getMinutes() : min,
 			0
 		);
+		if (parsed_date.toString() == 'Invalid Date') {
+			parsed_date = new Date;
+		}
+		return parsed_date;
 	}
 	function formatDate (date, format, locale) {
 		var m = date.getMonth();

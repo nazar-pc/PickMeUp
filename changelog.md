@@ -1,3 +1,6 @@
+2.4.1 (11 July, 2014)
+* Fix for NaN instead of dates and months names when wrong data placed in input field, fixes [#26](https://github.com/nazar-pc/PickMeUp/issues/26) and [#27](https://github.com/nazar-pc/PickMeUp/issues/27)
+
 2.4.0 (01 July, 2014)
 * Add methods prev/next for external call
 
