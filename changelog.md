@@ -1,3 +1,6 @@
+2.4.2 (16 July, 2014)
+* More correct fix for NaN instead of dates and months names when wrong data placed in input field
+
 2.4.1 (11 July, 2014)
 * Fix for NaN instead of dates and months names when wrong data placed in input field, fixes [#26](https://github.com/nazar-pc/PickMeUp/issues/26) and [#27](https://github.com/nazar-pc/PickMeUp/issues/27)
 
