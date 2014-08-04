@@ -303,7 +303,7 @@
 			min === undefined ? now.getMinutes() : min,
 			0
 		);
-		if (isNaN(parseInt(parsed_date))) {
+		if (isNaN(parsed_date * 1)) {
 			parsed_date = new Date;
 		}
 		return parsed_date;
