@@ -1,5 +1,8 @@
-2.4.x (Unreleased yet)
+2.x.x (Unreleased yet)
 * Fix for The month before min date should not display [#32](https://github.com/nazar-pc/PickMeUp/issues/32)
+* events namespacing
+* touch support
+* destroy method, fixes [#30](https://github.com/nazar-pc/PickMeUp/issues/30)
 
 2.4.3 (05 August, 2014)
 * Fix for broken date parsing in last version

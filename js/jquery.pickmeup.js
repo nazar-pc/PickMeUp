@@ -40,6 +40,7 @@
 	};
 })(Date.prototype);
 (function ($) {
+	var instances_count	= 0;
 	$.pickmeup = $.extend($.pickmeup || {}, {
 		date			: new Date,
 		flat			: false,
@@ -53,7 +54,7 @@
 		calendars		: 1,
 		format			: 'd-m-Y',
 		position		: 'bottom',
-		trigger_event	: 'click',
+		trigger_event	: 'click touchstart',
 		class_name		: '',
 		separator		: ' - ',
 		hide_on_select	: false,
@@ -590,11 +591,11 @@
 			});
 			$(document)
 				.on(
-					'mousedown',
+					'mousedown' + options.events_namespace,
 					options.binded.hide
 				)
 				.on(
-					'resize',
+					'resize' + options.events_namespace,
 					[
 						true
 					],
@@ -676,9 +677,10 @@
 		}
 	}
 	function get_date (formatted) {
+		var options			= $(this).data('pickmeup-options'),
+			prepared_date	= prepareDate(options);
 		if (typeof formatted === 'string') {
-			var options = $(this).data('pickmeup-options'),
-				date = prepareDate($(this).data('pickmeup-options'))[1];
+			var date = prepared_date[1];
 			if (date.constructor == Date) {
 				return formatDate(date, formatted, options.locale)
 			} else {
@@ -687,7 +689,7 @@
 				});
 			}
 		} else {
-			return prepareDate($(this).data('pickmeup-options'))[formatted ? 0 : 1];
+			return prepared_date[formatted ? 0 : 1];
 		}
 	}
 	function set_date (date) {
@@ -722,6 +724,14 @@
 		options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
 		options.binded.fill();
 	}
+	function destroy () {
+		var	$this	= $(this),
+			options	= $this.data('pickmeup-options');
+		$this.removeData('pickmeup-options');
+		$this.off(options.events_namespace);
+		$(document).off(options.events_namespace);
+		$(this.pickmeup).remove();
+	}
 	$.fn.pickmeup	= function (initial_options) {
 		if (typeof initial_options === 'string') {
 			var data,
@@ -733,6 +743,7 @@
 				case 'update':
 				case 'prev':
 				case 'next':
+				case 'destroy':
 					this.each(function () {
 						data	= $(this).data('pickmeup-options');
 						if (data) {
@@ -854,10 +865,12 @@
 				prev		: prev.bind(this),
 				next		: next.bind(this),
 				get_date	: get_date.bind(this),
-				set_date	: set_date.bind(this)
+				set_date	: set_date.bind(this),
+				destroy		: destroy.bind(this)
 			};
+			options.events_namespace	= '.pickmeup-' + (++instances_count);
 			pickmeup
-				.on('click', options.binded.click)
+				.on('click touchstart', options.binded.click)
 				.addClass(views[options.view])
 				.append(html)
 				.on(
@@ -874,7 +887,13 @@
 				});
 			} else {
 				pickmeup.appendTo(document.body);
-				$this.on(options.trigger_event, options.binded.show);
+				// Multiple events support
+				var trigger_event	= options.trigger_event.split(' ');
+				for (i = 0; i < trigger_event.length; ++i) {
+					trigger_event[i]	+= options.events_namespace;
+				}
+				trigger_event	= trigger_event.join(' ');
+				$this.on(trigger_event, options.binded.show);
 			}
 		});
 	};
