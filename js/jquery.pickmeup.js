@@ -588,7 +588,10 @@
 	}
 	function click (e) {
 		var el	= $(e.target);
-		if (el.hasClass('pmu-button')) {
+		if (!el.hasClass('pmu-button')) {
+			el	= el.closest('.pmu-button');
+		}
+		if (el.length) {
 			if (el.hasClass('pmu-disabled')) {
 				return false;
 			}

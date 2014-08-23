@@ -56,27 +56,28 @@ All options and events are the same.
 
 
 ## Configuration options
-| Option          | Value                 | Default  | Description                                                                                                 |
-|-----------------|-----------------------|----------|-------------------------------------------------------------------------------------------------------------|
-| date            | array/object/string   | new Date | Selected date after initialization. Can be single date string/object or array depending on selection mode   |
-| flat            | boolean               | false    | Whatever if the date picker is appended to the element or triggered by an event                             |
-| first_day       | 0/1                   | 1        | First day of week: 0 - Sunday, 1 - Monday                                                                   |
-| prev            | string                | &#9664;  | Previous button content                                                                                     |
-| next            | string                | &#9654;  | Next button content                                                                                         |
-| mode            | single/multiple/range | single   | Date selection mode                                                                                         |
-| select_month    | boolean               | true     | Allow or deny months selection                                                                              |
-| select_year     | boolean               | true     | Allow or deny year selection (obviously, depends on `select_month` option)                                  |
-| view            | days/months/years     | days     | View mode after initialization                                                                              |
-| calendars       | int                   | 1        | Number of calendars, that will be rendered                                                                  |
-| format          | string                | d-m-Y    | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                          |
-| position        | top/right/bottom/left | bottom   | Date picker's position relative to the triggered element                                                    |
-| trigger_event   | string                | click    | Event to trigger the date picker                                                                            |
-| class_name      | string                |          | Class to be added to root datepicker element                                                                |
-| hide_on_select  | boolean               | false    | If `true` - datepicker will be hidden after selection (for range mode allows to select first and last days) |
-| min             | null/object/string    | null     | Min date available for selection, `null` means no limitation                                                |
-| max             | null/object/string    | null     | Max date available for selection, `null` means no limitation                                                |
-| separator       | string                | ` - `    | Is used for joining separate dates in multiple mode and first/last dates in range mode                      |
-| locale          | object                |          | Object, that contains localized days of week names and months                                               |
+| Option          | Value                 | Default          | Description                                                                                                 |
+|-----------------|-----------------------|------------------|-------------------------------------------------------------------------------------------------------------|
+| date            | array/object/string   | new Date         | Selected date after initialization. Can be single date string/object or array depending on selection mode   |
+| flat            | boolean               | false            | Whatever if the date picker is appended to the element or triggered by an event                             |
+| first_day       | 0/1                   | 1                | First day of week: 0 - Sunday, 1 - Monday                                                                   |
+| prev            | string                | &#9664;          | Previous button content                                                                                     |
+| next            | string                | &#9654;          | Next button content                                                                                         |
+| mode            | single/multiple/range | single           | Date selection mode                                                                                         |
+| select_day      | boolean               | true             | Allow or deny days selection                                                                              |
+| select_month    | boolean               | true             | Allow or deny months selection                                                                              |
+| select_year     | boolean               | true             | Allow or deny year selection                                                                                |
+| view            | days/months/years     | days             | View mode after initialization                                                                              |
+| calendars       | int                   | 1                | Number of calendars, that will be rendered                                                                  |
+| format          | string                | d-m-Y            | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                          |
+| position        | top/right/bottom/left | bottom           | Date picker's position relative to the triggered element                                                    |
+| trigger_event   | string                | click touchstart | Event to trigger the date picker                                                                            |
+| class_name      | string                |                  | Class to be added to root datepicker element                                                                |
+| hide_on_select  | boolean               | false            | If `true` - datepicker will be hidden after selection (for range mode allows to select first and last days) |
+| min             | null/object/string    | null             | Min date available for selection, `null` means no limitation                                                |
+| max             | null/object/string    | null             | Max date available for selection, `null` means no limitation                                                |
+| separator       | string                | ` - `            | Is used for joining separate dates in multiple mode and first/last dates in range mode                      |
+| locale          | object                |                  | Object, that contains localized days of week names and months                                               |
 
 ## Events callbacks
 `this` in any callback will be the same element, on which pickmeup() was called.
@@ -153,6 +154,12 @@ Is useful, for example, after input field change
 $('.date').pickmeup('update');
 ```
 
+##### Destroy datepicker
+Destroys PickMeUp instance, removes created markup, restores everything that was changed to original state.
+```javascript
+$('.date').pickmeup('destroy');
+```
+
 ## Other
 Current options (for whatever reason) can be accessed as `$('...').data('pickmeup-options')`.
 
@@ -165,6 +172,10 @@ To change size - adjust `font-size` for root datepicker element, everything will
 
 ## Contribution
 Feel free to create issues and send pull requests, they are highly appreciated!
+
+Before reporting an issue, be so kind to prepare reproducible example on jsfiddle.net, please.
+
+You can start with working demo of latest stable version of PickMeUp: [jsfiddle.net/z4fmvuzb](http://jsfiddle.net/z4fmvuzb/)
 
 ## License
 MIT License, see license.txt

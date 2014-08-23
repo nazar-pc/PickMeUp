@@ -1,12 +1,13 @@
-2.x.x (Unreleased yet)
+2.5.0 (23 August, 2014)
 * Fix for The month before min date should not display [#32](https://github.com/nazar-pc/PickMeUp/issues/32)
 * events namespacing
 * touch support (`trigger_event` option defaults to `click touchstart`)
-* destroy method, fixes [#30](https://github.com/nazar-pc/PickMeUp/issues/30)
+* `destroy` method, fixes [#30](https://github.com/nazar-pc/PickMeUp/issues/30)
 * current date highlighting in range mode
 * new option `select_day` (also `select_month` no longer depends on `select_year`), fixes [#29](https://github.com/nazar-pc/PickMeUp/issues/29)
 * account min/max options in months and years views
 * huge refactoring and fixes for various found small bugs
+* Fix for pmu-{next || prev} clicktarget unreachable with icon, issue [#33](https://github.com/nazar-pc/PickMeUp/issues/33)
 
 2.4.3 (05 August, 2014)
 * Fix for broken date parsing in last version
