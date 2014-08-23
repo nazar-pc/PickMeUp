@@ -148,6 +148,16 @@
 			}
 			if (!shown_date_from) {
 				shown_date_from = new Date(date);
+				// If all dates in this month are before min option - set next month as current in order not to show calendar with all disabled dates
+				shown_date_from.setDate(1);
+				shown_date_from.addMonths(1);
+				shown_date_from.addDays(-1);
+				if (options.min && options.min > shown_date_from) {
+					--i;
+					options.current.addMonths(1);
+					shown_date_from	= undefined;
+					continue;
+				}
 			}
 			shown_date_to = new Date(date);
 			instance
