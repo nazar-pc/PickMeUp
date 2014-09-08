@@ -873,7 +873,7 @@
 				}
 			}
 		} else {
-			options.date = options.date.valueOf();
+			options.date = options.date.constructor == Array ? options.date[0].valueOf() : options.date.valueOf();
 		}
 		options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
 		options.binded.fill();
