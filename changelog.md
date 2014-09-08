@@ -1,3 +1,6 @@
+2.5.1 (08 September, 2014)
+* Single mode check if options.date is array (take first element of array) [#35](https://github.com/nazar-pc/PickMeUp/pull/35)
+
 2.5.0 (23 August, 2014)
 * Fix for The month before min date should not display [#32](https://github.com/nazar-pc/PickMeUp/issues/32)
 * events namespacing
