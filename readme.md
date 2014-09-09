@@ -74,6 +74,7 @@ All options and events are the same.
 | trigger_event   | string                | click touchstart | Event to trigger the date picker                                                                            |
 | class_name      | string                |                  | Class to be added to root datepicker element                                                                |
 | hide_on_select  | boolean               | false            | If `true` - datepicker will be hidden after selection (for range mode allows to select first and last days) |
+| uniquify_dates  | boolean               | false            | If `true` - dates returned will be unique (for range mode if start and end date the same)                   |
 | min             | null/object/string    | null             | Min date available for selection, `null` means no limitation                                                |
 | max             | null/object/string    | null             | Max date available for selection, `null` means no limitation                                                |
 | separator       | string                | ` - `            | Is used for joining separate dates in multiple mode and first/last dates in range mode                      |
