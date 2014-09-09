@@ -9,6 +9,7 @@
 $border-radius						: .4em;
 $background							: #000;
 $color								: #eee;
+$background-hover					: $background;
 $color-hover						: #88c5eb;
 $nav-color							: $color;
 $nav-color-hover					: $color-hover;
@@ -55,7 +56,8 @@ $today-color						: $color-hover;
 		}
 
 		.pmu-button:hover {
-			color : $color-hover;
+			background : $background-hover;
+			color      : $color-hover;
 		}
 
 		.pmu-not-in-month {

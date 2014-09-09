@@ -1,3 +1,6 @@
+2.x.x (Unreleased yet)
+* New parameter `$background-hover` added to `scss` style file.
+
 2.5.1 (08 September, 2014)
 * Single mode check if options.date is array (take first element of array) [#35](https://github.com/nazar-pc/PickMeUp/pull/35)
 
