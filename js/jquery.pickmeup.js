@@ -59,6 +59,7 @@
 		class_name		: '',
 		separator		: ' - ',
 		hide_on_select	: false,
+		uniquify_dates	: false,
 		min				: null,
 		max				: null,
 		render			: function () {},
@@ -676,6 +677,7 @@
 			return [formatDate(result, options.format, options.locale), result];
 		} else {
 			result = [[],[]];
+			if (options.uniquify_dates && options.date.filter) options.date = options.date.filter(function (e, i, arr) { return arr.lastIndexOf(e) === i; });
 			$.each(options.date, function(nr, val){
 				var date = new Date(val);
 				result[0].push(formatDate(date, options.format, options.locale));
