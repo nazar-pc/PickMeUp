@@ -254,7 +254,7 @@
 					) {
 						year.class_name.push('pmu-disabled');
 					} else if (is_year_selected(year.text)) {
-						year.class_name.push('pmu-today');
+						year.class_name.push('pmu-selected');
 					}
 					year.class_name	= year.class_name.join(' ');
 					years.push(year);
@@ -296,7 +296,7 @@
 					) {
 						month.class_name.push('pmu-disabled');
 					} else if (is_months_selected(current_year, j)) {
-						month.class_name.push('pmu-today');
+						month.class_name.push('pmu-selected');
 					}
 					month.class_name	= month.class_name.join(' ');
 					months.push(month);
