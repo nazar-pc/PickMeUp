@@ -516,6 +516,26 @@
 				case 'S':
 					part = (sec < 10) ? ("0" + sec) : sec;
 				break;
+				case 't':
+					switch ( ("" + d) ) {
+						case "1":
+						case "21":
+						case "31":
+							part = "st";
+						break;
+						case "2":
+						case "22":
+							part = "nd";
+						break;
+						case "3":
+						case "23":
+							part = "rd";
+						break;
+						default:
+							part = "th";
+						break;
+					}
+				break;
 				case 'u':
 					part = w + 1;
 				break;
