@@ -403,6 +403,8 @@
 				break;
 				case 'd':
 				case 'e':
+				case 'et':
+				case 'dt':
 					d = parseInt(parts[i],10);
 				break;
 				case 'm':
