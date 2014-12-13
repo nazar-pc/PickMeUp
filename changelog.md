@@ -1,6 +1,9 @@
-2.x.x (Unreleased yet)
+2.6.0 (13 December, 2014)
 * New parameter `$background-hover` added to `scss` style file
 * Fix wrong class on selected months and years (`pmu-today` instead of `pmu-selected`)
+* New `default_date` option
+* Fix for `$background-hover` default color
+* Fix for resetting interval to 1 date with combination of `flat:false` and `hide_on_select:true`
 
 2.5.1 (08 September, 2014)
 * Single mode check if options.date is array (take first element of array) [#35](https://github.com/nazar-pc/PickMeUp/pull/35)

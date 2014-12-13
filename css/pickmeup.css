@@ -7,7 +7,7 @@
  * @license		MIT License, see license.txt
  */
 .pickmeup {
-  background: black;
+  background: #000;
   border-radius: 0.4em;
   -moz-box-sizing: content-box;
   box-sizing: content-box;
@@ -23,7 +23,7 @@
     text-align: center;
     width: 15em; }
     .pickmeup .pmu-instance .pmu-button {
-      color: #eeeeee;
+      color: #eee;
       cursor: pointer;
       outline: none;
       text-decoration: none; }
@@ -31,21 +31,21 @@
       background: #17384d;
       color: #88c5eb; }
     .pickmeup .pmu-instance .pmu-button:hover {
-      background: black;
+      background: "transparent";
       color: #88c5eb; }
     .pickmeup .pmu-instance .pmu-not-in-month {
-      color: #666666; }
+      color: #666; }
     .pickmeup .pmu-instance .pmu-disabled,
     .pickmeup .pmu-instance .pmu-disabled:hover {
-      color: #333333;
+      color: #333;
       cursor: default; }
     .pickmeup .pmu-instance .pmu-selected {
       background: #136a9f;
-      color: #eeeeee; }
+      color: #eee; }
     .pickmeup .pmu-instance .pmu-not-in-month.pmu-selected {
       background: #17384d; }
     .pickmeup .pmu-instance nav {
-      color: #eeeeee;
+      color: #eee;
       display: -ms-flexbox;
       display: -webkit-flex;
       display: flex;
@@ -65,7 +65,7 @@
       line-height: 3.6em;
       width: 3.5em; }
     .pickmeup .pmu-instance .pmu-day-of-week {
-      color: #999999;
+      color: #999;
       cursor: default; }
     .pickmeup .pmu-instance .pmu-day-of-week *,
     .pickmeup .pmu-instance .pmu-days * {

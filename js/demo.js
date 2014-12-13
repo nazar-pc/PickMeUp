@@ -23,6 +23,7 @@ $(function () {
 	});
 	$('input').pickmeup({
 		position		: 'right',
-		hide_on_select	: true
+		hide_on_select	: true,
+		mode:'range'
 	});
 });

@@ -59,12 +59,13 @@ All options and events are the same.
 | Option          | Value                 | Default          | Description                                                                                                 |
 |-----------------|-----------------------|------------------|-------------------------------------------------------------------------------------------------------------|
 | date            | array/object/string   | new Date         | Selected date after initialization. Can be single date string/object or array depending on selection mode   |
+| default_date    | array/object/string   | new Date         | Allows to keep empty value until date selected, but open PickMeUp at this default date                      |
 | flat            | boolean               | false            | Whatever if the date picker is appended to the element or triggered by an event                             |
 | first_day       | 0/1                   | 1                | First day of week: 0 - Sunday, 1 - Monday                                                                   |
 | prev            | string                | &#9664;          | Previous button content                                                                                     |
 | next            | string                | &#9654;          | Next button content                                                                                         |
 | mode            | single/multiple/range | single           | Date selection mode                                                                                         |
-| select_day      | boolean               | true             | Allow or deny days selection                                                                              |
+| select_day      | boolean               | true             | Allow or deny days selection                                                                                |
 | select_month    | boolean               | true             | Allow or deny months selection                                                                              |
 | select_year     | boolean               | true             | Allow or deny year selection                                                                                |
 | view            | days/months/years     | days             | View mode after initialization                                                                              |

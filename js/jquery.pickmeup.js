@@ -43,7 +43,7 @@
 	var instances_count	= 0;
 	$.pickmeup = $.extend($.pickmeup || {}, {
 		date			: new Date,
-		default_date		: new Date,
+		default_date	: new Date,
 		flat			: false,
 		first_day		: 1,
 		prev			: '&#9664;',
@@ -777,7 +777,6 @@
 				$(document)
 					.off('mousedown', options.binded.hide)
 					.off('resize', options.binded.forced_show);
-				options.date[1]	= options.date[0];
 				options.lastSel	= false;
 			}
 		}
