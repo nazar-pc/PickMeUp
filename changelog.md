@@ -1,3 +1,6 @@
+2.6.1 (13 January, 2015)
+* Fix for bug when specified `max` date in the middle of the month caused inability to switch to that month
+
 2.6.0 (13 December, 2014)
 * New parameter `$background-hover` added to `scss` style file
 * Fix wrong class on selected months and years (`pmu-today` instead of `pmu-selected`)

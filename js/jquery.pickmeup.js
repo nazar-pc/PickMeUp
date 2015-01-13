@@ -111,6 +111,8 @@
 			current_cal		= Math.floor(options.calendars / 2),
 			actual_date		= options.date,
 			current_date	= options.current,
+			min_date		= new Date(options.min),
+			max_date		= new Date(options.max),
 			local_date,
 			header,
 			html,
@@ -119,6 +121,16 @@
 			shown_date_from,
 			shown_date_to,
 			tmp_date;
+		if (min_date) {
+			min_date.setDate(1);
+			min_date.addMonths(1);
+			min_date.addDays(-1);
+		}
+		if (max_date) {
+			max_date.setDate(1);
+			max_date.addMonths(1);
+			max_date.addDays(-1);
+		}
 		/**
 		 * Remove old content except header navigation
 		 */
@@ -140,7 +152,7 @@
 				header = formatDate(local_date, 'B, Y', options.locale);
 			}
 			if (!shown_date_to) {
-				if (options.max) {
+				if (max_date) {
 					// If all dates in this month (months in year or years in years block) are after max option - set next month as current
 					// in order not to show calendar with all disabled dates
 					tmp_date	= new Date(local_date);
@@ -151,7 +163,7 @@
 					} else {
 						tmp_date.addYears((options.calendars - 1) * 12);
 					}
-					if (tmp_date > options.max) {
+					if (tmp_date > max_date) {
 						--i;
 						current_date.addMonths(-1);
 						shown_date_to	= undefined;
@@ -166,7 +178,7 @@
 				shown_date_from.setDate(1);
 				shown_date_from.addMonths(1);
 				shown_date_from.addDays(-1);
-				if (options.min && options.min > shown_date_from) {
+				if (min_date && min_date > shown_date_from) {
 					--i;
 					current_date.addMonths(1);
 					shown_date_from	= undefined;
