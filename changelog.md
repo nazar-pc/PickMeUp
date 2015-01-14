@@ -1,3 +1,6 @@
+2.6.2 (15 January, 2015)
+* Fix for bug when `min` and `max` were not specified and forced datepicker to stuck at 1970, fixes [#49](https://github.com/nazar-pc/PickMeUp/issues/49)
+
 2.6.1 (13 January, 2015)
 * Fix for bug when specified `max` date in the middle of the month caused inability to switch to that month
 
