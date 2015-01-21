@@ -339,7 +339,7 @@
 					} else if (local_date.getDay() == 6) {
 						day.class_name.push('pmu-saturday');
 					}
-					var from_user	= options.render(local_date) || {},
+					var from_user	= options.render(new Date(local_date)) || {},
 						val			= local_date.valueOf(),
 						disabled	= (options.min && options.min > local_date) || (options.max && options.max < local_date);
 					if (from_user.disabled || disabled) {
@@ -589,6 +589,7 @@
 		}
 		options.change.apply(this, prepared_date);
 		if (
+			!options.flat &&
 			options.hide_on_select &&
 			(
 				options.mode != 'range' ||
@@ -722,52 +723,54 @@
 					});
 			}
 			options.before_show();
-			switch (options.position){
-				case 'top':
-					top -= pickmeup.outerHeight();
-					break;
-				case 'left':
-					left -= pickmeup.outerWidth();
-					break;
-				case 'right':
-					left += this.offsetWidth;
-					break;
-				case 'bottom':
-					top += this.offsetHeight;
-					break;
-			}
-			if (top + pickmeup.offsetHeight > viewport.t + viewport.h) {
-				top = pos.top  - pickmeup.offsetHeight;
-			}
-			if (top < viewport.t) {
-				top = pos.top + this.offsetHeight + pickmeup.offsetHeight;
-			}
-			if (left + pickmeup.offsetWidth > viewport.l + viewport.w) {
-				left = pos.left - pickmeup.offsetWidth;
-			}
-			if (left < viewport.l) {
-				left = pos.left + this.offsetWidth
-			}
 			if (options.show() == false) {
 				return;
 			}
-			pickmeup.css({
-				display	: 'inline-block',
-				top		: top + 'px',
-				left	: left + 'px'
-			});
-			$(document)
-				.on(
-					'mousedown' + options.events_namespace,
-					options.binded.hide
-				)
-				.on(
-					'resize' + options.events_namespace,
-					[
-						true
-					],
-					options.binded.forced_show
-				);
+			if (!options.flat) {
+				switch (options.position){
+					case 'top':
+						top -= pickmeup.outerHeight();
+						break;
+					case 'left':
+						left -= pickmeup.outerWidth();
+						break;
+					case 'right':
+						left += this.offsetWidth;
+						break;
+					case 'bottom':
+						top += this.offsetHeight;
+						break;
+				}
+				if (top + pickmeup.offsetHeight > viewport.t + viewport.h) {
+					top = pos.top  - pickmeup.offsetHeight;
+				}
+				if (top < viewport.t) {
+					top = pos.top + this.offsetHeight + pickmeup.offsetHeight;
+				}
+				if (left + pickmeup.offsetWidth > viewport.l + viewport.w) {
+					left = pos.left - pickmeup.offsetWidth;
+				}
+				if (left < viewport.l) {
+					left = pos.left + this.offsetWidth
+				}
+				pickmeup.css({
+					display	: 'inline-block',
+					top		: top + 'px',
+					left	: left + 'px'
+				});
+				$(document)
+					.on(
+						'mousedown' + options.events_namespace,
+						options.binded.hide
+					)
+					.on(
+						'resize' + options.events_namespace,
+						[
+							true
+						],
+						options.binded.forced_show
+					);
+			}
 		}
 	}
 	function forced_show () {

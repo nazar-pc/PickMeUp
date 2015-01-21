@@ -1,3 +1,7 @@
+2.6.3 (21 January, 2015)
+* Protect modification of internal date in `render` event callback.
+* Fix for `update` event on `flat: true` instances.
+
 2.6.2 (15 January, 2015)
 * Fix for bug when `min` and `max` were not specified and forced datepicker to stuck at 1970, fixes [#49](https://github.com/nazar-pc/PickMeUp/issues/49)
 
