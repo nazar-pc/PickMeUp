@@ -892,6 +892,7 @@
 		}
 		options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
 		options.binded.fill();
+		options.binded.update_date();
 	}
 	function destroy () {
 		var	$this	= $(this),
