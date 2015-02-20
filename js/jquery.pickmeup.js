@@ -715,12 +715,13 @@
 			options.binded.fill();
 			if ($this.is('input')) {
 				$this
-					.pickmeup('set_date', parseDate(($this.val()) ? $this.val() : options.default_date, options.format, options.separator, options.locale))
+					.pickmeup('set_date', parseDate($this.val() ? $this.val() : options.default_date, options.format, options.separator, options.locale))
 					.keydown(function (e) {
 						if (e.which == 9) {
 							$this.pickmeup('hide');
 						}
 					});
+				options.lastSel = false;
 			}
 			options.before_show();
 			if (options.show() == false) {
@@ -862,7 +863,8 @@
 		}
 	}
 	function set_date (date) {
-		var options = $(this).data('pickmeup-options');
+		var $this	= $(this),
+			options = $this.data('pickmeup-options');
 		options.date = date;
 		if (typeof options.date === 'string') {
 			options.date = parseDate(options.date, options.format, options.separator, options.locale).setHours(0,0,0,0);
@@ -892,7 +894,10 @@
 		}
 		options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
 		options.binded.fill();
-		options.binded.update_date();
+		if ($this.is('input')) {
+			var prepared_date	= prepareDate(options);
+			$this.val(options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator));
+		}
 	}
 	function destroy () {
 		var	$this	= $(this),

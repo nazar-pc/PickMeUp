@@ -1,5 +1,6 @@
 Unreleased yet
 * Method 'set_date' does not update input value, fixes [#53](https://github.com/nazar-pc/PickMeUp/issues/53)
+* Fix for input+range+hide_on_select, fixes [#56](https://github.com/nazar-pc/PickMeUp/issues/56)
 
 2.6.3 (21 January, 2015)
 * Protect modification of internal date in `render` event callback.
