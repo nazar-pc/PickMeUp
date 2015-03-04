@@ -20,7 +20,7 @@ do ($ = jQuery) ->
 		button		= $('<button class="btn btn-default" />')
 		link_hover	= $('<button class="btn btn-link" />').hover()
 		text_muted	= $('<span class="text-muted" />')
-		disabled	= $('<button class="uk-button" disabled />')
+		disabled	= $('<span class="text-muted" />')
 		selected	= $('<div class="alert alert-info" />')
 		parameters	=
 			$border_radius						: '.4em'
