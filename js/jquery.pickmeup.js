@@ -54,12 +54,12 @@
 		select_day		: true,
 		view			: 'days',
 		calendars		: 1,
-		format			: 'd-m-Y',
+		format			: 'd.m.Y',
 		position		: 'bottom',
 		trigger_event	: 'click touchstart',
 		class_name		: '',
 		separator		: ' - ',
-		hide_on_select	: false,
+		hide_on_select	: true,
 		min				: null,
 		max				: null,
 		render			: function () {},
@@ -74,7 +74,10 @@
 			daysMin		: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
 			months		: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 			monthsShort	: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-		}
+		},
+                select_all_onclick      : false,
+                hide_onenter            : false
+                
 	});
 	var	views	= {
 			years	: 'pmu-view-years',
@@ -105,6 +108,7 @@
 				return '<div class="' + container_class_name + '">' + result + '</div>';
 			}
 		};
+                
 	function fill () {
 		var options			= $(this).data('pickmeup-options'),
 			pickmeup		= this.pickmeup,
@@ -131,7 +135,25 @@
 			max_date.addMonths(1);
 			max_date.addDays(-1);
 		}
-		/**
+
+                if (options.select_all_onclick)
+                {
+                    $(this).click(function()
+                    {
+                        $(this).select();
+                    });
+                }
+    
+                if (options.hide_onenter)
+                {
+                    $(this).keypress(function(event) {
+                        if ( event.which == 13 ) {
+                            $(this).pickmeup('hide');
+                        }
+                    });
+                }
+            
+                /**
 		 * Remove old content except header navigation
 		 */
 		pickmeup.find('.pmu-instance > :not(nav)').remove();
