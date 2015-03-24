@@ -761,7 +761,7 @@
 				});
 				$(document)
 					.on(
-						'mousedown' + options.events_namespace,
+						'mousedown' + options.events_namespace + ' touchstart' + options.events_namespace,
 						options.binded.hide
 					)
 					.on(
@@ -791,7 +791,7 @@
 			if (options.hide() != false) {
 				pickmeup.hide();
 				$(document)
-					.off('mousedown', options.binded.hide)
+					.off('mousedown touchstart', options.binded.hide)
 					.off('resize', options.binded.forced_show);
 				options.lastSel	= false;
 			}

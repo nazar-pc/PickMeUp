@@ -1,3 +1,6 @@
+2.6.5 (24 March, 2015)
+* Mobile Safari issue, fixes [#50](https://github.com/nazar-pc/PickMeUp/issues/50)
+
 2.6.4 (04 March, 2015)
 * Method 'set_date' does not update input value, fixes [#53](https://github.com/nazar-pc/PickMeUp/issues/53)
 * Fix for input+range+hide_on_select, fixes [#56](https://github.com/nazar-pc/PickMeUp/issues/56)
