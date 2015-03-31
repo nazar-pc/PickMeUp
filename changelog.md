@@ -1,3 +1,6 @@
+2.7.0 (31 March, 2015)
+* Added UMD support [#63](https://github.com/nazar-pc/PickMeUp/pull/63), thanks to Przemysław Piątek for pull request!
+
 2.6.5 (24 March, 2015)
 * Mobile Safari issue, fixes [#50](https://github.com/nazar-pc/PickMeUp/issues/50)
 
