@@ -6,6 +6,7 @@
  * @copyright	Copyright (c) 2008-2009, Stefan Petre
  * @license		MIT License, see license.txt
  */
+
 (function (d) {
 	function getMaxDays () {
 		var tmpDate	= new Date(this.toString()),
@@ -39,7 +40,19 @@
 		return Math.floor(time / 24*60*60*1000);
 	};
 })(Date.prototype);
-(function ($) {
+
+(function (factory) {
+	if (typeof define === 'function' && define.amd) {
+		// AMD
+		define(['jquery'], factory);
+	} else if (typeof exports === 'object') {
+		// CommonJS
+		factory(require('jquery'));
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
 	var instances_count	= 0;
 	$.pickmeup = $.extend($.pickmeup || {}, {
 		date			: new Date,
@@ -1119,4 +1132,4 @@
 			}
 		});
 	};
-})(jQuery);
+}));
