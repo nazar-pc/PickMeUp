@@ -16,6 +16,8 @@ Browser support:
 ## Getting started
 You need only 2 files: `js/jquery.pickmeup.min.js` and `css/pickmeup.min.css`.
 
+The plugin can also be loaded as AMD or CommonJS module.
+
 Then you can apply datepicker to any element:
 ```javascript
 $('.date').pickmeup();
