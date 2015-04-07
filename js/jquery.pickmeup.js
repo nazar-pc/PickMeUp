@@ -728,7 +728,7 @@
 			options.binded.fill();
 			if ($this.is('input')) {
 				$this
-					.pickmeup('set_date', parseDate($this.val() ? $this.val() : options.default_date, options.format, options.separator, options.locale))
+					.pickmeup('set_date', parseDate($this.val() ? $this.val() : ((options.default_date === true) ? new Date : options.default_date), options.format, options.separator, options.locale))
 					.keydown(function (e) {
 						if (e.which == 9) {
 							$this.pickmeup('hide');
