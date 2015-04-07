@@ -728,7 +728,7 @@
 			options.binded.fill();
 			if ($this.is('input')) {
 				$this
-					.pickmeup('set_date', parseDate($this.val() ? $this.val() : options.default_date, options.format, options.separator, options.locale))
+					.pickmeup('set_date', parseDate($this.val() ? $this.val() : ((options.default_date === true) ? new Date : options.default_date), options.format, options.separator, options.locale))
 					.keydown(function (e) {
 						if (e.which == 9) {
 							$this.pickmeup('hide');
@@ -903,13 +903,15 @@
 				}
 			}
 		} else {
-			options.date = options.date.constructor == Array ? options.date[0].valueOf() : options.date.valueOf();
+			if($this.val() != '' || options.default_date !== false) {
+				options.date = options.date.constructor == Array ? options.date[0].valueOf() : options.date.valueOf();
+			}
 		}
 		options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
 		options.binded.fill();
 		if ($this.is('input')) {
 			var prepared_date	= prepareDate(options);
-			$this.val(options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator));
+			$this.val(options.mode == 'single' ? ((options.default_date === false) ? (($this.val() != '') ? $this.val() : '') : prepared_date[0]) : prepared_date[0].join(options.separator));
 		}
 	}
 	function destroy () {
