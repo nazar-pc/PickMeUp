@@ -903,7 +903,7 @@
 				}
 			}
 		} else {
-			if($this.val() != '' || options.default_date !== false) {
+			if($this.val() || options.default_date !== false) {
 				options.date = options.date.constructor == Array ? options.date[0].valueOf() : options.date.valueOf();
 			}
 		}
@@ -911,7 +911,11 @@
 		options.binded.fill();
 		if ($this.is('input')) {
 			var prepared_date	= prepareDate(options);
-			$this.val(options.mode == 'single' ? ((options.default_date === false) ? (($this.val() != '') ? $this.val() : '') : prepared_date[0]) : prepared_date[0].join(options.separator));
+			$this.val(
+				options.mode == 'single'
+					? (options.default_date === false ? $this.val() : prepared_date[0])
+					: prepared_date[0].join(options.separator)
+			);
 		}
 	}
 	function destroy () {
