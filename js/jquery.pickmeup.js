@@ -75,6 +75,7 @@
 		hide_on_select	: false,
 		min				: null,
 		max				: null,
+		days_disabled : [],
 		render			: function () {},
 		change			: function () {return true;},
 		before_show		: function () {return true;},
@@ -352,9 +353,12 @@
 					} else if (local_date.getDay() == 6) {
 						day.class_name.push('pmu-saturday');
 					}
+
 					var from_user	= options.render(new Date(local_date)) || {},
 						val			= local_date.valueOf(),
-						disabled	= (options.min && options.min > local_date) || (options.max && options.max < local_date);
+						disabled	= (options.min && options.min > local_date)
+													|| (options.max && options.max < local_date)
+													|| (options.days_disabled.indexOf(options.locale.days[local_date.getDay()]) > -1);
 					if (from_user.disabled || disabled) {
 						day.class_name.push('pmu-disabled');
 					} else if (

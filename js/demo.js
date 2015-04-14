@@ -25,4 +25,8 @@ $(function () {
 		position		: 'right',
 		hide_on_select	: true
 	});
+	$('.disable').pickmeup({
+		days_disabled : ['Monday', 'Friday'],
+		flat          : true
+	});
 });
