@@ -51,7 +51,7 @@
         $today_background: '$not_in_month_selected_background',
         $today_color: '$color_hover'
       };
-      tmp.remove();
+      $(tmp).remove();
 
       /*
       			Style string obtained from scss style, before conversion to css file was processed with regular expression replacement
