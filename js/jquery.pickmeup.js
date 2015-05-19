@@ -67,6 +67,7 @@
 		select_day		: true,
 		view			: 'days',
 		calendars		: 1,
+		alignment		: 0,
 		format			: 'd-m-Y',
 		position		: 'bottom',
 		trigger_event	: 'click touchstart',
@@ -121,7 +122,7 @@
 	function fill () {
 		var options			= $(this).data('pickmeup-options'),
 			pickmeup		= this.pickmeup,
-			current_cal		= Math.floor(options.calendars / 2),
+			current_cal		= align(options),
 			actual_date		= options.date,
 			current_date	= options.current,
 			min_date		= options.min ? new Date(options.min) : null,
@@ -613,6 +614,23 @@
 			return false;
 		}
 	}
+	function align(options){
+		if (options.alignment === parseInt(options.alignment, 10)) {
+			return options.alignment;
+		}
+		switch(options.alignment){
+			case 'left':
+				return 0;
+				break;
+			case 'right':
+				return options.calendars - 1 ;
+				break;
+			case 'center':
+			default:
+				return Math.floor(options.calendars / 2);
+				break;
+		}
+	}
 	function click (e) {
 		var el	= $(e.target);
 		if (!el.hasClass('pmu-button')) {
@@ -629,7 +647,7 @@
 				instance_index	= $('.pmu-instance', root).index(instance);
 			if (el.parent().is('nav')) {
 				if (el.hasClass('pmu-month')) {
-					options.current.addMonths(instance_index - Math.floor(options.calendars / 2));
+					options.current.addMonths(instance_index - align(options));
 					if (root.hasClass('pmu-view-years')) {
 						// Shift back to current date, otherwise with min value specified may jump on few (tens) years forward
 						if (options.mode != 'single') {
@@ -681,12 +699,19 @@
 						options.binded.update_date();
 					}
 					// Move current month to the first place
-					options.current.addMonths(Math.floor(options.calendars / 2) - instance_index);
+					options.current.addMonths(align(options) - instance_index);
 				} else {
 					var val	= parseInt(el.text(), 10);
-					options.current.addMonths(instance_index - Math.floor(options.calendars / 2));
+					options.current.addMonths(instance_index - align(options));
 					if (el.hasClass('pmu-not-in-month')) {
 						options.current.addMonths(val > 15 ? -1 : 1);
+						if (options.alignment === parseInt(options.alignment, 10)) {
+							instance_index = instance_index + (val > 15 ? -1 : 1);
+							options.alignment = instance_index;
+						}
+					}
+					if (options.alignment === parseInt(options.alignment, 10)) {
+						options.alignment = instance_index;
 					}
 					options.current.setDate(val);
 					options.binded.update_date();
