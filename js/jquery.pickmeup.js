@@ -67,7 +67,7 @@
 		select_day		: true,
 		view			: 'days',
 		calendars		: 1,
-		alignment		: 0,
+		alignment		: 'static',
 		format			: 'd-m-Y',
 		position		: 'bottom',
 		trigger_event	: 'click touchstart',
@@ -619,6 +619,8 @@
 			return options.alignment;
 		}
 		switch(options.alignment){
+			case 'static':
+				options.alignment = 0;
 			case 'left':
 				return 0;
 				break;

@@ -72,7 +72,7 @@ All options and events are the same.
 | select_year     | boolean                   | true             | Allow or deny year selection                                                                                         |
 | view            | days/months/years         | days             | View mode after initialization                                                                                       |
 | calendars       | int                       | 1                | Number of calendars, that will be rendered                                                                           |
-| alignment       | string/int                | 0                | Alignment method or static offset to use when there are multiple calendars. `right`, `left` or `center` default :0   | 
+| alignment       | string/int                | static           | Alignment method or static offset to use when there are multiple calendars. `static`,  `right`, `left` or `center`   | 
 | format          | string                    | d-m-Y            | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                                   |
 | position        | top/right/bottom/left     | bottom           | Date picker's position relative to the triggered element                                                             |
 | trigger_event   | string                    | click touchstart | Event to trigger the date picker                                                                                     |
