@@ -615,7 +615,7 @@
 		}
 	}
 	function align(options){
-		if (options.alignment === parseInt(options.alignment, 10)) {
+		if ($.isNumeric(options.alignment)) {
 			return options.alignment;
 		}
 		switch(options.alignment){
@@ -710,12 +710,12 @@
 					options.current.addMonths(instance_index - align(options));
 					if (el.hasClass('pmu-not-in-month')) {
 						options.current.addMonths(val > 15 ? -1 : 1);
-						if (options.alignment === parseInt(options.alignment, 10)) {
+						if ($.isNumeric(options.alignment)) {
 							instance_index = instance_index + (val > 15 ? -1 : 1);
 							options.alignment = instance_index;
 						}
 					}
-					if (options.alignment === parseInt(options.alignment, 10)) {
+					if ($.isNumeric(options.alignment)) {
 						options.alignment = instance_index;
 					}
 					options.current.setDate(val);
