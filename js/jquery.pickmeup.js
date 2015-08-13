@@ -687,21 +687,24 @@
 					options.current.setFullYear(parseInt(el.text(), 10));
 					if (options.select_month) {
 						root.removeClass('pmu-view-years').addClass('pmu-view-months');
-					} else if (options.select_day) {
+					  options.current.addYears(align(options) - instance_index);
+				} else if (options.select_day) {
 						root.removeClass('pmu-view-years').addClass('pmu-view-days');
-					} else {
+						options.current.addYears(align(options) - instance_index);
+		 		} else {
 						options.binded.update_date();
+						options.current.addYears(((align(options) - instance_index) * 12) - (instance.find('.pmu-years .pmu-button').index(el) - 6));
 					}
 				} else if (root.hasClass('pmu-view-months')) {
 					options.current.setMonth(instance.find('.pmu-months .pmu-button').index(el));
 					options.current.setFullYear(parseInt(instance.find('.pmu-month').text(), 10));
 					if (options.select_day) {
 						root.removeClass('pmu-view-months').addClass('pmu-view-days');
+						options.current.addMonths(align(options) - instance_index);
 					} else {
 						options.binded.update_date();
+ 					  options.current.addYears(align(options) - instance_index);
 					}
-					// Move current month to the first place
-					options.current.addMonths(align(options) - instance_index);
 				} else {
 					var val	= parseInt(el.text(), 10);
 					options.current.addMonths(instance_index - align(options));
