@@ -75,6 +75,7 @@
 		hide_on_select	: false,
 		min				: null,
 		max				: null,
+		enabled_days	: null,
 		render			: function () {},
 		change			: function () {return true;},
 		before_show		: function () {return true;},
@@ -355,6 +356,18 @@
 					var from_user	= options.render(new Date(local_date)) || {},
 						val			= local_date.valueOf(),
 						disabled	= (options.min && options.min > local_date) || (options.max && options.max < local_date);
+
+						// check for enabled days.
+						if(options.enabled_days != null){
+							disabled = true;
+							options.enabled_days.forEach(function(day,i,arr){
+								var ddate = new Date(day);
+								if(local_date.toString() == ddate.toString()){
+									disabled = false;
+								}
+							});
+						}
+
 					if (from_user.disabled || disabled) {
 						day.class_name.push('pmu-disabled');
 					} else if (
