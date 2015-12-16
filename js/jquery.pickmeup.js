@@ -75,7 +75,7 @@
 		hide_on_select	: false,
 		min				: null,
 		max				: null,
-		alter_text	: function () {},
+		alter_text		: function () {},
 		render			: function () {},
 		change			: function () {return true;},
 		before_show		: function () {return true;},
