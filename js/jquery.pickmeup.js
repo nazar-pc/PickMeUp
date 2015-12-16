@@ -75,6 +75,7 @@
 		hide_on_select	: false,
 		min				: null,
 		max				: null,
+		alter_text	: function () {},
 		render			: function () {},
 		change			: function () {return true;},
 		before_show		: function () {return true;},
@@ -344,6 +345,7 @@
 						text		: local_date.getDate(),
 						class_name	: []
 					};
+					day.text = options.alter_text(day.text, new Date(local_date)) || day.text;
 					if (current_month != local_date.getMonth()) {
 						day.class_name.push('pmu-not-in-month');
 					}
@@ -1090,7 +1092,7 @@
 			}
 			$this.data('pickmeup-options', options);
 			for (i in options) {
-				if (['render', 'change', 'before_show', 'show', 'hide'].indexOf(i) != -1) {
+				if (['alter_text', 'render', 'change', 'before_show', 'show', 'hide'].indexOf(i) != -1) {
 					options[i]	= options[i].bind(this);
 				}
 			}
