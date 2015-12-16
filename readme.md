@@ -80,10 +80,13 @@ All options and events are the same.
 | min             | null/object/string        | null             | Min date available for selection, `null` means no limitation                                                         |
 | max             | null/object/string        | null             | Max date available for selection, `null` means no limitation                                                         |
 | separator       | string                    | ` - `            | Is used for joining separate dates in multiple mode and first/last dates in range mode                               |
-| locale          | object                    |                  | Object, that contains localized days of week names and months                                                      
+| locale          | object                    |                  | Object, that contains localized days of week names and months
 ## Events callbacks
 `this` in any callback will be the same element, on which pickmeup() was called.
 Events are specified as regular options:
+
+##### object alter_text (text, date)
+Triggered on day element rendering, accepts text of the day and date as arguments and may return new value for a text of the day:
 
 ##### object render (date)
 Triggered on day element rendering, accepts date as argument and may return object with next properties:
