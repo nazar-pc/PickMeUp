@@ -1,10 +1,10 @@
 /**
- * @package		PickMeUp - jQuery datepicker plugin
- * @author		Nazar Mokrynskyi <nazar@mokrynskyi.com>
- * @author		Stefan Petre <www.eyecon.ro>
- * @copyright	Copyright (c) 2013-2015, Nazar Mokrynskyi
- * @copyright	Copyright (c) 2008-2009, Stefan Petre
- * @license		MIT License, see license.txt
+ * @package   PickMeUp - jQuery datepicker plugin
+ * @author    Nazar Mokrynskyi <nazar@mokrynskyi.com>
+ * @author    Stefan Petre <www.eyecon.ro>
+ * @copyright Copyright (c) 2013-2016, Nazar Mokrynskyi
+ * @copyright Copyright (c) 2008-2009, Stefan Petre
+ * @license   MIT License, see license.txt
  */
 
 (function (d) {

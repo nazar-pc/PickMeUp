@@ -1,3 +1,6 @@
+2.x.x (Unreleased yet)
+* Added 'title_format' option
+
 2.8.0 (08 April, 2015)
 * Added support for no default date [#70](https://github.com/nazar-pc/PickMeUp/pull/70), thanks to Amar Syla for pull request!
 
