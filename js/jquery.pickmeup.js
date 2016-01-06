@@ -68,6 +68,7 @@
 		view			: 'days',
 		calendars		: 1,
 		format			: 'd-m-Y',
+		title_format    : 'B, Y',
 		position		: 'bottom',
 		trigger_event	: 'click touchstart',
 		class_name		: '',
@@ -162,7 +163,7 @@
 				header = local_date.getFullYear();
 			} else if (pickmeup.hasClass('pmu-view-days')) {
 				local_date.addMonths(i - current_cal);
-				header = formatDate(local_date, 'B, Y', options.locale);
+				header = formatDate(local_date, options.title_format, options.locale);
 			}
 			if (!shown_date_to) {
 				if (max_date) {
