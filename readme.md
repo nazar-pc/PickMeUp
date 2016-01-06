@@ -73,6 +73,7 @@ All options and events are the same.
 | view            | days/months/years         | days             | View mode after initialization                                                                                       |
 | calendars       | int                       | 1                | Number of calendars, that will be rendered                                                                           |
 | format          | string                    | d-m-Y            | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                                   |
+| title_format    | string                    | B, Y             | Date format for calendar title in days view (aAbBCdeHIjklmMpPsSuwyY are supported)                                   |
 | position        | top/right/bottom/left     | bottom           | Date picker's position relative to the triggered element                                                             |
 | trigger_event   | string                    | click touchstart | Event to trigger the date picker                                                                                     |
 | class_name      | string                    |                  | Class to be added to root datepicker element                                                                         |
