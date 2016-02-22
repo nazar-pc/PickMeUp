@@ -16,12 +16,20 @@ do ($ = jQuery) ->
 				.css('box-sizing', 'content-box')
 	do ->
 		# Styles
+		tmp = $('<div class="hide"></div>')
 		panel		= $('<div class="panel" />')
+		panel.appendTo(tmp)
 		button		= $('<button class="btn btn-default" />')
+		button.appendTo(tmp)
 		link_hover	= $('<button class="btn btn-link" />').hover()
+		link_hover.appendTo(tmp)
 		text_muted	= $('<span class="text-muted" />')
+		text_muted.appendTo(tmp)
 		disabled	= $('<span class="text-muted" />')
+		disabled.appendTo(tmp)
 		selected	= $('<div class="alert alert-info" />')
+		selected.appendTo(tmp)
+		tmp.appendTo("body")
 		parameters	=
 			$border_radius						: '.4em'
 			$background							: panel.css('background-color')
@@ -39,6 +47,7 @@ do ($ = jQuery) ->
 			$day_of_week						: '$not_in_month_hover'
 			$today_background					: '$not_in_month_selected_background'
 			$today_color						: '$color_hover'
+		tmp.remove()
 		###
 			Style string obtained from scss style, before conversion to css file was processed with regular expression replacement
 			Find	: ((\$[a-z-]+)\t+: )(.*);
