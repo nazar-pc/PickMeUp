@@ -16,29 +16,31 @@ do ($ = jQuery) ->
 				.css('box-sizing', 'content-box')
 	do ->
 		# Styles
-		panel		= $('<div class="panel" />')
-		button		= $('<button class="btn btn-default" />')
-		link_hover	= $('<button class="btn btn-link" />').hover()
-		text_muted	= $('<span class="text-muted" />')
-		disabled	= $('<span class="text-muted" />')
-		selected	= $('<div class="alert alert-info" />')
+		$tmp		= $('<div hidden />').appendTo(document.body);
+		$panel		= $('<div class="panel" />')
+		$link_hover	= $('<button class="btn btn-link" />').hover()
+		$text_muted	= $('<span class="text-muted" />')
+		$disabled	= $('<span class="text-muted" />')
+		$selected	= $('<div class="alert alert-info" />')
+		$tmp.append($panel, $link_hover, $text_muted, $disabled, $selected)
 		parameters	=
 			$border_radius						: '.4em'
-			$background							: panel.css('background-color')
-			$color								: panel.css('color')
+			$background							: $panel.css('background-color')
+			$color								: $panel.css('color')
 			$background_hover					: '$background'
-			$color_hover						: link_hover.css('color')
+			$color_hover						: $link_hover.css('color')
 			$nav_color							: '$color'
 			$nav_color_hover					: '$color_hover'
-			$not_in_month						: text_muted.css('color')
-			$not_in_month_hover					: text_muted.css('color')
-			$disabled							: disabled.css('color')
-			$selected			 				: selected.css('color')
-			$selected_background 				: selected.css('background-color')
+			$not_in_month						: $text_muted.css('color')
+			$not_in_month_hover					: $text_muted.css('color')
+			$disabled							: $disabled.css('color')
+			$selected			 				: $selected.css('color')
+			$selected_background 				: $selected.css('background-color')
 			$not_in_month_selected_background	: '$selected_background'
 			$day_of_week						: '$not_in_month_hover'
 			$today_background					: '$not_in_month_selected_background'
 			$today_color						: '$color_hover'
+		$tmp.remove()
 		###
 			Style string obtained from scss style, before conversion to css file was processed with regular expression replacement
 			Find	: ((\$[a-z-]+)\t+: )(.*);

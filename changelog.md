@@ -1,3 +1,6 @@
+Unreleased yet
+* Fix for Twitter Bootstrap and UIkit integration didn't work properly, fixes [#73](https://github.com/nazar-pc/PickMeUp/issues/73)
+
 2.9.0 (04 February, 2016)
 * Added 'title_format' option
 * Added NPM support
