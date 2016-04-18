@@ -410,9 +410,9 @@
 			});
 			return splitted_date;
 		}
-		var months_text	= locale.monthsShort.join(')(') + ')(' + locale.months.join(')('),
-			separator	= new RegExp('[^0-9a-zA-Z(' + months_text + ')]+'),
-			parts		= date.split(separator),
+		var months_text	= locale.monthsShort.join(')(') + ')(' + locale.months.join(')(');
+		separator	= new RegExp('[^0-9a-zA-Z(' + months_text + ')]+')
+		var parts		= date.split(separator),
 			against		= format.split(separator),
 			d,
 			m,
@@ -1038,7 +1038,7 @@
 						options.date[1] = ((new Date(options.date[1])).setHours(0,0,0,0)).valueOf();
 					}
 				}
-				options.current	= new Date(options.date[0]);
+				options.current	= new Date(options.date[options.date.length -1]);
 				// Set days to 1 in order to handle them consistently
 				if (!options.select_day) {
 					for (i = 0; i < options.date.length; ++i) {
