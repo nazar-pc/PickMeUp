@@ -912,6 +912,9 @@
 		options.binded.fill();
 		if ($this.is('input') && options.default_date !== false) {
 			var prepared_date	= prepareDate(options);
+			if (!$this.val()) {
+				options.change.apply(this, prepared_date);
+			}
 			$this.val(options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator));
 		}
 	}
