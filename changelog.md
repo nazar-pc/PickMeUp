@@ -3,6 +3,7 @@ Unreleased yet
 * In case of multiple dates open on the last one instead of the first (seems more natural), fixes first part of [#74](https://github.com/nazar-pc/PickMeUp/issues/74)
 * Added support for `default: false` for `range` and `multiple` modes, fixes second part of [#74](https://github.com/nazar-pc/PickMeUp/issues/74) and [#89](https://github.com/nazar-pc/PickMeUp/issues/89)
 * Fire `change` event when filling empty input on on first open, fixes [#77](https://github.com/nazar-pc/PickMeUp/issues/77)
+* Small fix for `transparent` in SCSS
 
 2.9.0 (04 February, 2016)
 * Added 'title_format' option

@@ -14,7 +14,7 @@ Browser support:
 ## [Demo](http://nazar-pc.github.io/PickMeUp)
 
 ## Getting started
-You need only 2 files: `js/jquery.pickmeup.min.js` and `css/pickmeup.min.css`.
+You need only 2 files: `js/jquery.pickmeup.min.js` and `css/pickmeup.css`.
 
 The plugin can also be loaded as AMD or CommonJS module.
 
@@ -81,7 +81,7 @@ All options and events are the same.
 | min             | null/object/string        | null             | Min date available for selection, `null` means no limitation                                                         |
 | max             | null/object/string        | null             | Max date available for selection, `null` means no limitation                                                         |
 | separator       | string                    | ` - `            | Is used for joining separate dates in multiple mode and first/last dates in range mode                               |
-| locale          | object                    |                  | Object, that contains localized days of week names and months                                                      
+| locale          | object                    |                  | Object, that contains localized days of week names and months
 ## Events callbacks
 `this` in any callback will be the same element, on which pickmeup() was called.
 Events are specified as regular options:
