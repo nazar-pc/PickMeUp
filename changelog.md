@@ -1,9 +1,11 @@
-Unreleased yet
+2.9.1 (24 June, 2016)
 * Fix for Twitter Bootstrap and UIkit integration didn't work properly, fixes [#73](https://github.com/nazar-pc/PickMeUp/issues/73)
 * In case of multiple dates open on the last one instead of the first (seems more natural), fixes first part of [#74](https://github.com/nazar-pc/PickMeUp/issues/74)
 * Added support for `default: false` for `range` and `multiple` modes, fixes second part of [#74](https://github.com/nazar-pc/PickMeUp/issues/74) and [#89](https://github.com/nazar-pc/PickMeUp/issues/89)
 * Fire `change` event when filling empty input on on first open, fixes [#77](https://github.com/nazar-pc/PickMeUp/issues/77)
 * Small fix for `transparent` in SCSS
+* Consistent use of namespaced events from configuration
+* Added information about touch devices support to readme
 
 2.9.0 (04 February, 2016)
 * Added 'title_format' option

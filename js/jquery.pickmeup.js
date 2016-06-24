@@ -119,6 +119,13 @@
 				return '<div class="' + container_class_name + '">' + result + '</div>';
 			}
 		};
+	function namespaced_events (events, namespace) {
+		events	= events.split(' ');
+		for (var i = 0; i < events.length; ++i) {
+			events[i]	+= namespace;
+		}
+		return events.join(' ');
+	}
 	function fill () {
 		var options			= $(this).data('pickmeup-options'),
 			pickmeup		= this.pickmeup,
@@ -775,7 +782,7 @@
 				});
 				$(document)
 					.on(
-						'mousedown' + options.events_namespace + ' touchstart' + options.events_namespace,
+						namespaced_events(options.trigger_event, options.events_namespace),
 						options.binded.hide
 					)
 					.on(
@@ -805,7 +812,7 @@
 			if (options.hide() != false) {
 				pickmeup.hide();
 				$(document)
-					.off('mousedown touchstart', options.binded.hide)
+					.off(namespaced_events(options.trigger_event, options.events_namespace), options.binded.hide)
 					.off('resize', options.binded.forced_show);
 				options.lastSel	= false;
 			}
@@ -814,7 +821,7 @@
 	function update () {
 		var	options	= $(this).data('pickmeup-options');
 		$(document)
-			.off('mousedown', options.binded.hide)
+			.off(namespaced_events(options.trigger_event, options.events_namespace), options.binded.hide)
 			.off('resize', options.binded.forced_show);
 		options.binded.forced_show();
 	}
@@ -1111,7 +1118,7 @@
 			};
 			options.events_namespace	= '.pickmeup-' + (++instances_count);
 			pickmeup
-				.on('click touchstart', options.binded.click)
+				.on(namespaced_events(options.trigger_event, options.events_namespace), options.binded.click)
 				.addClass(views[options.view])
 				.append(html)
 				.on(
@@ -1128,13 +1135,7 @@
 				});
 			} else {
 				pickmeup.appendTo(document.body);
-				// Multiple events support
-				var trigger_event	= options.trigger_event.split(' ');
-				for (i = 0; i < trigger_event.length; ++i) {
-					trigger_event[i]	+= options.events_namespace;
-				}
-				trigger_event	= trigger_event.join(' ');
-				$this.on(trigger_event, options.binded.show);
+				$this.on(namespaced_events(options.trigger_event, options.events_namespace), options.binded.show);
 			}
 		});
 	};

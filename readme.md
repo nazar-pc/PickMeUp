@@ -168,6 +168,11 @@ Current options (for whatever reason) can be accessed as `$('...').data('pickmeu
 
 Root pickmeup element (jQuery collection object) can be accessed as `$('...').get(0).pickmeup` or directly `this.pickmeup` if inside callback.
 
+## Touch devices
+PickMeUp doesn't include complete support for touch devices, only naive implementation.
+
+If you need proper support for touch devices, you can use [jTAP](https://github.com/BR0kEN-/jTap) jQuery plugin and set `trigger_event` to `click tap`.
+
 ## Styling
 If you want other colors - just change several variables in scss file.
 
