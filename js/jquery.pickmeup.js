@@ -67,6 +67,7 @@
 		select_day		: true,
 		view			: 'days',
 		calendars		: 1,
+		alignment		: 'static',
 		format			: 'd-m-Y',
 		title_format    : 'B, Y',
 		position		: 'bottom',
@@ -129,7 +130,7 @@
 	function fill () {
 		var options			= $(this).data('pickmeup-options'),
 			pickmeup		= this.pickmeup,
-			current_cal		= Math.floor(options.calendars / 2),
+			current_cal		= align(options),
 			actual_date		= options.date,
 			current_date	= options.current,
 			min_date		= options.min ? new Date(options.min) : null,
@@ -621,6 +622,25 @@
 			return false;
 		}
 	}
+	function align(options){
+		if ($.isNumeric(options.alignment)) {
+			return options.alignment;
+		}
+		switch(options.alignment){
+			case 'static':
+				options.alignment = 0;
+			case 'left':
+				return 0;
+				break;
+			case 'right':
+				return options.calendars - 1 ;
+				break;
+			case 'center':
+			default:
+				return Math.floor(options.calendars / 2);
+				break;
+		}
+	}
 	function click (e) {
 		var el	= $(e.target);
 		if (!el.hasClass('pmu-button')) {
@@ -637,7 +657,7 @@
 				instance_index	= $('.pmu-instance', root).index(instance);
 			if (el.parent().is('nav')) {
 				if (el.hasClass('pmu-month')) {
-					options.current.addMonths(instance_index - Math.floor(options.calendars / 2));
+					options.current.addMonths(instance_index - align(options));
 					if (root.hasClass('pmu-view-years')) {
 						// Shift back to current date, otherwise with min value specified may jump on few (tens) years forward
 						if (options.mode != 'single') {
@@ -675,26 +695,36 @@
 					options.current.setFullYear(parseInt(el.text(), 10));
 					if (options.select_month) {
 						root.removeClass('pmu-view-years').addClass('pmu-view-months');
-					} else if (options.select_day) {
+					  options.current.addYears(align(options) - instance_index);
+				} else if (options.select_day) {
 						root.removeClass('pmu-view-years').addClass('pmu-view-days');
-					} else {
+						options.current.addYears(align(options) - instance_index);
+		 		} else {
 						options.binded.update_date();
+						options.current.addYears(((align(options) - instance_index) * 12) - (instance.find('.pmu-years .pmu-button').index(el) - 6));
 					}
 				} else if (root.hasClass('pmu-view-months')) {
 					options.current.setMonth(instance.find('.pmu-months .pmu-button').index(el));
 					options.current.setFullYear(parseInt(instance.find('.pmu-month').text(), 10));
 					if (options.select_day) {
 						root.removeClass('pmu-view-months').addClass('pmu-view-days');
+						options.current.addMonths(align(options) - instance_index);
 					} else {
 						options.binded.update_date();
+ 					  options.current.addYears(align(options) - instance_index);
 					}
-					// Move current month to the first place
-					options.current.addMonths(Math.floor(options.calendars / 2) - instance_index);
 				} else {
 					var val	= parseInt(el.text(), 10);
-					options.current.addMonths(instance_index - Math.floor(options.calendars / 2));
+					options.current.addMonths(instance_index - align(options));
 					if (el.hasClass('pmu-not-in-month')) {
 						options.current.addMonths(val > 15 ? -1 : 1);
+						if ($.isNumeric(options.alignment)) {
+							instance_index = instance_index + (val > 15 ? -1 : 1);
+							options.alignment = instance_index;
+						}
+					}
+					if ($.isNumeric(options.alignment)) {
+						options.alignment = instance_index;
 					}
 					options.current.setDate(val);
 					options.binded.update_date();
