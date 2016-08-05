@@ -1,3 +1,7 @@
+2.9.2 (05 August, 2016)
+* Fix for [#120](https://github.com/nazar-pc/PickMeUp/issues/120) (when applied to multiple elements options might be changed during initialization of one element and then used in another, fixed by deep copy of options)
+* Added support for numeric (Unix timestamp in milliseconds) dates
+
 2.9.1 (24 June, 2016)
 * Fix for Twitter Bootstrap and UIkit integration didn't work properly, fixes [#73](https://github.com/nazar-pc/PickMeUp/issues/73)
 * In case of multiple dates open on the last one instead of the first (seems more natural), fixes first part of [#74](https://github.com/nazar-pc/PickMeUp/issues/74)

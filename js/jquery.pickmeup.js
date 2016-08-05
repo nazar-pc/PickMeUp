@@ -407,6 +407,8 @@
 	function parseDate (date, format, separator, locale) {
 		if (date.constructor == Date) {
 			return date;
+		} else if (date.constructor === Number) {
+			return new Date(date);
 		} else if (!date) {
 			return new Date;
 		}
@@ -977,7 +979,7 @@
 			}
 			var i,
 				option,
-				options	= $.extend({}, $.pickmeup, initial_options || {});
+				options	= $.extend(true, {}, $.pickmeup, initial_options || {});
 			for (i in options) {
 				option	= $this.data('pmu-' + i);
 				if (typeof option !== 'undefined') {
@@ -1056,7 +1058,7 @@
 							options.mode != 'range' &&
 							options.date.indexOf(options.date[i]) !== i
 						) {
-							delete options.date.splice(i, 1);
+							options.date.splice(i, 1);
 							--i;
 						}
 					}
