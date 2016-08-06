@@ -728,8 +728,8 @@
 				options		= $this.data('pickmeup-options'),
 				pos			= $this.offset(),
 				viewport	= {
-					l : document.documentElement.scrollLeft,
-					t : document.documentElement.scrollTop,
+					l : window.pageXOffset || document.documentElement.scrollLeft,
+					t : window.pageYOffset || document.documentElement.scrollTop,
 					w : document.documentElement.clientWidth,
 					h : document.documentElement.clientHeight
 				},
