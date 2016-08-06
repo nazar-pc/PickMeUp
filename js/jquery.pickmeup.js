@@ -41,6 +41,16 @@
 	};
 })(Date.prototype);
 
+function week(year,month,day) {
+    function serial(days) { return 86400000*days; }
+    function dateserial(year,month,day) { return (new Date(year,month-1,day).valueOf()); }
+    function weekday(date) { return (new Date(date)).getDay()+1; }
+    function yearserial(date) { return (new Date(date)).getFullYear(); }
+    var date = year instanceof Date ? year.valueOf() : typeof year === "string" ? new Date(year).valueOf() : dateserial(year,month,day),
+        date2 = dateserial(yearserial(date - serial(weekday(date-serial(1))) + serial(4)),1,3);
+    return ~~((date - date2 + serial(weekday(date2) + 5))/ serial(7));
+}
+
 (function (factory) {
 	if (typeof define === 'function' && define.amd) {
 		// AMD
@@ -76,6 +86,7 @@
 		hide_on_select	: false,
 		min				: null,
 		max				: null,
+		showWeek		: false,
 		render			: function () {},
 		change			: function () {return true;},
 		before_show		: function () {return true;},
@@ -87,7 +98,8 @@
 			daysShort	: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
 			daysMin		: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
 			months		: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-			monthsShort	: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+			monthsShort	: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            		calendarWeek	: ['KW']
 		}
 	});
 	var	views	= {
@@ -99,8 +111,12 @@
 			wrapper	: '<div class="pickmeup" />',
 			head	: function (d) {
 				var result	= '';
-				for (var i = 0; i < 7; ++i) {
-					result	+= '<div>' + d.day[i] + '</div>'
+				for (var i = 0; i < 8; ++i) {
+					if (i == 0) {
+                        			result += '<div>&nbsp;</div>'
+                    			} else {
+						result	+= '<div>' + d.day[i] + '</div>'
+                    			}
 				}
 				return '<div class="pmu-instance">' +
 					'<nav>' +
@@ -352,36 +368,41 @@
 						text		: local_date.getDate(),
 						class_name	: []
 					};
-					if (current_month != local_date.getMonth()) {
-						day.class_name.push('pmu-not-in-month');
-					}
-					if (local_date.getDay() == 0) {
-						day.class_name.push('pmu-sunday');
-					} else if (local_date.getDay() == 6) {
-						day.class_name.push('pmu-saturday');
-					}
-					var from_user	= options.render(new Date(local_date)) || {},
-						val			= local_date.valueOf(),
-						disabled	= (options.min && options.min > local_date) || (options.max && options.max < local_date);
-					if (from_user.disabled || disabled) {
-						day.class_name.push('pmu-disabled');
-					} else if (
-						from_user.selected ||
-						options.date == val ||
-						$.inArray(val, options.date) !== -1 ||
-						(
-							options.mode == 'range' && val >= options.date[0] && val <= options.date[1]
-						)
-					) {
-						day.class_name.push('pmu-selected');
-					}
-					if (val == today) {
-						day.class_name.push('pmu-today');
-					}
-					if (from_user.class_name) {
-						day.class_name.push(from_user.class_name);
-					}
-					day.class_name = day.class_name.join(' ');
+					if (options.showWeek == true && (j == 0 || j % 7 == 0)) {
+                        day.class_name = 'pmu-cw';
+                        day.text = week(local_date.getYear(),local_date.getMonth(),local_date.getDate());
+                    } else {
+                        if (current_month != local_date.getMonth()) {
+                            day.class_name.push('pmu-not-in-month');
+                        }
+                        if (local_date.getDay() == 0) {
+                            day.class_name.push('pmu-sunday');
+                        } else if (local_date.getDay() == 6) {
+                            day.class_name.push('pmu-saturday');
+                        }
+                        var from_user = options.render(new Date(local_date)) || {},
+                            val = local_date.valueOf(),
+                            disabled = (options.min && options.min > local_date) || (options.max && options.max < local_date);
+                        if (from_user.disabled || disabled) {
+                            day.class_name.push('pmu-disabled');
+                        } else if (
+                            from_user.selected ||
+                            options.date == val ||
+                            $.inArray(val, options.date) !== -1 ||
+                            (
+                                options.mode == 'range' && val >= options.date[0] && val <= options.date[1]
+                            )
+                        ) {
+                            day.class_name.push('pmu-selected');
+                        }
+                        if (val == today) {
+                            day.class_name.push('pmu-today');
+                        }
+                        if (from_user.class_name) {
+                            day.class_name.push(from_user.class_name);
+                        }
+                        day.class_name = day.class_name.join(' ');
+                    }
 					days.push(day);
 					// Move to next day
 					local_date.addDays(1);
