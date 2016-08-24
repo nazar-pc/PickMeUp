@@ -570,14 +570,13 @@
 		}
 		return parts.join('');
 	}
-	function update_date () {
+	function update_date (new_date) {
 		var	$this			= $(this),
 			options			= $this.data('pickmeup-options'),
-			current_date	= options.current,
 			new_value;
 		switch (options.mode) {
 			case 'multiple':
-				new_value = current_date.setHours(0,0,0,0).valueOf();
+				new_value = new_date.setHours(0,0,0,0).valueOf();
 				if ($.inArray(new_value, options.date) !== -1) {
 					$.each(options.date, function (index, value){
 						if (value == new_value) {
@@ -592,9 +591,9 @@
 				break;
 			case 'range':
 				if (!options.lastSel) {
-					options.date[0]	= current_date.setHours(0,0,0,0).valueOf();
+					options.date[0]	= new_date.setHours(0,0,0,0).valueOf();
 				}
-				new_value	= current_date.setHours(0,0,0,0).valueOf();
+				new_value	= new_date.setHours(0,0,0,0).valueOf();
 				if (new_value <= options.date[0]) {
 					options.date[1]	= options.date[0];
 					options.date[0]	= new_value;
@@ -604,7 +603,7 @@
 				options.lastSel	= !options.lastSel;
 				break;
 			default:
-				options.date	= current_date.valueOf();
+				options.date	= new_date.valueOf();
 				break;
 		}
 		var prepared_date	= prepareDate(options);
@@ -681,7 +680,7 @@
 					} else if (options.select_day) {
 						root.removeClass('pmu-view-years').addClass('pmu-view-days');
 					} else {
-						options.binded.update_date();
+						options.binded.update_date(options.current);
 					}
 				} else if (root.hasClass('pmu-view-months')) {
 					options.current.setMonth(instance.find('.pmu-months .pmu-button').index(el));
@@ -689,18 +688,19 @@
 					if (options.select_day) {
 						root.removeClass('pmu-view-months').addClass('pmu-view-days');
 					} else {
-						options.binded.update_date();
+						options.binded.update_date(options.current);
 					}
 					// Move current month to the first place
 					options.current.addMonths(Math.floor(options.calendars / 2) - instance_index);
 				} else {
-					var val	= parseInt(el.text(), 10);
-					options.current.addMonths(instance_index - Math.floor(options.calendars / 2));
+					var val	= parseInt(el.text(), 10), new_date;
+					new_date = new Date(options.current);
+					new_date.addMonths(instance_index - Math.floor(options.calendars / 2));
 					if (el.hasClass('pmu-not-in-month')) {
-						options.current.addMonths(val > 15 ? -1 : 1);
+						new_date.addMonths(val > 15 ? -1 : 1);
 					}
-					options.current.setDate(val);
-					options.binded.update_date();
+					new_date.setDate(val);
+					options.binded.update_date(new_date);
 				}
 			}
 			options.binded.fill();
