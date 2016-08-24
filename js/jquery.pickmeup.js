@@ -55,6 +55,7 @@
 }(function ($) {
 	var instances_count	= 0;
 	$.pickmeup = $.extend($.pickmeup || {}, {
+		current			: null,
 		date			: new Date,
 		default_date	: new Date,
 		flat			: false,
@@ -885,7 +886,7 @@
 			return prepared_date[formatted ? 0 : 1];
 		}
 	}
-	function set_date (date) {
+	function set_date (date, current) {
 		var $this	= $(this),
 			options = $this.data('pickmeup-options');
 		options.date = date;
@@ -917,7 +918,16 @@
 				options.date = options.date.constructor == Array ? options.date[0].valueOf() : options.date.valueOf();
 			}
 		}
-		options.current = new Date (options.mode != 'single' ? options.date[0] : options.date);
+		if (!options.select_day) {
+			options.date = prepare_date_to_ignore_day_selection(options.date, options);
+		}
+		if (current) {
+			options.current	= parseDate(current);
+		} else {
+			options.current	= new Date(options.mode === 'single' ? options.date : new Date(options.date[options.date.length -1]));
+		}
+		options.current.setDate(1);
+		options.current.setHours(0,0,0,0);
 		options.binded.fill();
 		if ($this.is('input') && options.default_date !== false) {
 			var prepared_date	= prepareDate(options);
@@ -926,6 +936,26 @@
 			}
 			$this.val(options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator));
 		}
+	}
+	function prepare_date_to_ignore_day_selection (date, options) {
+		if (date instanceof Array) {
+			date	= date.slice();
+			for (var i = 0; i < date.length; ++i) {
+				date[i] = prepare_date_to_ignore_day_selection(date[i]);
+				// Remove duplicates
+				if (
+					options.mode != 'range' &&
+					date.indexOf(date[i]) !== i
+				) {
+					date.splice(i, 1);
+					--i;
+				}
+			}
+			return date;
+		}
+		date	= new Date(date);
+		date.setDate(1);
+		return date.valueOf();
 	}
 	function destroy () {
 		var	$this	= $(this),
@@ -1023,57 +1053,6 @@
 					options.max	= options.max.valueOf();
 				}
 			}
-			if (typeof options.date === 'string') {
-				options.date = parseDate(options.date, options.format, options.separator, options.locale).setHours(0,0,0,0);
-			} else if (options.date.constructor == Date) {
-				options.date.setHours(0,0,0,0);
-			}
-			if (!options.date) {
-				options.date = new Date;
-				options.date.setHours(0,0,0,0);
-			}
-			if (options.mode != 'single') {
-				if (options.date.constructor != Array) {
-					options.date = [options.date.valueOf()];
-					if (options.mode == 'range') {
-						options.date.push(((new Date(options.date[0])).setHours(0,0,0,0)).valueOf());
-					}
-				} else {
-					for (i = 0; i < options.date.length; i++) {
-						options.date[i] = (parseDate(options.date[i], options.format, options.separator, options.locale).setHours(0,0,0,0)).valueOf();
-					}
-					if (options.mode == 'range') {
-						options.date[1] = ((new Date(options.date[1])).setHours(0,0,0,0)).valueOf();
-					}
-				}
-				options.current	= new Date(options.date[options.date.length -1]);
-				// Set days to 1 in order to handle them consistently
-				if (!options.select_day) {
-					for (i = 0; i < options.date.length; ++i) {
-						options.date[i]	= new Date(options.date[i]);
-						options.date[i].setDate(1);
-						options.date[i]	= options.date[i].valueOf();
-						// Remove duplicates
-						if (
-							options.mode != 'range' &&
-							options.date.indexOf(options.date[i]) !== i
-						) {
-							options.date.splice(i, 1);
-							--i;
-						}
-					}
-				}
-			} else {
-				options.date	= options.date.valueOf();
-				options.current	= new Date(options.date);
-				if (!options.select_day) {
-					options.date	= new Date(options.date);
-					options.date.setDate(1);
-					options.date	= options.date.valueOf();
-				}
-			}
-			options.current.setDate(1);
-			options.current.setHours(0,0,0,0);
 			var cnt,
 				pickmeup = $(tpl.wrapper);
 			this.pickmeup	= pickmeup;
@@ -1129,7 +1108,6 @@
 						e.preventDefault();
 					}
 				);
-			options.binded.fill();
 			if (options.flat) {
 				pickmeup.appendTo(this).css({
 					position	: 'relative',
@@ -1139,6 +1117,7 @@
 				pickmeup.appendTo(document.body);
 				$this.on(namespaced_events(options.trigger_event, options.events_namespace), options.binded.show);
 			}
+			options.binded.set_date(options.date, options.current);
 		});
 	};
 }));

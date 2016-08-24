@@ -62,6 +62,7 @@ All options and events are the same.
 |-----------------|-----------------------------------|------------------|----------------------------------------------------------------------------------------------------------------------|
 | date            | array/number/object/string        | new Date         | Selected date after initialization. Can be single date string/object or array depending on selection mode            |
 | default_date    | array/false/number/object/string  | new Date         | Allows to keep empty value until date selected, but open PickMeUp at this default date (`false` for no default date) |
+| current         | number/object/string              | date             | Represents date that will be in the center of rendered calendar, defaults to `date` option's value                   |
 | flat            | boolean                           | false            | Whatever if the date picker is appended to the element or triggered by an event                                      |
 | first_day       | 0/1                               | 1                | First day of week: 0 - Sunday, 1 - Monday                                                                            |
 | prev            | string                            | &#9664;          | Previous button content                                                                                              |
