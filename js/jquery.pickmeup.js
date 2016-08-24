@@ -921,10 +921,14 @@
 					options.date.push(parseDate(options.date[0]));
 				}
 			}
+			for (i = 0; i < options.date.length; ++i) {
+				options.date[i] = correct_date_outside_of_limit(options.date[i], options.min, options.max);
+			}
 		} else {
 			if(options.date instanceof Array) {
 				options.date = options.date[0];
 			}
+			options.date = correct_date_outside_of_limit(options.date, options.min, options.max);
 		}
 		if (!options.select_day) {
 			if (options.date instanceof Array) {
@@ -966,6 +970,14 @@
 		$this.off(options.events_namespace);
 		$(document).off(options.events_namespace);
 		$(this.pickmeup).remove();
+	}
+	function correct_date_outside_of_limit (date, min, max) {
+		if (min && min > date) {
+			return new Date(min);
+		} else if (max && max < date) {
+			return new Date(max);
+		}
+		return date;
 	}
 	$.fn.pickmeup	= function (initial_options) {
 		if (typeof initial_options === 'string') {
@@ -1035,20 +1047,14 @@
 			options.mode		= /single|multiple|range/.test(options.mode) ? options.mode : 'single';
 			if (options.min) {
 				options.min = parseDate(options.min, options.format, options.separator, options.locale);
+				if (!options.select_day) {
+					options.min.setDate(1);
+				}
 			}
 			if (options.max) {
 				options.max = parseDate(options.max, options.format, options.separator, options.locale);
-			}
-			if (!options.select_day) {
-				if (options.min) {
-					options.min	= new Date(options.min);
-					options.min.setDate(1);
-					options.min	= options.min.valueOf();
-				}
-				if (options.max) {
-					options.max	= new Date(options.max);
+				if (!options.select_day) {
 					options.max.setDate(1);
-					options.max	= options.max.valueOf();
 				}
 			}
 			var cnt,
