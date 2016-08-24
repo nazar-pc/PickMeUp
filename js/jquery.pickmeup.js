@@ -436,7 +436,7 @@
 			return splitted_date;
 		}
 		var months_text	= locale.monthsShort.join(')(') + ')(' + locale.months.join(')(');
-		separator	= new RegExp('[^0-9a-zA-Z(' + months_text + ')]+')
+		separator	= new RegExp('[^0-9a-zA-Z(' + months_text + ')]+');
 		var parts		= date.split(separator),
 			against		= format.split(separator),
 			d,
@@ -820,12 +820,13 @@
 		show.call(this, true);
 	}
 	function hide (e) {
+		//noinspection JSBitwiseOperatorUsage
 		if (
 			!e ||
 			!e.target ||														//Called directly
 			(
 				e.target != this &&												//Clicked not on element itself
-				!(this.pickmeup.get(0).compareDocumentPosition(e.target) & 16)	//And not o its children
+				!(this.pickmeup.get(0).compareDocumentPosition(e.target) & 16)	//And not on its children
 			)
 		) {
 			var pickmeup	= this.pickmeup,
