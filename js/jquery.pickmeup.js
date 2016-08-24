@@ -139,7 +139,6 @@
 			header,
 			html,
 			instance,
-			today		= (new Date).setHours(0,0,0,0).valueOf(),
 			shown_date_from,
 			shown_date_to,
 			tmp_date;
@@ -303,8 +302,9 @@
 					min_month		= new Date(options.min).getMonth(),
 					max_year		= new Date(options.max).getFullYear(),
 					max_month		= new Date(options.max).getMonth(),
-					month;
-				for (var j = 0; j < 12; ++j) {
+					month,
+					j;
+				for (j = 0; j < 12; ++j) {
 					month	= {
 						text		: options.locale.monthsShort[j],
 						class_name	: []
@@ -341,14 +341,19 @@
 			(function () {
 				var days			= [],
 					current_month	= local_date.getMonth(),
-					day;
+					today			= reset_time(new Date).valueOf(),
+					day,
+					j,
+					from_user,
+					val,
+					disabled;
 				// Correct first day in calendar taking into account first day of week (Sunday or Monday)
 				(function () {
 					local_date.setDate(1);
 					var day = (local_date.getDay() - options.first_day) % 7;
 					local_date.addDays(-(day + (day < 0 ? 7 : 0)));
 				})();
-				for (var j = 0; j < 42; ++j) {
+				for (j = 0; j < 42; ++j) {
 					day	= {
 						text		: local_date.getDate(),
 						class_name	: []
@@ -361,15 +366,20 @@
 					} else if (local_date.getDay() == 6) {
 						day.class_name.push('pmu-saturday');
 					}
-					var from_user	= options.render(new Date(local_date)) || {},
-						val			= local_date.valueOf(),
-						disabled	= (options.min && options.min > local_date) || (options.max && options.max < local_date);
+					from_user	= options.render(new Date(local_date)) || {};
+					val			= local_date.valueOf();
+					disabled	= (options.min && options.min > local_date) || (options.max && options.max < local_date);
 					if (from_user.disabled || disabled) {
 						day.class_name.push('pmu-disabled');
 					} else if (
 						from_user.selected ||
-						options.date == val ||
-						$.inArray(val, options.date) !== -1 ||
+						options.date.valueOf() == val ||
+						(
+							options.date instanceof Array &&
+							options.date.reduce(function (prev, date) {
+								return prev || val === date.valueOf();
+							}, false)
+						) ||
 						(
 							options.mode == 'range' && val >= options.date[0] && val <= options.date[1]
 						)
@@ -406,12 +416,17 @@
 		options.fill.apply(this);
 	}
 	function parseDate (date, format, separator, locale) {
-		if (date.constructor == Date) {
-			return date;
-		} else if (date.constructor === Number) {
-			return new Date(date);
+		var i;
+		if (date instanceof Date || date instanceof Number) {
+			return reset_time(new Date(date));
 		} else if (!date) {
-			return new Date;
+			return reset_time(new Date);
+		} else if (date instanceof Array) {
+			date = date.slice();
+			for (i = 0; i < date.length; ++i) {
+				date[i] = parseDate(date[i]);
+			}
+			return date;
 		}
 		var splitted_date	= date.split(separator);
 		if (splitted_date.length > 1) {
@@ -430,7 +445,7 @@
 			h,
 			min,
 			now = new Date();
-		for (var i = 0; i < parts.length; i++) {
+		for (i = 0; i < parts.length; i++) {
 			switch (against[i]) {
 				case 'b':
 					m = locale.monthsShort.indexOf(parts[i]);
@@ -480,7 +495,11 @@
 		if (isNaN(parsed_date * 1)) {
 			parsed_date = new Date;
 		}
-		return parsed_date;
+		return reset_time(parsed_date);
+	}
+	function reset_time (date) {
+		date.setHours(0,0,0,0);
+		return date;
 	}
 	function formatDate (date, format, locale) {
 		var m = date.getMonth();
@@ -573,32 +592,31 @@
 	function update_date (new_date) {
 		var	$this			= $(this),
 			options			= $this.data('pickmeup-options'),
-			new_value;
+			new_value,
+			i;
+		reset_time(new_date);
 		switch (options.mode) {
 			case 'multiple':
-				new_value = new_date.setHours(0,0,0,0).valueOf();
-				if ($.inArray(new_value, options.date) !== -1) {
-					$.each(options.date, function (index, value){
-						if (value == new_value) {
-							options.date.splice(index,1);
-							return false;
-						}
-						return true;
-					});
-				} else {
-					options.date.push(new_value);
+				new_value = new_date.valueOf();
+				for (i = 0; i < options.date.length; ++i) {
+					if (options.date[i].valueOf() === new_value) {
+						options.date.splice(i, 1);
+						break;
+					}
+				}
+				if (i === options.date.length) {
+					options.date.push(new_date);
 				}
 				break;
 			case 'range':
 				if (!options.lastSel) {
-					options.date[0]	= new_date.setHours(0,0,0,0).valueOf();
+					options.date[0]	= new_date;
 				}
-				new_value	= new_date.setHours(0,0,0,0).valueOf();
-				if (new_value <= options.date[0]) {
+				if (new_date <= options.date[0]) {
 					options.date[1]	= options.date[0];
-					options.date[0]	= new_value;
+					options.date[0]	= new_date;
 				} else {
-					options.date[1]	= new_value;
+					options.date[1]	= new_date;
 				}
 				options.lastSel	= !options.lastSel;
 				break;
@@ -888,46 +906,50 @@
 	}
 	function set_date (date, current) {
 		var $this	= $(this),
-			options = $this.data('pickmeup-options');
-		options.date = date;
-		if (typeof options.date === 'string') {
-			options.date = parseDate(options.date, options.format, options.separator, options.locale).setHours(0,0,0,0);
-		} else if (options.date.constructor == Date) {
-			options.date.setHours(0,0,0,0);
-		}
-		if (!options.date) {
-			options.date = new Date;
-			options.date.setHours(0,0,0,0);
-		}
+			options = $this.data('pickmeup-options'),
+			i;
+		options.date = parseDate(date, options.format, options.separator, options.locale);
 		if (options.mode != 'single') {
-			if (options.date.constructor != Array) {
-				options.date = [options.date.valueOf()];
+			if (options.date instanceof Array) {
+				options.date[0] = options.date[0] || parseDate(new Date);
 				if (options.mode == 'range') {
-					options.date.push(((new Date(options.date[0])).setHours(0,0,0,0)).valueOf());
+					options.date[1] = options.date[1] || parseDate(options.date[0]);
 				}
 			} else {
-				for (var i = 0; i < options.date.length; i++) {
-					options.date[i] = (parseDate(options.date[i], options.format, options.separator, options.locale).setHours(0,0,0,0)).valueOf();
-				}
+				options.date = [options.date];
 				if (options.mode == 'range') {
-					options.date[1] = ((new Date(options.date[1])).setHours(0,0,0,0)).valueOf();
+					options.date.push(parseDate(options.date[0]));
 				}
 			}
 		} else {
-			if($this.val() || options.default_date !== false) {
-				options.date = options.date.constructor == Array ? options.date[0].valueOf() : options.date.valueOf();
+			if(options.date instanceof Array) {
+				options.date = options.date[0];
 			}
 		}
 		if (!options.select_day) {
-			options.date = prepare_date_to_ignore_day_selection(options.date, options);
+			if (options.date instanceof Array) {
+				for (i = 0; i < options.date.length; ++i) {
+					options.date[i].setDate(1);
+				}
+			} else {
+				options.date.setDate(1);
+			}
+		}
+		// Remove duplicates
+		if (options.mode == 'multiple') {
+			for (i = 0; i < options.date.length; ++i) {
+				if (options.date.indexOf(options.date[i]) !== i) {
+					options.date.splice(i, 1);
+					--i;
+				}
+			}
 		}
 		if (current) {
 			options.current	= parseDate(current);
 		} else {
-			options.current	= new Date(options.mode === 'single' ? options.date : new Date(options.date[options.date.length -1]));
+			options.current	= new Date(options.mode === 'single' ? options.date : options.date[options.date.length -1]);
 		}
 		options.current.setDate(1);
-		options.current.setHours(0,0,0,0);
 		options.binded.fill();
 		if ($this.is('input') && options.default_date !== false) {
 			var prepared_date	= prepareDate(options);
@@ -936,26 +958,6 @@
 			}
 			$this.val(options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator));
 		}
-	}
-	function prepare_date_to_ignore_day_selection (date, options) {
-		if (date instanceof Array) {
-			date	= date.slice();
-			for (var i = 0; i < date.length; ++i) {
-				date[i] = prepare_date_to_ignore_day_selection(date[i]);
-				// Remove duplicates
-				if (
-					options.mode != 'range' &&
-					date.indexOf(date[i]) !== i
-				) {
-					date.splice(i, 1);
-					--i;
-				}
-			}
-			return date;
-		}
-		date	= new Date(date);
-		date.setDate(1);
-		return date.valueOf();
 	}
 	function destroy () {
 		var	$this	= $(this),
@@ -1031,15 +1033,11 @@
 			}
 			options.calendars	= Math.max(1, parseInt(options.calendars, 10) || 1);
 			options.mode		= /single|multiple|range/.test(options.mode) ? options.mode : 'single';
-			if (typeof options.min === 'string') {
-				options.min = parseDate(options.min, options.format, options.separator, options.locale).setHours(0,0,0,0);
-			} else if (options.min && options.min.constructor == Date) {
-				options.min.setHours(0,0,0,0);
+			if (options.min) {
+				options.min = parseDate(options.min, options.format, options.separator, options.locale);
 			}
-			if (typeof options.max === 'string') {
-				options.max = parseDate(options.max, options.format, options.separator, options.locale).setHours(0,0,0,0);
-			} else if (options.max && options.max.constructor == Date) {
-				options.max.setHours(0,0,0,0);
+			if (options.max) {
+				options.max = parseDate(options.max, options.format, options.separator, options.locale);
 			}
 			if (!options.select_day) {
 				if (options.min) {
