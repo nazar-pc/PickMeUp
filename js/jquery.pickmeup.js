@@ -592,38 +592,38 @@
 	function update_date (new_date) {
 		var	$this			= $(this),
 			options			= $this.data('pickmeup-options'),
-			new_value,
 			i;
 		reset_time(new_date);
-		switch (options.mode) {
-			case 'multiple':
-				new_value = new_date.valueOf();
-				for (i = 0; i < options.date.length; ++i) {
-					if (options.date[i].valueOf() === new_value) {
-						options.date.splice(i, 1);
-						break;
+		(function () {
+			var new_value;
+			switch (options.mode) {
+				case 'multiple':
+					new_value = new_date.valueOf();
+					for (i = 0; i < options.date.length; ++i) {
+						if (options.date[i].valueOf() === new_value) {
+							options.date.splice(i, 1);
+							return;
+						}
 					}
-				}
-				if (i === options.date.length) {
 					options.date.push(new_date);
-				}
-				break;
-			case 'range':
-				if (!options.lastSel) {
-					options.date[0]	= new_date;
-				}
-				if (new_date <= options.date[0]) {
-					options.date[1]	= options.date[0];
-					options.date[0]	= new_date;
-				} else {
-					options.date[1]	= new_date;
-				}
-				options.lastSel	= !options.lastSel;
-				break;
-			default:
-				options.date	= new_date.valueOf();
-				break;
-		}
+					break;
+				case 'range':
+					if (!options.lastSel) {
+						options.date[0]	= new_date;
+					}
+					if (new_date <= options.date[0]) {
+						options.date[1]	= options.date[0];
+						options.date[0]	= new_date;
+					} else {
+						options.date[1]	= new_date;
+					}
+					options.lastSel	= !options.lastSel;
+					break;
+				default:
+					options.date	= new_date.valueOf();
+					break;
+			}
+		})();
 		var prepared_date	= prepareDate(options);
 		if ($this.is('input')) {
 			$this.val(options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator));
