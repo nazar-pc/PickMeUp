@@ -161,6 +161,7 @@
 		 */
 		for (var i = 0; i < options.calendars; i++) {
 			local_date		= new Date(current_date);
+			reset_time(local_date);
 			instance	= pickmeup.find('.pmu-instance').eq(i);
 			if (pickmeup.hasClass('pmu-view-years')) {
 				local_date.addYears((i - current_cal) * 12);
@@ -741,7 +742,8 @@
 		}
 	}
 	function show (force) {
-		var pickmeup	= this.pickmeup;
+		var pickmeup	= this.pickmeup,
+			value;
 		if (force || !pickmeup.is(':visible')) {
 			var $this		= $(this),
 				options		= $this.data('pickmeup-options'),
@@ -756,13 +758,15 @@
 				left		= pos.left;
 			options.binded.fill();
 			if ($this.is('input')) {
-				$this
-					.pickmeup('set_date', parseDate($this.val() ? $this.val() : options.default_date, options.format, options.separator, options.locale))
-					.keydown(function (e) {
-						if (e.which == 9) {
-							$this.pickmeup('hide');
-						}
-					});
+				value = $this.val();
+				if (value) {
+					$this.pickmeup('set_date', parseDate(value, options.format, options.separator, options.locale))
+				}
+				$this.keydown(function (e) {
+					if (e.which == 9) {
+						$this.pickmeup('hide');
+					}
+				});
 				options.lastSel = false;
 			}
 			options.before_show();
@@ -909,27 +913,31 @@
 		var $this	= $(this),
 			options = $this.data('pickmeup-options'),
 			i;
-		options.date = parseDate(date, options.format, options.separator, options.locale);
-		if (options.mode != 'single') {
-			if (options.date instanceof Array) {
-				options.date[0] = options.date[0] || parseDate(new Date);
-				if (options.mode == 'range') {
-					options.date[1] = options.date[1] || parseDate(options.date[0]);
+		if (!(date instanceof Array) || date.length > 0) {
+			options.date = parseDate(date, options.format, options.separator, options.locale);
+			if (options.mode != 'single') {
+				if (options.date instanceof Array) {
+					options.date[0] = options.date[0] || parseDate(new Date);
+					if (options.mode == 'range') {
+						options.date[1] = options.date[1] || parseDate(options.date[0]);
+					}
+				} else {
+					options.date = [options.date];
+					if (options.mode == 'range') {
+						options.date.push(parseDate(options.date[0]));
+					}
+				}
+				for (i = 0; i < options.date.length; ++i) {
+					options.date[i] = correct_date_outside_of_limit(options.date[i], options.min, options.max);
 				}
 			} else {
-				options.date = [options.date];
-				if (options.mode == 'range') {
-					options.date.push(parseDate(options.date[0]));
+				if(options.date instanceof Array) {
+					options.date = options.date[0];
 				}
-			}
-			for (i = 0; i < options.date.length; ++i) {
-				options.date[i] = correct_date_outside_of_limit(options.date[i], options.min, options.max);
+				options.date = correct_date_outside_of_limit(options.date, options.min, options.max);
 			}
 		} else {
-			if(options.date instanceof Array) {
-				options.date = options.date[0];
-			}
-			options.date = correct_date_outside_of_limit(options.date, options.min, options.max);
+			options.date = [];
 		}
 		if (!options.select_day) {
 			if (options.date instanceof Array) {
@@ -952,7 +960,8 @@
 		if (current) {
 			options.current	= parseDate(current);
 		} else {
-			options.current	= new Date(options.mode === 'single' ? options.date : options.date[options.date.length -1]);
+			current	= options.mode === 'single' ? options.date : options.date[options.date.length -1];
+			options.current	= current ? new Date(current) : new Date;
 		}
 		options.current.setDate(1);
 		options.binded.fill();
