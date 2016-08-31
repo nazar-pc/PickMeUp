@@ -1,3 +1,15 @@
+2.10.0 (31 August, 2016)
+* Refactoring to `set_date` during initialization instead of duplicating code
+* Added new option `current`, represents date that will be in the center of rendered calendar
+* Fix for [#41](https://github.com/nazar-pc/PickMeUp/issues/41) (do not move months back and forth when selecting days)
+* Refactoring towards unification and normalization (dates as `Date` objects)
+* Fix for [#97](https://github.com/nazar-pc/PickMeUp/issues/97) and generally for setting date outside of limits
+* Fix for setting date to empty array, to address underlying problem in [#121](https://github.com/nazar-pc/PickMeUp/issues/121)
+* Make sass variables 'default' ([PR #313](https://github.com/nazar-pc/PickMeUp/pull/131))
+* Tiny fix for `show` method being forced even when it shouldn't
+* Do not update `<input>` value unless value really changed to avoid cursor jumping
+* Small fixes
+
 2.9.2 (05 August, 2016)
 * Fix for [#120](https://github.com/nazar-pc/PickMeUp/issues/120) (when applied to multiple elements options might be changed during initialization of one element and then used in another, fixed by deep copy of options)
 * Added support for numeric (Unix timestamp in milliseconds) dates
