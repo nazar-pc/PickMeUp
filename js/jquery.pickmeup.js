@@ -54,6 +54,103 @@
 		factory(jQuery);
 	}
 }(function ($) {
+	/**
+	 * @param {(Element|NodeList)} element
+	 * @param {Function}           callback
+	 * @param {*}                  [args=[]]
+	 */
+	function dom_for_collection (element, callback, args) {
+		args = args || [];
+		if (element instanceof Element) {
+			callback.apply(callback, [element].concat(args));
+		} else {
+			var elements, i;
+			elements = element.length;
+			for (i = 0; i < elements; ++i) {
+				callback.apply(callback, [element[i]].concat(args));
+			}
+		}
+	}
+
+	/**
+	 * @param {(Element|Element[]|NodeList)} element
+	 */
+	function dom_remove (element) {
+		dom_for_collection(element, function (element) {
+			element.parentElement.removeChild(element);
+		});
+	}
+
+	/**
+	 * @param {Element} element
+	 * @param {string}  selector
+	 *
+	 * @returns {Element}
+	 */
+	function dom_closest_parent (element, selector) {
+		var parent = element;
+		do {
+			parent = parent.parentElement;
+		} while (parent && !dom_matches(parent, selector));
+		return parent;
+	}
+
+	/**
+	 * @param {Element} element
+	 * @param {string}  selector
+	 *
+	 * @returns {boolean}
+	 */
+	function dom_matches (element, selector) {
+		return (element.matches || element.webkitMatchesSelector || element.msMatchesSelector).call(element, selector);
+	}
+
+	/**
+	 * @param {Element} element
+	 * @param {string}  class_name
+	 *
+	 * @returns {boolean}
+	 */
+	function dom_has_class (element, class_name) {
+		return element && element.classList.contains(class_name);
+	}
+
+	/**
+	 * @param {Element} element
+	 * @param {string}  class_name
+	 */
+	function dom_add_class (element, class_name) {
+		element.classList.add(class_name);
+	}
+
+	/**
+	 * @param {Element} element
+	 * @param {string}  class_name
+	 */
+	function dom_remove_class (element, class_name) {
+		element.classList.remove(class_name);
+	}
+
+	/**
+	 * @param {Element} element
+	 * @param {string}  selector
+	 *
+	 * @returns {Element}
+	 */
+	function dom_query (element, selector) {
+		return element.querySelector(selector);
+	}
+
+	/**
+	 * @param {Element} element
+	 * @param {string}  selector
+	 *
+	 * @returns {Element[]}
+	 */
+	function dom_query_all (element, selector) {
+		return Array.prototype.slice.call(element.querySelectorAll(selector));
+	}
+
 	var instances_count = 0;
 	$.pickmeup          = $.extend($.pickmeup || {}, {
 		current        : null,
@@ -143,7 +240,7 @@
 
 	function fill () {
 		var options      = $(this).data('pickmeup-options'),
-			pickmeup     = this.pickmeup,
+			pickmeup     = this.pickmeup.get(0),
 			current_cal  = Math.floor(options.calendars / 2),
 			actual_date  = options.date,
 			current_date = options.current,
@@ -169,21 +266,21 @@
 		/**
 		 * Remove old content except header navigation
 		 */
-		pickmeup.find('.pmu-instance > :not(nav)').remove();
+		dom_remove(dom_query_all(pickmeup, '.pmu-instance > :not(nav)'));
 		/**
 		 * If several calendars should be shown
 		 */
 		for (var i = 0; i < options.calendars; i++) {
 			local_date = new Date(current_date);
 			reset_time(local_date);
-			instance = pickmeup.find('.pmu-instance').eq(i);
-			if (pickmeup.hasClass('pmu-view-years')) {
+			instance = dom_query_all(pickmeup, '.pmu-instance')[i];
+			if (dom_has_class(pickmeup, 'pmu-view-years')) {
 				local_date.addYears((i - current_cal) * 12);
 				header = (local_date.getFullYear() - 6) + ' - ' + (local_date.getFullYear() + 5);
-			} else if (pickmeup.hasClass('pmu-view-months')) {
+			} else if (dom_has_class(pickmeup, 'pmu-view-months')) {
 				local_date.addYears(i - current_cal);
 				header = local_date.getFullYear();
-			} else if (pickmeup.hasClass('pmu-view-days')) {
+			} else if (dom_has_class(pickmeup, 'pmu-view-days')) {
 				local_date.addMonths(i - current_cal);
 				header = formatDate(local_date, options.title_format, options.locale);
 			}
@@ -221,11 +318,9 @@
 					continue;
 				}
 			}
-			instance
-				.find('.pmu-month')
-				.text(header);
-			html                   = '';
-			var is_year_selected   = function (year) {
+			dom_query(instance, '.pmu-month').textContent = header;
+			html                                          = '';
+			var is_year_selected                          = function (year) {
 				return (
 						options.mode == 'range' &&
 						year >= new Date(actual_date[0]).getFullYear() &&
@@ -240,7 +335,7 @@
 					) ||
 					new Date(actual_date).getFullYear() == year;
 			};
-			var is_months_selected = function (year, month) {
+			var is_months_selected                        = function (year, month) {
 				var first_year  = new Date(actual_date[0]).getFullYear(),
 					lastyear    = new Date(actual_date[1]).getFullYear(),
 					first_month = new Date(actual_date[0]).getMonth(),
@@ -414,20 +509,14 @@
 				}
 				html += tpl.body(days, 'pmu-days');
 			})();
-			instance.append(html);
+			instance.insertAdjacentHTML('beforeend', html);
 		}
 		shown_date_from.setDate(1);
 		shown_date_to.setDate(1);
 		shown_date_to.addMonths(1);
 		shown_date_to.addDays(-1);
-		pickmeup.find('.pmu-prev').css(
-			'visibility',
-			options.min && options.min >= shown_date_from ? 'hidden' : 'visible'
-		);
-		pickmeup.find('.pmu-next').css(
-			'visibility',
-			options.max && options.max <= shown_date_to ? 'hidden' : 'visible'
-		);
+		dom_query(pickmeup, '.pmu-prev').style.visibility = options.min && options.min >= shown_date_from ? 'hidden' : 'visible';
+		dom_query(pickmeup, '.pmu-next').style.visibility = options.max && options.max <= shown_date_to ? 'hidden' : 'visible'
 		options.fill.apply(this);
 	}
 
@@ -609,8 +698,7 @@
 	}
 
 	function update_date (new_date) {
-		var $this   = $(this),
-			options = $this.data('pickmeup-options'),
+		var options = $(this).data('pickmeup-options'),
 			i;
 		reset_time(new_date);
 		(function () {
@@ -644,8 +732,8 @@
 			}
 		})();
 		var prepared_date = prepareDate(options);
-		if ($this.is('input')) {
-			$this.val(options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator));
+		if (dom_matches(this, 'input')) {
+			this.value = options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator);
 		}
 		options.change.apply(this, prepared_date);
 		if (
@@ -661,88 +749,94 @@
 	}
 
 	function click (e) {
-		var el = $(e.target);
-		if (!el.hasClass('pmu-button')) {
-			el = el.closest('.pmu-button');
+		var el = e.target;
+		if (!dom_has_class(el, 'pmu-button')) {
+			el = dom_closest_parent(el, '.pmu-button');
 		}
-		if (el.length) {
-			if (el.hasClass('pmu-disabled')) {
-				return false;
-			}
-			var $this          = $(this),
-				options        = $this.data('pickmeup-options'),
-				instance       = el.parents('.pmu-instance').eq(0),
-				root           = instance.parent(),
-				instance_index = $('.pmu-instance', root).index(instance);
-			if (el.parent().is('nav')) {
-				if (el.hasClass('pmu-month')) {
-					options.current.addMonths(instance_index - Math.floor(options.calendars / 2));
-					if (root.hasClass('pmu-view-years')) {
-						// Shift back to current date, otherwise with min value specified may jump on few (tens) years forward
-						if (options.mode != 'single') {
-							options.current = new Date(options.date[options.date.length - 1]);
-						} else {
-							options.current = new Date(options.date);
-						}
-						if (options.select_day) {
-							root.removeClass('pmu-view-years').addClass('pmu-view-days');
-						} else if (options.select_month) {
-							root.removeClass('pmu-view-years').addClass('pmu-view-months');
-						}
-					} else if (root.hasClass('pmu-view-months')) {
-						if (options.select_year) {
-							root.removeClass('pmu-view-months').addClass('pmu-view-years');
-						} else if (options.select_day) {
-							root.removeClass('pmu-view-months').addClass('pmu-view-days');
-						}
-					} else if (root.hasClass('pmu-view-days')) {
-						if (options.select_month) {
-							root.removeClass('pmu-view-days').addClass('pmu-view-months');
-						} else if (options.select_year) {
-							root.removeClass('pmu-view-days').addClass('pmu-view-years');
-						}
-					}
-				} else {
-					if (el.hasClass('pmu-prev')) {
-						options.binded.prev(false);
+		if (!dom_has_class(el, 'pmu-button') || dom_has_class(el, 'pmu-disabled')) {
+			return false;
+		}
+		var options        = $(this).data('pickmeup-options'),
+			instance       = dom_closest_parent(el, '.pmu-instance'),
+			root           = instance.parentElement,
+			instance_index = dom_query_all(root, '.pmu-instance').indexOf(instance);
+		if (dom_matches(el.parentElement, 'nav')) {
+			if (dom_has_class(el, 'pmu-month')) {
+				options.current.addMonths(instance_index - Math.floor(options.calendars / 2));
+				if (dom_has_class(root, 'pmu-view-years')) {
+					// Shift back to current date, otherwise with min value specified may jump on few (tens) years forward
+					if (options.mode != 'single') {
+						options.current = new Date(options.date[options.date.length - 1]);
 					} else {
-						options.binded.next(false);
+						options.current = new Date(options.date);
 					}
-				}
-			} else if (!el.hasClass('pmu-disabled')) {
-				if (root.hasClass('pmu-view-years')) {
-					options.current.setFullYear(parseInt(el.text(), 10));
-					if (options.select_month) {
-						root.removeClass('pmu-view-years').addClass('pmu-view-months');
-					} else if (options.select_day) {
-						root.removeClass('pmu-view-years').addClass('pmu-view-days');
-					} else {
-						options.binded.update_date(options.current);
-					}
-				} else if (root.hasClass('pmu-view-months')) {
-					options.current.setMonth(instance.find('.pmu-months .pmu-button').index(el));
-					options.current.setFullYear(parseInt(instance.find('.pmu-month').text(), 10));
 					if (options.select_day) {
-						root.removeClass('pmu-view-months').addClass('pmu-view-days');
-					} else {
-						options.binded.update_date(options.current);
+						dom_remove_class(root, 'pmu-view-years');
+						dom_add_class(root, 'pmu-view-days');
+					} else if (options.select_month) {
+						dom_remove_class(root, 'pmu-view-years');
+						dom_add_class(root, 'pmu-view-months');
 					}
-					// Move current month to the first place
-					options.current.addMonths(Math.floor(options.calendars / 2) - instance_index);
+				} else if (dom_has_class(root, 'pmu-view-months')) {
+					if (options.select_year) {
+						dom_remove_class(root, 'pmu-view-months');
+						dom_add_class(root, 'pmu-view-years');
+					} else if (options.select_day) {
+						dom_remove_class(root, 'pmu-view-months');
+						dom_add_class(root, 'pmu-view-days');
+					}
+				} else if (dom_has_class(root, 'pmu-view-days')) {
+					if (options.select_month) {
+						dom_remove_class(root, 'pmu-view-days');
+						dom_add_class(root, 'pmu-view-months');
+					} else if (options.select_year) {
+						dom_remove_class(root, 'pmu-view-days');
+						dom_add_class(root, 'pmu-view-years');
+					}
+				}
+			} else {
+				if (dom_has_class(el, 'pmu-prev')) {
+					options.binded.prev(false);
 				} else {
-					var val  = parseInt(el.text(), 10), new_date;
-					new_date = new Date(options.current);
-					new_date.addMonths(instance_index - Math.floor(options.calendars / 2));
-					if (el.hasClass('pmu-not-in-month')) {
-						new_date.addMonths(val > 15 ? -1 : 1);
-					}
-					new_date.setDate(val);
-					options.binded.update_date(new_date);
+					options.binded.next(false);
 				}
 			}
-			options.binded.fill();
+		} else {
+			if (dom_has_class(root, 'pmu-view-years')) {
+				options.current.setFullYear(parseInt(el.textContent, 10));
+				if (options.select_month) {
+					dom_remove_class(root, 'pmu-view-years');
+					dom_add_class(root, 'pmu-view-months');
+				} else if (options.select_day) {
+					dom_remove_class(root, 'pmu-view-years');
+					dom_add_class(root, 'pmu-view-days');
+				} else {
+					options.binded.update_date(options.current);
+				}
+			} else if (dom_has_class(root, 'pmu-view-months')) {
+				options.current.setMonth(dom_query_all(instance, '.pmu-months .pmu-button').indexOf(el));
+				options.current.setFullYear(parseInt(dom_query(instance, '.pmu-month').textContent, 10));
+				if (options.select_day) {
+					dom_remove_class(root, 'pmu-view-months');
+					dom_add_class(root, 'pmu-view-days');
+				} else {
+					options.binded.update_date(options.current);
+				}
+				// Move current month to the first place
+				options.current.addMonths(Math.floor(options.calendars / 2) - instance_index);
+			} else {
+				var val  = parseInt(el.textContent, 10), new_date;
+				new_date = new Date(options.current);
+				new_date.addMonths(instance_index - Math.floor(options.calendars / 2));
+				if (dom_has_class(el, 'pmu-not-in-month')) {
+					new_date.addMonths(val > 15 ? -1 : 1);
+				}
+				new_date.setDate(val);
+				options.binded.update_date(new_date);
+			}
 		}
-		return false;
+		options.binded.fill();
+		return true;
 	}
 
 	function prepareDate (options) {
@@ -1011,7 +1105,7 @@
 		$this.removeData('pickmeup-options');
 		$this.off(options.events_namespace);
 		$(document).off(options.events_namespace);
-		$(this.pickmeup).remove();
+		dom_remove(this.pickmeup.get(0));
 	}
 
 	function correct_date_outside_of_limit (date, min, max) {
