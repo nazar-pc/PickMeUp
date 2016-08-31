@@ -966,11 +966,15 @@
 		options.current.setDate(1);
 		options.binded.fill();
 		if ($this.is('input') && options.default_date !== false) {
-			var prepared_date	= prepareDate(options);
-			if (!$this.val()) {
+			var prepared_date	= prepareDate(options),
+				current_value	= $this.val(),
+				new_value		= options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator);
+			if (!current_value) {
 				options.change.apply(this, prepared_date);
 			}
-			$this.val(options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator));
+			if (current_value != new_value) {
+				$this.val(new_value);
+			}
 		}
 	}
 	function destroy () {
