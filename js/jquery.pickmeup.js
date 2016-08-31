@@ -206,8 +206,7 @@
 			days   : 'pmu-view-days'
 		},
 		tpl             = {
-			wrapper : '<div class="pickmeup" />',
-			head    : function (d) {
+			head : function (d) {
 				var result = '';
 				for (var i = 0; i < 7; ++i) {
 					result += '<div>' + d.day[i] + '</div>'
@@ -215,13 +214,13 @@
 				return '<div class="pmu-instance">' +
 					'<nav>' +
 					'<div class="pmu-prev pmu-button">' + d.prev + '</div>' +
-					'<div class="pmu-month pmu-button" />' +
+					'<div class="pmu-month pmu-button"></div>' +
 					'<div class="pmu-next pmu-button">' + d.next + '</div>' +
 					'</nav>' +
 					'<nav class="pmu-day-of-week">' + result + '</nav>' +
 					'</div>';
 			},
-			body    : function (elements, container_class_name) {
+			body : function (elements, container_class_name) {
 				var result = '';
 				for (var i = 0; i < elements.length; ++i) {
 					result += '<div class="' + elements[i].class_name + ' pmu-button">' + elements[i].text + '</div>'
@@ -515,8 +514,14 @@
 		shown_date_to.setDate(1);
 		shown_date_to.addMonths(1);
 		shown_date_to.addDays(-1);
-		dom_query(pickmeup, '.pmu-prev').style.visibility = options.min && options.min >= shown_date_from ? 'hidden' : 'visible';
-		dom_query(pickmeup, '.pmu-next').style.visibility = options.max && options.max <= shown_date_to ? 'hidden' : 'visible'
+		var prev = dom_query(pickmeup, '.pmu-prev'),
+			next = dom_query(pickmeup, '.pmu-next');
+		if (prev) {
+			prev.style.visibility = options.min && options.min >= shown_date_from ? 'hidden' : 'visible';
+		}
+		if (next) {
+			next.style.visibility = options.max && options.max <= shown_date_to ? 'hidden' : 'visible';
+		}
 		options.fill.apply(this);
 	}
 
@@ -1196,10 +1201,11 @@
 				}
 			}
 			var cnt,
-				pickmeup  = $(tpl.wrapper);
-			this.pickmeup = pickmeup;
+				pickmeup  = document.createElement('div');
+			this.pickmeup = $(pickmeup);
+			dom_add_class(pickmeup, 'pickmeup');
 			if (options.class_name) {
-				pickmeup.addClass(options.class_name);
+				dom_add_class(pickmeup, options.class_name);
 			}
 			var html = '';
 			for (i = 0; i < options.calendars; i++) {
@@ -1240,10 +1246,10 @@
 				destroy     : destroy.bind(this)
 			};
 			options.events_namespace = '.pickmeup-' + (++instances_count);
-			pickmeup
+			dom_add_class(pickmeup, views[options.view]);
+			pickmeup.innerHTML = html;
+			$(pickmeup)
 				.on(namespaced_events(options.trigger_event, options.events_namespace), options.binded.click)
-				.addClass(views[options.view])
-				.append(html)
 				.on(
 					$.support.selectstart ? 'selectstart' : 'mousedown',
 					function (e) {
@@ -1251,12 +1257,11 @@
 					}
 				);
 			if (options.flat) {
-				pickmeup.appendTo(this).css({
-					position : 'relative',
-					display  : 'inline-block'
-				});
+				pickmeup.style.display  = 'inline-block';
+				pickmeup.style.position = 'relative';
+				this.appendChild(pickmeup);
 			} else {
-				pickmeup.appendTo(document.body);
+				document.body.appendChild(pickmeup);
 				$this.on(
 					namespaced_events(options.trigger_event, options.events_namespace),
 					function () {
