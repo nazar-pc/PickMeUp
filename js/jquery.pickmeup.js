@@ -425,7 +425,7 @@
 		} else if (date instanceof Array) {
 			date = date.slice();
 			for (i = 0; i < date.length; ++i) {
-				date[i] = parseDate(date[i]);
+				date[i] = parseDate(date[i], format, separator, locale);
 			}
 			return date;
 		}
@@ -917,14 +917,14 @@
 			options.date = parseDate(date, options.format, options.separator, options.locale);
 			if (options.mode != 'single') {
 				if (options.date instanceof Array) {
-					options.date[0] = options.date[0] || parseDate(new Date);
+					options.date[0] = options.date[0] || parseDate(new Date, options.format, options.separator, options.locale);
 					if (options.mode == 'range') {
-						options.date[1] = options.date[1] || parseDate(options.date[0]);
+						options.date[1] = options.date[1] || parseDate(options.date[0], options.format, options.separator, options.locale);
 					}
 				} else {
 					options.date = [options.date];
 					if (options.mode == 'range') {
-						options.date.push(parseDate(options.date[0]));
+						options.date.push(parseDate(options.date[0], options.format, options.separator, options.locale));
 					}
 				}
 				for (i = 0; i < options.date.length; ++i) {
@@ -958,7 +958,7 @@
 			}
 		}
 		if (current) {
-			options.current	= parseDate(current);
+			options.current	= parseDate(current, options.format, options.separator, options.locale);
 		} else {
 			current	= options.mode === 'single' ? options.date : options.date[options.date.length -1];
 			options.current	= current ? new Date(current) : new Date;
