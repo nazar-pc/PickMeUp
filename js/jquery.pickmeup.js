@@ -1129,7 +1129,12 @@
 				});
 			} else {
 				pickmeup.appendTo(document.body);
-				$this.on(namespaced_events(options.trigger_event, options.events_namespace), options.binded.show);
+				$this.on(
+					namespaced_events(options.trigger_event, options.events_namespace),
+					function () {
+						options.binded.show();
+					}
+				);
 			}
 			options.binded.set_date(options.date, options.current);
 		});
