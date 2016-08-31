@@ -239,7 +239,7 @@
 
 	function fill () {
 		var options      = $(this).data('pickmeup-options'),
-			pickmeup     = this.pickmeup.get(0),
+			pickmeup     = this.pickmeup,
 			current_cal  = Math.floor(options.calendars / 2),
 			actual_date  = options.date,
 			current_date = options.current,
@@ -863,7 +863,7 @@
 	function show (force) {
 		var pickmeup = this.pickmeup,
 			value;
-		if (force || !pickmeup.is(':visible')) {
+		if (force || dom_has_class(pickmeup, 'pmu-hidden')) {
 			var $this    = $(this),
 				options  = $this.data('pickmeup-options'),
 				pos      = $this.offset(),
@@ -895,10 +895,10 @@
 			if (!options.flat) {
 				switch (options.position) {
 					case 'top':
-						top -= pickmeup.outerHeight();
+						top -= pickmeup.offsetHeight;
 						break;
 					case 'left':
-						left -= pickmeup.outerWidth();
+						left -= pickmeup.offsetWidth;
 						break;
 					case 'right':
 						left += this.offsetWidth;
@@ -919,11 +919,9 @@
 				if (left < viewport.l) {
 					left = pos.left + this.offsetWidth
 				}
-				pickmeup.css({
-					display : 'inline-block',
-					top     : top + 'px',
-					left    : left + 'px'
-				});
+				pickmeup.style.top  = top + 'px';
+				pickmeup.style.left = left + 'px';
+				dom_remove_class(pickmeup, 'pmu-hidden');
 				$(document)
 					.on(
 						namespaced_events(options.trigger_event, options.events_namespace),
@@ -947,16 +945,16 @@
 	function hide (e) {
 		//noinspection JSBitwiseOperatorUsage
 		if (
-			!e || !e.target ||														//Called directly
+			!e || !e.target ||													//Called directly
 			(
 				e.target != this &&												//Clicked not on element itself
-				!(this.pickmeup.get(0).compareDocumentPosition(e.target) & 16)	//And not on its children
+				!(this.pickmeup.compareDocumentPosition(e.target) & 16)	//And not on its children
 			)
 		) {
 			var pickmeup = this.pickmeup,
 				options  = $(this).data('pickmeup-options');
 			if (options.hide() != false) {
-				pickmeup.hide();
+				dom_add_class(pickmeup, 'pmu-hidden');
 				$(document)
 					.off(namespaced_events(options.trigger_event, options.events_namespace), options.binded.hide)
 					.off('resize', options.binded.forced_show);
@@ -988,11 +986,11 @@
 		}
 		var root    = this.pickmeup;
 		var options = $(this).data('pickmeup-options');
-		if (root.hasClass('pmu-view-years')) {
+		if (dom_has_class(root, 'pmu-view-years')) {
 			options.current.addYears(-12);
-		} else if (root.hasClass('pmu-view-months')) {
+		} else if (dom_has_class(root, 'pmu-view-months')) {
 			options.current.addYears(-1);
-		} else if (root.hasClass('pmu-view-days')) {
+		} else if (dom_has_class(root, 'pmu-view-days')) {
 			options.current.addMonths(-1);
 		}
 		if (fill) {
@@ -1006,11 +1004,11 @@
 		}
 		var root    = this.pickmeup;
 		var options = $(this).data('pickmeup-options');
-		if (root.hasClass('pmu-view-years')) {
+		if (dom_has_class(root, 'pmu-view-years')) {
 			options.current.addYears(12);
-		} else if (root.hasClass('pmu-view-months')) {
+		} else if (dom_has_class(root, 'pmu-view-months')) {
 			options.current.addYears(1);
-		} else if (root.hasClass('pmu-view-days')) {
+		} else if (dom_has_class(root, 'pmu-view-days')) {
 			options.current.addMonths(1);
 		}
 		if (fill) {
@@ -1110,7 +1108,7 @@
 		$this.removeData('pickmeup-options');
 		$this.off(options.events_namespace);
 		$(document).off(options.events_namespace);
-		dom_remove(this.pickmeup.get(0));
+		dom_remove(this.pickmeup);
 	}
 
 	function correct_date_outside_of_limit (date, min, max) {
@@ -1202,7 +1200,7 @@
 			}
 			var cnt,
 				pickmeup  = document.createElement('div');
-			this.pickmeup = $(pickmeup);
+			this.pickmeup = pickmeup;
 			dom_add_class(pickmeup, 'pickmeup');
 			if (options.class_name) {
 				dom_add_class(pickmeup, options.class_name);
@@ -1257,10 +1255,10 @@
 					}
 				);
 			if (options.flat) {
-				pickmeup.style.display  = 'inline-block';
-				pickmeup.style.position = 'relative';
+				dom_add_class(pickmeup, 'pmu-flat');
 				this.appendChild(pickmeup);
 			} else {
+				dom_add_class(pickmeup, 'pmu-hidden');
 				document.body.appendChild(pickmeup);
 				$this.on(
 					namespaced_events(options.trigger_event, options.events_namespace),

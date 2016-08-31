@@ -28,12 +28,20 @@ $today-color                      : $color-hover !default;
 	border-radius   : $border-radius;
 	-moz-box-sizing : content-box;
 	box-sizing      : content-box;
-	display         : none;
+	display         : inline-block;
 	position        : absolute;
 
 	* {
 		-moz-box-sizing : border-box;
 		box-sizing      : border-box;
+	}
+
+	&.pmu-flat {
+		position : relative;
+	}
+
+	&.pmu-hidden {
+		display : none;
 	}
 
 	.pmu-instance {
