@@ -876,8 +876,8 @@
 				top      = pos.top,
 				left     = pos.left;
 			options.binded.fill();
-			if ($this.is('input')) {
-				value = $this.val();
+			if (dom_matches(this, 'input')) {
+				value = this.value;
 				if (value) {
 					$this.pickmeup('set_date', parseDate(value, options.format, options.separator, options.locale))
 				}
@@ -1034,8 +1034,7 @@
 	}
 
 	function set_date (date, current) {
-		var $this   = $(this),
-			options = this.pickmeup.pickmeup_options,
+		var options = this.pickmeup.pickmeup_options,
 			i;
 		if (!(date instanceof Array) || date.length > 0) {
 			options.date = parseDate(date, options.format, options.separator, options.locale);
@@ -1089,24 +1088,23 @@
 		}
 		options.current.setDate(1);
 		options.binded.fill();
-		if ($this.is('input') && options.default_date !== false) {
+		if (dom_matches(this, 'input') && options.default_date !== false) {
 			var prepared_date = prepareDate(options),
-				current_value = $this.val(),
+				current_value = this.value,
 				new_value     = options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator);
 			if (!current_value) {
 				options.change.apply(this, prepared_date);
 			}
 			if (current_value != new_value) {
-				$this.val(new_value);
+				this.value = new_value;
 			}
 		}
 	}
 
 	function destroy () {
-		var $this   = $(this),
-			options = this.pickmeup.pickmeup_options;
+		var options = this.pickmeup.pickmeup_options;
 		delete this.pickmeup.pickmeup_options;
-		$this.off(options.events_namespace);
+		$(this).off(options.events_namespace);
 		$(document).off(options.events_namespace);
 		dom_remove(this.pickmeup);
 	}
@@ -1158,7 +1156,6 @@
 			return this;
 		}
 		return this.each(function () {
-			var $this = $(this);
 			if (this.pickmeup) {
 				return;
 			}
@@ -1166,8 +1163,8 @@
 				option,
 				options = $.extend(true, {}, $.pickmeup, initial_options || {});
 			for (i in options) {
-				option = $this.data('pmu-' + i);
-				if (typeof option !== 'undefined') {
+				option = this.getAttribute('pmu-' + i);
+				if (option !== null) {
 					options[i] = option;
 				}
 			}
@@ -1260,7 +1257,7 @@
 			} else {
 				dom_add_class(pickmeup, 'pmu-hidden');
 				document.body.appendChild(pickmeup);
-				$this.on(
+				$(this).on(
 					namespaced_events(options.trigger_event, options.events_namespace),
 					function () {
 						options.binded.show();
