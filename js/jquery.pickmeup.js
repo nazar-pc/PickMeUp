@@ -203,6 +203,18 @@
 		}
 	}
 
+	/**
+	 * @param {Element} element
+	 * @returns {{top: number, left: number}}
+	 */
+	function dom_offset (element) {
+		var rect = element.getBoundingClientRect();
+		return {
+			top  : rect.top + window.pageYOffset - document.documentElement.clientTop,
+			left : rect.left + window.pageXOffset - document.documentElement.clientLeft
+		};
+	}
+
 	$.pickmeup = $.extend($.pickmeup || {}, {
 		current        : null,
 		date           : new Date,
@@ -585,7 +597,7 @@
 		var splitted_date = date.split(separator);
 		if (splitted_date.length > 1) {
 			splitted_date.forEach(function (element, index, array) {
-				array[index] = parseDate($.trim(element), format, separator, locale);
+				array[index] = parseDate(element.trim(), format, separator, locale);
 			});
 			return splitted_date;
 		}
@@ -895,7 +907,7 @@
 			return [formatDate(result, options.format, options.locale), result];
 		} else {
 			result = [[], []];
-			$.each(options.date, function (nr, val) {
+			options.date.forEach(function (val) {
 				var date = new Date(val);
 				result[0].push(formatDate(date, options.format, options.locale));
 				result[1].push(date);
@@ -909,7 +921,7 @@
 			value;
 		if (force || dom_has_class(pickmeup, 'pmu-hidden')) {
 			var options  = pickmeup.__pickmeup.options,
-				pos      = $(this).offset(),
+				pos      = dom_offset(this),
 				viewport = {
 					l : document.documentElement.scrollLeft,
 					t : document.documentElement.scrollTop,
@@ -1285,7 +1297,7 @@
 			dom_on(
 				pickmeup,
 				pickmeup,
-				$.support.selectstart ? 'selectstart' : 'mousedown',
+				'onselectstart' in Element.prototype ? 'selectstart' : 'mousedown',
 				function (e) {
 					e.preventDefault();
 				});
