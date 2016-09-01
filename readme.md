@@ -22,7 +22,7 @@ Then you can apply datepicker to any element:
 ```javascript
 pickmeup('.date');
 ```
-Global default settings are stored in `$.pickmeup`
+Global default options are stored in `pickmeup.defaults`
 
 They can be redefined during initialization:
 ```javascript

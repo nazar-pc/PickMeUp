@@ -215,61 +215,12 @@
 		};
 	}
 
-	$.pickmeup = $.extend($.pickmeup || {}, {
-		current        : null,
-		date           : new Date,
-		default_date   : new Date,
-		flat           : false,
-		first_day      : 1,
-		prev           : '&#9664;',
-		next           : '&#9654;',
-		mode           : 'single',
-		select_year    : true,
-		select_month   : true,
-		select_day     : true,
-		view           : 'days',
-		calendars      : 1,
-		format         : 'd-m-Y',
-		title_format   : 'B, Y',
-		position       : 'bottom',
-		// TODO: Use touchend and compute distance from touchstart coordinates
-		trigger_event  : 'click touchstart',
-		class_name     : '',
-		separator      : ' - ',
-		hide_on_select : false,
-		min            : null,
-		max            : null,
-		render         : function () {
-		},
-		change         : function () {
-			return true;
-		},
-		before_show    : function () {
-			return true;
-		},
-		show           : function () {
-			return true;
-		},
-		hide           : function () {
-			return true;
-		},
-		fill           : function () {
-			return true;
-		},
-		locale         : {
-			days        : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			daysShort   : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-			daysMin     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
-			months      : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-			monthsShort : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-		}
-	});
-	var views  = {
+	var views = {
 			years  : 'pmu-view-years',
 			months : 'pmu-view-months',
 			days   : 'pmu-view-days'
 		},
-		tpl    = {
+		tpl   = {
 			head : function (d) {
 				var result = '';
 				for (var i = 0; i < 7; ++i) {
@@ -1169,7 +1120,7 @@
 
 	/**
 	 * @param {(Element|string)} element
-	 * @param initial_options
+	 * @param {Object}           [initial_options={}]
 	 */
 	function pickmeup_init (element, initial_options) {
 		if (typeof element == 'string') {
@@ -1178,7 +1129,7 @@
 		if (!element.pickmeup) {
 			var i,
 				option,
-				options = $.extend(true, {}, $.pickmeup, initial_options || {});
+				options = $.extend(true, {}, pickmeup_init.defaults, initial_options || {});
 			for (i in options) {
 				option = element.getAttribute('pmu-' + i);
 				if (option !== null) {
@@ -1302,6 +1253,56 @@
 			set_date : options.binded.set_date
 		}
 	}
+
+	pickmeup_init.defaults = {
+		current        : null,
+		date           : new Date,
+		default_date   : new Date,
+		flat           : false,
+		first_day      : 1,
+		prev           : '&#9664;',
+		next           : '&#9654;',
+		mode           : 'single',
+		select_year    : true,
+		select_month   : true,
+		select_day     : true,
+		view           : 'days',
+		calendars      : 1,
+		format         : 'd-m-Y',
+		title_format   : 'B, Y',
+		position       : 'bottom',
+		// TODO: Use touchend and compute distance from touchstart coordinates
+		trigger_event  : 'click touchstart',
+		class_name     : '',
+		separator      : ' - ',
+		hide_on_select : false,
+		min            : null,
+		max            : null,
+		render         : function () {
+		},
+		change         : function () {
+			return true;
+		},
+		before_show    : function () {
+			return true;
+		},
+		show           : function () {
+			return true;
+		},
+		hide           : function () {
+			return true;
+		},
+		fill           : function () {
+			return true;
+		},
+		locale         : {
+			days        : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+			daysShort   : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+			daysMin     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+			months      : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+			monthsShort : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+		}
+	};
 
 	return pickmeup_init;
 }));
