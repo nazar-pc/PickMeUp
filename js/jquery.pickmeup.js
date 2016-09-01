@@ -923,8 +923,8 @@
 			var options  = pickmeup.__pickmeup.options,
 				pos      = dom_offset(this),
 				viewport = {
-					l : document.documentElement.scrollLeft,
-					t : document.documentElement.scrollTop,
+					l : window.pageXOffset,
+					t : window.pageYOffset,
 					w : document.documentElement.clientWidth,
 					h : document.documentElement.clientHeight
 				},
@@ -971,7 +971,7 @@
 					top = pos.top - pickmeup.offsetHeight;
 				}
 				if (top < viewport.t) {
-					top = pos.top + this.offsetHeight + pickmeup.offsetHeight;
+					top = pos.top + this.offsetHeight;
 				}
 				if (left + pickmeup.offsetWidth > viewport.l + viewport.w) {
 					left = pos.left - pickmeup.offsetWidth;
