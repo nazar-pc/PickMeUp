@@ -20,13 +20,13 @@ The plugin can also be loaded as AMD or CommonJS module.
 
 Then you can apply datepicker to any element:
 ```javascript
-$('.date').pickmeup();
+pickmeup('.date');
 ```
 Global default settings are stored in `$.pickmeup`
 
 They can be redefined during initialization:
 ```javascript
-$('.date').pickmeup({
+pickmeup('.date', {
 	format	: 'Y-m-d'
 });
 ```
@@ -61,7 +61,7 @@ All options and events are the same.
 | Option          | Value                             | Default          | Description                                                                                                          |
 |-----------------|-----------------------------------|------------------|----------------------------------------------------------------------------------------------------------------------|
 | date            | array/number/object/string        | new Date         | Selected date after initialization. Can be single date string/object or array depending on selection mode            |
-| default_date    | array/false/number/object/string  | new Date         | Allows to keep empty value until date selected, but open PickMeUp at this default date (`false` for no default date) |
+| default_date    | boolean                           | true             | If `false` will keep empty value until date selected                                                                 |
 | current         | number/object/string              | date             | Represents date that will be in the center of rendered calendar, defaults to `date` option's value                   |
 | flat            | boolean                           | false            | Whatever if the date picker is appended to the element or triggered by an event                                      |
 | first_day       | 0/1                               | 1                | First day of week: 0 - Sunday, 1 - Monday                                                                            |
@@ -114,27 +114,27 @@ Methods allows external control on datepicker
 
 ##### Hide
 ```javascript
-$('.date').pickmeup('hide');
+pickmeup('.date').hide();
 ```
 
 ##### Show
 ```javascript
-$('.date').pickmeup('show');
+pickmeup('.date').show();
 ```
 
 ##### Prev
 ```javascript
-$('.date').pickmeup('prev');
+pickmeup('.date').prev();
 ```
 
 ##### Next
 ```javascript
-$('.date').pickmeup('next');
+pickmeup('.date').next();
 ```
 
 ##### Get date
 ```javascript
-$('.date').pickmeup('get_date', formatted);
+pickmeup('.date').get_date(formatted);
 ```
 `formatted` - boolean or string (default `false`)
 * `false` - `Date` object
@@ -143,25 +143,24 @@ $('.date').pickmeup('get_date', formatted);
 
 ##### Set date
 ```javascript
-$('.date').pickmeup('set_date', date);
+pickmeup('.date').set_date(date);
 ```
 `date` - can be single date string/object or array depending on selection mode
 
 ##### Clear multiple selection
 ```javascript
-$('.date').pickmeup('clear');
+pickmeup('.date').clear();
 ```
 
 ##### Update datepicker
-Is useful, for example, after input field change
 ```javascript
-$('.date').pickmeup('update');
+pickmeup('.date').update();
 ```
 
 ##### Destroy datepicker
 Destroys PickMeUp instance, removes created markup, restores everything that was changed to original state.
 ```javascript
-$('.date').pickmeup('destroy');
+pickmeup('.date').destroy();
 ```
 
 ## Localization
@@ -182,15 +181,15 @@ Russian:
 	days: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'],
 	daysShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
 	daysMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'],
-	months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'December'],
+	months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
 	monthsShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
 }
 ````
 
 ## Other
-Current options (for whatever reason) can be accessed as `$('...').data('pickmeup-options')`.
+Current options (for whatever reason) can be accessed as `element.pickmeup.__pickmeup.options`.
 
-Root pickmeup element (jQuery collection object) can be accessed as `$('...').get(0).pickmeup` or directly `this.pickmeup` if inside callback.
+Root pickmeup element can be accessed as `element.pickmeup`.
 
 ## Touch devices
 PickMeUp doesn't include complete support for touch devices, only naive implementation.

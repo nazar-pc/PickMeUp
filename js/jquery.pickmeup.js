@@ -42,18 +42,18 @@
 	};
 })(Date.prototype);
 
-(function (factory) {
+(function (root, factory) {
 	if (typeof define === 'function' && define.amd) {
 		// AMD
-		define(['jquery'], factory);
+		define(factory);
 	} else if (typeof exports === 'object') {
 		// CommonJS
-		factory(require('jquery'));
+		module.exports = factory();
 	} else {
 		// Browser globals
-		factory(jQuery);
+		root.pickmeup = factory();
 	}
-}(function ($) {
+}(this, function () {
 	/**
 	 * @param {(Element|NodeList)} element
 	 * @param {Function}           callback
@@ -1013,7 +1013,8 @@
 	}
 
 	function update () {
-		var options = this.pickmeup.__pickmeup.options;
+		var pickmeup = this.pickmeup,
+			options  = pickmeup.__pickmeup.options;
 		dom_off(pickmeup, document.documentElement, options.trigger_event, options.binded.hide);
 		dom_off(pickmeup, window, 'resize', options.binded.forced_show);
 		options.binded.forced_show();
@@ -1166,52 +1167,20 @@
 		return date;
 	}
 
-	$.fn.pickmeup = function (initial_options) {
-		if (typeof initial_options === 'string') {
-			var options,
-				parameters = Array.prototype.slice.call(arguments, 1);
-			switch (initial_options) {
-				case 'hide':
-				case 'show':
-				case 'clear':
-				case 'update':
-				case 'prev':
-				case 'next':
-				case 'destroy':
-					this.each(function () {
-						options = this.pickmeup.__pickmeup.options;
-						if (options) {
-							options.binded[initial_options]();
-						}
-					});
-					break;
-				case 'get_date':
-					options = this.pickmeup.__pickmeup.options;
-					if (options) {
-						return options.binded.get_date(parameters[0]);
-					} else {
-						return null;
-					}
-					break;
-				case 'set_date':
-					this.each(function () {
-						options = this.pickmeup.__pickmeup.options;
-						if (options) {
-							options.binded[initial_options].apply(this, parameters);
-						}
-					});
-			}
-			return this;
+	/**
+	 * @param {(Element|string)} element
+	 * @param initial_options
+	 */
+	function pickmeup_init (element, initial_options) {
+		if (typeof element == 'string') {
+			element = document.querySelector(element);
 		}
-		return this.each(function () {
-			if (this.pickmeup) {
-				return;
-			}
+		if (!element.pickmeup) {
 			var i,
 				option,
 				options = $.extend(true, {}, $.pickmeup, initial_options || {});
 			for (i in options) {
-				option = this.getAttribute('pmu-' + i);
+				option = element.getAttribute('pmu-' + i);
 				if (option !== null) {
 					options[i] = option;
 				}
@@ -1245,7 +1214,7 @@
 			}
 			var cnt,
 				pickmeup        = document.createElement('div');
-			this.pickmeup       = pickmeup;
+			element.pickmeup    = pickmeup;
 			pickmeup.__pickmeup = {
 				options : options,
 				events  : []
@@ -1273,23 +1242,23 @@
 			}
 			for (i in options) {
 				if (['render', 'change', 'before_show', 'show', 'hide'].indexOf(i) != -1) {
-					options[i] = options[i].bind(this);
+					options[i] = options[i].bind(element);
 				}
 			}
 			options.binded = {
-				fill        : fill.bind(this),
-				update_date : update_date.bind(this),
-				click       : click.bind(this),
-				show        : show.bind(this),
-				forced_show : forced_show.bind(this),
-				hide        : hide.bind(this),
-				update      : update.bind(this),
-				clear       : clear.bind(this),
-				prev        : prev.bind(this),
-				next        : next.bind(this),
-				get_date    : get_date.bind(this),
-				set_date    : set_date.bind(this),
-				destroy     : destroy.bind(this)
+				fill        : fill.bind(element),
+				update_date : update_date.bind(element),
+				click       : click.bind(element),
+				show        : show.bind(element),
+				forced_show : forced_show.bind(element),
+				hide        : hide.bind(element),
+				update      : update.bind(element),
+				clear       : clear.bind(element),
+				prev        : prev.bind(element),
+				next        : next.bind(element),
+				get_date    : get_date.bind(element),
+				set_date    : set_date.bind(element),
+				destroy     : destroy.bind(element)
 			};
 			dom_add_class(pickmeup, views[options.view]);
 			pickmeup.innerHTML = html;
@@ -1303,20 +1272,36 @@
 				});
 			if (options.flat) {
 				dom_add_class(pickmeup, 'pmu-flat');
-				this.appendChild(pickmeup);
+				element.appendChild(pickmeup);
 			} else {
 				dom_add_class(pickmeup, 'pmu-hidden');
 				document.body.appendChild(pickmeup);
 				dom_on(
 					pickmeup,
-					this,
+					element,
 					options.trigger_event,
 					function () {
 						options.binded.show();
 					}
 				);
+				dom_on(pickmeup, element, 'input', options.binded.update);
+				dom_on(pickmeup, element, 'change', options.binded.update);
 			}
 			options.binded.set_date(options.date, options.current);
-		});
-	};
+		}
+		options = element.pickmeup.__pickmeup.options;
+		return {
+			hide     : options.binded.hide,
+			show     : options.binded.hide,
+			clear    : options.binded.hide,
+			update   : options.binded.hide,
+			prev     : options.binded.hide,
+			next     : options.binded.hide,
+			destroy  : options.binded.hide,
+			get_date : options.binded.get_date,
+			set_date : options.binded.set_date
+		}
+	}
+
+	return pickmeup_init;
 }));
