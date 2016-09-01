@@ -151,8 +151,59 @@
 		return Array.prototype.slice.call(element.querySelectorAll(selector));
 	}
 
-	var instances_count = 0;
-	$.pickmeup          = $.extend($.pickmeup || {}, {
+	/**
+	 * @param {Element}        pickmeup
+	 * @param {Element|Window} target
+	 * @param {string}         event
+	 * @param {Function}       callback
+	 */
+	function dom_on (pickmeup, target, event, callback) {
+		if (event.indexOf(' ') !== -1) {
+			var events        = event.split(' '),
+				events_number = events.length,
+				i;
+			for (i = 0; i < events_number; ++i) {
+				dom_on(pickmeup, target, events[i], callback)
+			}
+		} else {
+			pickmeup.__pickmeup.events.push([target, event, callback]);
+			target.addEventListener(event, callback);
+		}
+	}
+
+	/**
+	 * @param {Element}        pickmeup
+	 * @param {Element|Window} [target=undefined]
+	 * @param {string}         [event='']
+	 * @param {Function}       [callback=undefined]
+	 */
+	function dom_off (pickmeup, target, event, callback) {
+		var events,
+			events_number,
+			i;
+		if (event.indexOf(' ') !== -1) {
+			events        = event.split(' ');
+			events_number = events.length;
+			for (i = 0; i < events_number; ++i) {
+				dom_off(pickmeup, target, events[i], callback)
+			}
+		} else {
+			events        = pickmeup.__pickmeup.events;
+			events_number = events.length;
+			for (i = 0; i < events_number; ++i) {
+				if (
+					(target && target != events[i][0]) ||
+					(event && event != events[i][1]) ||
+					(callback && callback != events[i][2])
+				) {
+					continue;
+				}
+				events[i][0].removeEventListener(events[i][1], events[i][2]);
+			}
+		}
+	}
+
+	$.pickmeup = $.extend($.pickmeup || {}, {
 		current        : null,
 		date           : new Date,
 		default_date   : new Date,
@@ -169,6 +220,7 @@
 		format         : 'd-m-Y',
 		title_format   : 'B, Y',
 		position       : 'bottom',
+		// TODO: Use touchend and compute distance from touchstart coordinates
 		trigger_event  : 'click touchstart',
 		class_name     : '',
 		separator      : ' - ',
@@ -200,12 +252,12 @@
 			monthsShort : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 		}
 	});
-	var views           = {
+	var views  = {
 			years  : 'pmu-view-years',
 			months : 'pmu-view-months',
 			days   : 'pmu-view-days'
 		},
-		tpl             = {
+		tpl    = {
 			head : function (d) {
 				var result = '';
 				for (var i = 0; i < 7; ++i) {
@@ -229,17 +281,9 @@
 			}
 		};
 
-	function namespaced_events (events, namespace) {
-		events = events.split(' ');
-		for (var i = 0; i < events.length; ++i) {
-			events[i] += namespace;
-		}
-		return events.join(' ');
-	}
-
 	function fill () {
 		var pickmeup     = this.pickmeup,
-			options      = pickmeup.pickmeup_options,
+			options      = pickmeup.__pickmeup.options,
 			current_cal  = Math.floor(options.calendars / 2),
 			actual_date  = options.date,
 			current_date = options.current,
@@ -703,7 +747,7 @@
 	}
 
 	function update_date (new_date) {
-		var options = this.pickmeup.pickmeup_options,
+		var options = this.pickmeup.__pickmeup.options,
 			i;
 		reset_time(new_date);
 		(function () {
@@ -761,7 +805,7 @@
 		if (!dom_has_class(el, 'pmu-button') || dom_has_class(el, 'pmu-disabled')) {
 			return false;
 		}
-		var options        = this.pickmeup.pickmeup_options,
+		var options        = this.pickmeup.__pickmeup.options,
 			instance       = dom_closest_parent(el, '.pmu-instance'),
 			root           = instance.parentElement,
 			instance_index = dom_query_all(root, '.pmu-instance').indexOf(instance);
@@ -864,9 +908,8 @@
 		var pickmeup = this.pickmeup,
 			value;
 		if (force || dom_has_class(pickmeup, 'pmu-hidden')) {
-			var $this    = $(this),
-				options  = pickmeup.pickmeup_options,
-				pos      = $this.offset(),
+			var options  = pickmeup.__pickmeup.options,
+				pos      = $(this).offset(),
 				viewport = {
 					l : document.documentElement.scrollLeft,
 					t : document.documentElement.scrollTop,
@@ -879,13 +922,18 @@
 			if (dom_matches(this, 'input')) {
 				value = this.value;
 				if (value) {
-					$this.pickmeup('set_date', parseDate(value, options.format, options.separator, options.locale))
+					options.binded.set_date(value);
 				}
-				$this.keydown(function (e) {
-					if (e.which == 9) {
-						$this.pickmeup('hide');
+				dom_on(
+					pickmeup,
+					this,
+					'keydown',
+					function (e) {
+						if (e.which == 9) {
+							options.binded.hide();
+						}
 					}
-				});
+				);
 				options.lastSel = false;
 			}
 			options.before_show();
@@ -922,18 +970,8 @@
 				pickmeup.style.top  = top + 'px';
 				pickmeup.style.left = left + 'px';
 				dom_remove_class(pickmeup, 'pmu-hidden');
-				$(document)
-					.on(
-						namespaced_events(options.trigger_event, options.events_namespace),
-						options.binded.hide
-					)
-					.on(
-						'resize' + options.events_namespace,
-						[
-							true
-						],
-						options.binded.forced_show
-					);
+				dom_on(pickmeup, document.documentElement, options.trigger_event, options.binded.hide);
+				dom_on(pickmeup, window, 'resize', options.binded.forced_show);
 			}
 		}
 	}
@@ -945,34 +983,32 @@
 	function hide (e) {
 		//noinspection JSBitwiseOperatorUsage
 		if (
-			!e || !e.target ||													//Called directly
+			!e || !e.target ||											//Called directly
 			(
-				e.target != this &&												//Clicked not on element itself
+				e.target != this &&										//Clicked not on element itself
 				!(this.pickmeup.compareDocumentPosition(e.target) & 16)	//And not on its children
 			)
 		) {
 			var pickmeup = this.pickmeup,
-				options  = pickmeup.pickmeup_options;
+				options  = pickmeup.__pickmeup.options;
 			if (options.hide() != false) {
 				dom_add_class(pickmeup, 'pmu-hidden');
-				$(document)
-					.off(namespaced_events(options.trigger_event, options.events_namespace), options.binded.hide)
-					.off('resize', options.binded.forced_show);
+				dom_off(pickmeup, document.documentElement, options.trigger_event, options.binded.hide);
+				dom_off(pickmeup, window, 'resize', options.binded.forced_show);
 				options.lastSel = false;
 			}
 		}
 	}
 
 	function update () {
-		var options = this.pickmeup.pickmeup_options;
-		$(document)
-			.off(namespaced_events(options.trigger_event, options.events_namespace), options.binded.hide)
-			.off('resize', options.binded.forced_show);
+		var options = this.pickmeup.__pickmeup.options;
+		dom_off(pickmeup, document.documentElement, options.trigger_event, options.binded.hide);
+		dom_off(pickmeup, window, 'resize', options.binded.forced_show);
 		options.binded.forced_show();
 	}
 
 	function clear () {
-		var options = this.pickmeup.pickmeup_options;
+		var options = this.pickmeup.__pickmeup.options;
 		if (options.mode != 'single') {
 			options.date    = [];
 			options.lastSel = false;
@@ -985,7 +1021,7 @@
 			fill = true;
 		}
 		var pickmeup = this.pickmeup;
-		var options  = pickmeup.pickmeup_options;
+		var options  = pickmeup.__pickmeup.options;
 		if (dom_has_class(pickmeup, 'pmu-view-years')) {
 			options.current.addYears(-12);
 		} else if (dom_has_class(pickmeup, 'pmu-view-months')) {
@@ -1003,7 +1039,7 @@
 			fill = true;
 		}
 		var pickmeup = this.pickmeup;
-		var options  = pickmeup.pickmeup_options;
+		var options  = pickmeup.__pickmeup.options;
 		if (dom_has_class(pickmeup, 'pmu-view-years')) {
 			options.current.addYears(12);
 		} else if (dom_has_class(pickmeup, 'pmu-view-months')) {
@@ -1017,7 +1053,7 @@
 	}
 
 	function get_date (formatted) {
-		var options       = this.pickmeup.pickmeup_options,
+		var options       = this.pickmeup.__pickmeup.options,
 			prepared_date = prepareDate(options);
 		if (typeof formatted === 'string') {
 			var date = prepared_date[1];
@@ -1034,7 +1070,7 @@
 	}
 
 	function set_date (date, current) {
-		var options = this.pickmeup.pickmeup_options,
+		var options = this.pickmeup.__pickmeup.options,
 			i;
 		if (!(date instanceof Array) || date.length > 0) {
 			options.date = parseDate(date, options.format, options.separator, options.locale);
@@ -1102,11 +1138,11 @@
 	}
 
 	function destroy () {
-		var options = this.pickmeup.pickmeup_options;
-		delete this.pickmeup.pickmeup_options;
-		$(this).off(options.events_namespace);
-		$(document).off(options.events_namespace);
+		var pickmeup = this.pickmeup;
+		dom_off(pickmeup);
 		dom_remove(this.pickmeup);
+		delete this.pickmeup.__pickmeup;
+		delete this.pickmeup;
 	}
 
 	function correct_date_outside_of_limit (date, min, max) {
@@ -1131,14 +1167,14 @@
 				case 'next':
 				case 'destroy':
 					this.each(function () {
-						options = this.pickmeup.pickmeup_options;
+						options = this.pickmeup.__pickmeup.options;
 						if (options) {
 							options.binded[initial_options]();
 						}
 					});
 					break;
 				case 'get_date':
-					options = this.pickmeup.pickmeup_options;
+					options = this.pickmeup.__pickmeup.options;
 					if (options) {
 						return options.binded.get_date(parameters[0]);
 					} else {
@@ -1147,7 +1183,7 @@
 					break;
 				case 'set_date':
 					this.each(function () {
-						options = this.pickmeup.pickmeup_options;
+						options = this.pickmeup.__pickmeup.options;
 						if (options) {
 							options.binded[initial_options].apply(this, parameters);
 						}
@@ -1196,9 +1232,12 @@
 				}
 			}
 			var cnt,
-				pickmeup                   = document.createElement('div');
-			this.pickmeup                  = pickmeup;
-			this.pickmeup.pickmeup_options = options;
+				pickmeup        = document.createElement('div');
+			this.pickmeup       = pickmeup;
+			pickmeup.__pickmeup = {
+				options : options,
+				events  : []
+			};
 			dom_add_class(pickmeup, 'pickmeup');
 			if (options.class_name) {
 				dom_add_class(pickmeup, options.class_name);
@@ -1225,7 +1264,7 @@
 					options[i] = options[i].bind(this);
 				}
 			}
-			options.binded           = {
+			options.binded = {
 				fill        : fill.bind(this),
 				update_date : update_date.bind(this),
 				click       : click.bind(this),
@@ -1240,25 +1279,26 @@
 				set_date    : set_date.bind(this),
 				destroy     : destroy.bind(this)
 			};
-			options.events_namespace = '.pickmeup-' + (++instances_count);
 			dom_add_class(pickmeup, views[options.view]);
 			pickmeup.innerHTML = html;
-			$(pickmeup)
-				.on(namespaced_events(options.trigger_event, options.events_namespace), options.binded.click)
-				.on(
-					$.support.selectstart ? 'selectstart' : 'mousedown',
-					function (e) {
-						e.preventDefault();
-					}
-				);
+			dom_on(pickmeup, pickmeup, options.trigger_event, options.binded.click);
+			dom_on(
+				pickmeup,
+				pickmeup,
+				$.support.selectstart ? 'selectstart' : 'mousedown',
+				function (e) {
+					e.preventDefault();
+				});
 			if (options.flat) {
 				dom_add_class(pickmeup, 'pmu-flat');
 				this.appendChild(pickmeup);
 			} else {
 				dom_add_class(pickmeup, 'pmu-hidden');
 				document.body.appendChild(pickmeup);
-				$(this).on(
-					namespaced_events(options.trigger_event, options.events_namespace),
+				dom_on(
+					pickmeup,
+					this,
+					options.trigger_event,
 					function () {
 						options.binded.show();
 					}
