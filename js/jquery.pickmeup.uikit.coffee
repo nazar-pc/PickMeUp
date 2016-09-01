@@ -1,14 +1,13 @@
 ###*
- * @package		PickMeUp - jQuery datepicker plugin
- * @author		Nazar Mokrynskyi <nazar@mokrynskyi.com>
- * @copyright	Copyright (c) 2015, Nazar Mokrynskyi
- * @license		MIT License, see license.txt
+ * @package   PickMeUp
+ * @author    Nazar Mokrynskyi <nazar@mokrynskyi.com>
+ * @copyright Copyright (c) 2015-2016, Nazar Mokrynskyi
+ * @license   MIT License, see license.txt
 ###
 do ($ = jQuery) ->
 	$.fn.pickmeup_uikit	= (initial_options) ->
-		this.pickmeup(initial_options)
 		this.each ->
-			options			= $(this).data('pickmeup-options')
+			pickmeup(initial_options)
 			$(this.pickmeup)
 				.removeClass('pickmeup')
 				.addClass('pickmeup-uikit uk-panel-box')

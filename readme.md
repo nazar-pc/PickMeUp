@@ -1,6 +1,4 @@
-## PickMeUp - jQuery datepicker plugin
-
-Really simple, powerful and customizable datepicker.
+## PickMeUp - Really simple, powerful and customizable datepicker
 
 Author - Nazar Mokrynskyi
 
@@ -14,7 +12,7 @@ Browser support:
 ## [Demo](http://nazar-pc.github.io/PickMeUp)
 
 ## Getting started
-You need only 2 files: `js/jquery.pickmeup.min.js` and `css/pickmeup.css`.
+You need only 2 files: `js/pickmeup.min.js` and `css/pickmeup.css`.
 
 The plugin can also be loaded as AMD or CommonJS module.
 
@@ -190,11 +188,6 @@ Russian:
 Current options (for whatever reason) can be accessed as `element.pickmeup.__pickmeup.options`.
 
 Root pickmeup element can be accessed as `element.pickmeup`.
-
-## Touch devices
-PickMeUp doesn't include complete support for touch devices, only naive implementation.
-
-If you need proper support for touch devices, you can use [jTAP](https://github.com/BR0kEN-/jTap) jQuery plugin and set `trigger_event` to `click tap`.
 
 ## Styling
 If you want other colors - just change several variables in scss file.

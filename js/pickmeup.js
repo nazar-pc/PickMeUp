@@ -1,5 +1,5 @@
 /**
- * @package   PickMeUp - jQuery datepicker plugin
+ * @package   PickMeUp
  * @author    Nazar Mokrynskyi <nazar@mokrynskyi.com>
  * @author    Stefan Petre <www.eyecon.ro>
  * @copyright Copyright (c) 2013-2016, Nazar Mokrynskyi
@@ -1129,7 +1129,10 @@
 		if (!element.pickmeup) {
 			var i,
 				option,
-				options = $.extend(true, {}, pickmeup_init.defaults, initial_options || {});
+				options = {};
+			for (i in pickmeup_init.defaults) {
+				options[i] = i in initial_options ? initial_options[i] : pickmeup_init.defaults[i];
+			}
 			for (i in options) {
 				option = element.getAttribute('pmu-' + i);
 				if (option !== null) {
