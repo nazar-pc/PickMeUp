@@ -1,4 +1,4 @@
-$(function () {
+addEventListener('DOMContentLoaded', function () {
 	pickmeup('.single', {
 		flat : true
 	});
