@@ -1,20 +1,20 @@
 {
-	"name"         : "pickmeup",
-	"title"        : "PickMeUp",
-	"description"  : "Really simple, powerful and customizable datepicker",
-	"keywords"     : [
+	"name"        : "pickmeup",
+	"title"       : "PickMeUp",
+	"description" : "Really simple, powerful and customizable datepicker",
+	"keywords"    : [
 		"datepicker",
 		"date",
 		"calendar"
 	],
-	"version"      : "2.10.0",
-	"homepage"     : "https://github.com/nazar-pc/PickMeUp",
-	"author"       : {
+	"version"     : "2.10.0",
+	"homepage"    : "https://github.com/nazar-pc/PickMeUp",
+	"author"      : {
 		"name"  : "Nazar Mokrynskyi",
 		"email" : "nazar@mokrynskyi.com",
 		"url"   : "http://cleverstyle.org"
 	},
-	"maintainers"  : [
+	"maintainers" : [
 		{
 			"name"  : "Nazar Mokrynskyi",
 			"email" : "nazar@mokrynskyi.com",
@@ -25,22 +25,19 @@
 			"url"  : "http://www.eyecon.ro"
 		}
 	],
-	"repository"   : {
+	"repository"  : {
 		"type" : "git",
 		"url"  : "git://github.com/nazar-pc/PickMeUp.git"
 	},
-	"licenses"     : [
+	"licenses"    : [
 		{
 			"type" : "MIT",
 			"url"  : "https://github.com/nazar-pc/PickMeUp/blob/master/license.txt"
 		}
 	],
-	"bugs"         : "https://github.com/nazar-pc/PickMeUp/issues",
-	"docs"         : "https://github.com/nazar-pc/PickMeUp",
-	"demo"         : "http://nazar-pc.github.io/PickMeUp",
-	"download"     : "https://github.com/nazar-pc/PickMeUp",
-	"dependencies" : {
-		"jquery" : "*"
-	},
-	"main"         : "js/jquery.pickmeup.min.js"
+	"bugs"        : "https://github.com/nazar-pc/PickMeUp/issues",
+	"docs"        : "https://github.com/nazar-pc/PickMeUp",
+	"demo"        : "http://nazar-pc.github.io/PickMeUp",
+	"download"    : "https://github.com/nazar-pc/PickMeUp",
+	"main"        : "js/pickmeup.min.js"
 }
