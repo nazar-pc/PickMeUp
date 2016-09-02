@@ -1,7 +1,7 @@
 {
 	"name"        : "pickmeup",
 	"title"       : "PickMeUp",
-	"description" : "Really simple, powerful and customizable datepicker",
+	"description" : "Really simple, powerful, customizable and lightweight standalone datepicker",
 	"keywords"    : [
 		"datepicker",
 		"date",

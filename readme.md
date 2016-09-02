@@ -1,6 +1,8 @@
-## PickMeUp - Really simple, powerful and customizable datepicker
+## PickMeUp - Really simple, powerful, customizable and lightweight standalone datepicker
 
-Author - Nazar Mokrynskyi
+No dependencies, single/range/multiple selections, ability to put custom content into dates, very flexible styling and customization abilities.
+
+Written and maintained by Nazar Mokrynskyi with the help of awesome [contributors](https://github.com/nazar-pc/PickMeUp/graphs/contributors)
 
 Based on DatePicker by Stefan Petre
 
