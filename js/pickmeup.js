@@ -722,8 +722,6 @@
 	/**
 	 * @param {Element} target
 	 * @param {Date}    new_date
-	 *
-	 * @returns {boolean}
 	 */
 	function update_date (target, new_date) {
 		var root_element = target.__pickmeup.element,
@@ -774,7 +772,6 @@
 			)
 		) {
 			options.bound.hide();
-			return false;
 		}
 	}
 
