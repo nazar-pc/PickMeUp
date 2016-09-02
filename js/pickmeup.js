@@ -152,10 +152,10 @@
 	}
 
 	/**
-	 * @param {Element}        pickmeup
-	 * @param {Element|Window} target
-	 * @param {string}         event
-	 * @param {Function}       callback
+	 * @param {Element}          pickmeup
+	 * @param {(Element|Window)} target
+	 * @param {string}           event
+	 * @param {Function}         callback
 	 */
 	function dom_on (pickmeup, target, event, callback) {
 		if (event.indexOf(' ') !== -1) {
@@ -172,10 +172,10 @@
 	}
 
 	/**
-	 * @param {Element}        pickmeup
-	 * @param {Element|Window} [target=undefined]
-	 * @param {string}         [event='']
-	 * @param {Function}       [callback=undefined]
+	 * @param {Element}          pickmeup
+	 * @param {(Element|Window)} [target=undefined]
+	 * @param {string}           [event='']
+	 * @param {Function}         [callback=undefined]
 	 */
 	function dom_off (pickmeup, target, event, callback) {
 		var events,
@@ -213,6 +213,22 @@
 			top  : rect.top + window.pageYOffset - document.documentElement.clientTop,
 			left : rect.left + window.pageXOffset - document.documentElement.clientLeft
 		};
+	}
+
+	/**
+	 * @param {Element} element
+	 * @param {string}  event
+	 * @param {Object}  [detail=undefined]
+	 *
+	 * @return {boolean}
+	 */
+	function dom_dispatch_event (element, event, detail) {
+		var e = document.createEvent('Event');
+		if (detail) {
+			e.detail = detail;
+		}
+		e.initEvent('pickmeup-' + event, false, true);
+		return element.dispatchEvent(e);
 	}
 
 	var views = {
@@ -529,7 +545,7 @@
 		if (next) {
 			next.style.visibility = options.max && options.max <= shown_date_to ? 'hidden' : 'visible';
 		}
-		options.fill.apply(this);
+		dom_dispatch_event(pickmeup, 'fill');
 	}
 
 	function parseDate (date, format, separator, locale) {
@@ -745,9 +761,9 @@
 		})();
 		var prepared_date = prepareDate(options);
 		if (dom_matches(this, 'input')) {
-			this.value = options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator);
+			this.value = options.mode == 'single' ? prepared_date.formatted_date : prepared_date.formatted_date.join(options.separator);
 		}
-		options.change.apply(this, prepared_date);
+		dom_dispatch_event(pickmeup, 'change', prepared_date);
 		if (
 			!options.flat &&
 			options.hide_on_select &&
@@ -855,13 +871,19 @@
 		var result;
 		if (options.mode == 'single') {
 			result = new Date(options.date);
-			return [formatDate(result, options.format, options.locale), result];
+			return {
+				formatted_date : formatDate(result, options.format, options.locale),
+				date           : result
+			};
 		} else {
-			result = [[], []];
+			result = {
+				formatted_date : [],
+				date           : []
+			};
 			options.date.forEach(function (val) {
 				var date = new Date(val);
-				result[0].push(formatDate(date, options.format, options.locale));
-				result[1].push(date);
+				result.formatted_date.push(formatDate(date, options.format, options.locale));
+				result.date.push(date);
 			});
 			return result;
 		}
@@ -899,8 +921,7 @@
 				);
 				options.lastSel = false;
 			}
-			options.before_show();
-			if (options.show() == false) {
+			if (!dom_dispatch_event(pickmeup, 'show')) {
 				return;
 			}
 			if (!options.flat) {
@@ -954,7 +975,7 @@
 		) {
 			var pickmeup = this.pickmeup,
 				options  = pickmeup.__pickmeup.options;
-			if (options.hide() != false) {
+			if (dom_dispatch_event(pickmeup, 'hide')) {
 				dom_add_class(pickmeup, 'pmu-hidden');
 				dom_off(pickmeup, document.documentElement, options.trigger_event, options.binded.hide);
 				dom_off(pickmeup, window, 'resize', options.binded.forced_show);
@@ -1020,7 +1041,7 @@
 		var options       = this.pickmeup.__pickmeup.options,
 			prepared_date = prepareDate(options);
 		if (typeof formatted === 'string') {
-			var date = prepared_date[1];
+			var date = prepared_date.date;
 			if (date.constructor == Date) {
 				return formatDate(date, formatted, options.locale)
 			} else {
@@ -1029,7 +1050,7 @@
 				});
 			}
 		} else {
-			return prepared_date[formatted ? 0 : 1];
+			return prepared_date[formatted ? 'formatted_date' : 'date'];
 		}
 	}
 
@@ -1091,9 +1112,9 @@
 		if (dom_matches(this, 'input') && options.default_date !== false) {
 			var prepared_date = prepareDate(options),
 				current_value = this.value,
-				new_value     = options.mode == 'single' ? prepared_date[0] : prepared_date[0].join(options.separator);
+				new_value     = options.mode == 'single' ? prepared_date.formatted_date : prepared_date.formatted_date.join(options.separator);
 			if (!current_value) {
-				options.change.apply(this, prepared_date);
+				dom_dispatch_event(pickmeup, 'change', prepared_date);
 			}
 			if (current_value != new_value) {
 				this.value = new_value;
@@ -1195,7 +1216,7 @@
 				});
 			}
 			for (i in options) {
-				if (['render', 'change', 'before_show', 'show', 'hide'].indexOf(i) != -1) {
+				if (['render', 'before_show', 'show', 'hide'].indexOf(i) != -1) {
 					options[i] = options[i].bind(element);
 				}
 			}
@@ -1282,12 +1303,6 @@
 		min            : null,
 		max            : null,
 		render         : function () {
-		},
-		change         : function () {
-			return true;
-		},
-		before_show    : function () {
-			return true;
 		},
 		show           : function () {
 			return true;

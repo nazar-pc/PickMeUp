@@ -56,7 +56,7 @@ All options and events are the same.
 
 
 ## Configuration options
-| Option          | Value                             | Default          | Description                                                                                                          |
+| Option          | Value type                        | Default          | Description                                                                                                          |
 |-----------------|-----------------------------------|------------------|----------------------------------------------------------------------------------------------------------------------|
 | date            | array/number/object/string        | new Date         | Selected date after initialization. Can be single date string/object or array depending on selection mode            |
 | default_date    | boolean                           | true             | If `false` will keep empty value until date selected                                                                 |
@@ -80,32 +80,68 @@ All options and events are the same.
 | min             | number/object/string              |                  | Min date available for selection                                                                                     |
 | max             | number/object/string              |                  | Max date available for selection                                                                                     |
 | separator       | string                            | ` - `            | Is used for joining separate dates in multiple mode and first/last dates in range mode                               |
-| locale          | object                            |                  | Object, that contains localized days of week names and months. See [Localization](#localization)
-## Events callbacks
-`this` in any callback will be the same element, on which pickmeup() was called.
-Events are specified as regular options:
+| locale          | object                            |                  | Object, that contains localized days of week names and months. See [Localization](#localization)                     |
+| render          | function                          |                  | Executed for each day element rendering, takes date argument, allows to select, disable or add class to element      |
 
-##### object render (date)
-Triggered on day element rendering, accepts date as argument and may return object with next properties:
+##### Selecting/disabling dates with custom logic
+`render` options might return object with any of following keys:
 * `selected`: if `true` - date will be selected
 * `disabled`: if `true` - date will be disabled
 * `class_name`: will be added to class of day element
 
-##### change (formatted_date)
-Triggered at date change, accepts formatted date as argument
+Example:
+```javascript
+var now = new Date;
+pickmeup(element, {
+    render : function (date) {
+        if (date < now) {
+            return {disable : true, class_name : 'date-in-past'};
+        }
+        return {};
+    } 
+})
+```
 
-##### before_show ()
-Triggered before showing
+## Events callbacks
+In PickMeUp events are native DOM events fired on element when `pickmeup()` was called and always have `pickmeup-` prefix.
 
-##### bool show ()
-Triggered at showing, if not `true` returned - datepicker will not be shown
+##### pickmeup-change
+Triggered at date change. Example:
+```javascript
+pickmeup(element);
+element.addEventListener('pickmeup-change', function (e) {
+    console.log(e.detail.formatted_date); // New date according to current format
+    console.log(e.detail.date);           // New date as Date object
+})
+```
 
-##### bool hide ()
-Triggered at hiding, if not `true` returned - datepicker will not be hidden
+##### pickmeup-show
+Triggered at showing. Example:
+```javascript
+pickmeup(element);
+element.addEventListener('pickmeup-show', function (e) {
+    e.preventDefault(); // Showing can be canceled if needed
+})
+```
 
-##### fill()
+##### pickmeup-hide
+Triggered at hiding. Example:
+```javascript
+pickmeup(element);
+element.addEventListener('pickmeup-hide', function (e) {
+    e.preventDefault(); // Hiding can be canceled if needed
+})
+```
+
+##### pickmeup-fill
 Triggered after filling of PickMeUp container with new markup of days, months, years.
 May be needed for inner datepicker markup editing.
+```javascript
+pickmeup(element);
+element.addEventListener('pickmeup-fill', function (e) {
+    // Do stuff here
+})
+```
 
 ## Methods
 Methods allows external control on datepicker
@@ -141,7 +177,7 @@ pickmeup('.date').get_date(formatted);
 
 ##### Set date
 ```javascript
-pickmeup('.date').set_date(date);
+pickmeup('.date').set_date(new Date);
 ```
 `date` - can be single date string/object or array depending on selection mode
 
