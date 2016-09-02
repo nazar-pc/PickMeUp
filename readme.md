@@ -240,7 +240,7 @@ Feel free to create issues and send pull requests, they are highly appreciated!
 
 Before reporting an issue, be so kind to prepare reproducible example on jsfiddle.net, please.
 
-You can start with working demo of latest stable version of PickMeUp: [jsfiddle.net/0kg5jL3p](https://jsfiddle.net/0kg5jL3p/)
+You can start with working demo of latest stable version of PickMeUp: [jsfiddle.net/0kg5jL3p](https://jsfiddle.net/qx152r6r/)
 
 ## License
 MIT License, see license.txt
