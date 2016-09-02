@@ -1,3 +1,21 @@
+3.0.0 (02 September, 2016)
+* PickMeUp is now standalone, no jQuery needed
+* `.pmu-flat` and `.pmu-hidden` classes added
+* Events are now native DOM events instead of callbacks in options
+* Changing date in input field will immediately affect datepicker
+* Defaults moved from `$.pickmeup` to `pickmeup.defaults`
+* Internals (runtime options, events, etc.) are stored in `element.__pickmeup`
+* `before_show` event removed as redundant
+* Days/months/years rendering is now done in form of elements, which allows to customize contents in any possible way, while necessary data are stored in private properties of those elements
+* New options `instance_template` and `instance_content_template` added
+* Stop patching `Date.prototype`, use local wrappers instead
+* `trigger_event` option was removed and styles adjusted to remove 300ms delay when clicking on touch devices
+* Added support for multiple languages with ability to choose during initialization (using newly added option `locales` and changed option `locale`)
+* Added gulp task for building minified file
+* Files re-structuring
+* Refactoring and smaller bug fixes
+* Minified source become even smaller!
+
 2.10.0 (31 August, 2016)
 * Refactoring to `set_date` during initialization instead of duplicating code
 * Added new option `current`, represents date that will be in the center of rendered calendar
