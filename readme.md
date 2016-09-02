@@ -40,7 +40,7 @@ or with data-attributes with `pmu-` prefix:
 For Twitter Bootstrap integration you do not need to include style file, but you need to include `jquery.pickmeup.twitter-bootstrap.js` instead,
 that will read settings of current Bootstrap theme and apply them to PickMeUp, so that it will look similar to native Bootstrap elements.
 
-To apply integrated version, replace `pickmeup` with `pickmeup_twitter_bootstrap` in initialization:
+To apply integrated version use `$(...).pickmeup_twitter_bootstrap()` plugin for initialization:
 ```javascript
 $('.date').pickmeup_twitter_bootstrap();
 ```
@@ -50,7 +50,7 @@ All options and events are the same.
 For UIkit integration you do not need to include style file, but you need to include `jquery.pickmeup.uikit.js` instead,
 that will read settings of current UIkit theme and apply them to PickMeUp, so that it will look similar to native UIkit elements.
 
-To apply integrated version, replace `pickmeup` with `pickmeup_uikit` in initialization:
+To apply integrated version use `$(...).pickmeup_uikit()` plugin for initialization:
 ```javascript
 $('.date').pickmeup_uikit();
 ```

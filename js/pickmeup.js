@@ -1201,7 +1201,7 @@
 				options[i] = i in initial_options ? initial_options[i] : pickmeup_init.defaults[i];
 			}
 			for (i in options) {
-				option = target.getAttribute('pmu-' + i);
+				option = target.getAttribute('data-pmu-' + i);
 				if (option !== null) {
 					options[i] = option;
 				}
