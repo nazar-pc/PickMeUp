@@ -58,33 +58,34 @@ All options and events are the same.
 
 
 ## Configuration options
-| Option                    | Value type                        | Default               | Description                                                                                                          |
-|---------------------------|-----------------------------------|-----------------------|----------------------------------------------------------------------------------------------------------------------|
-| date                      | array/number/object/string        | new Date              | Selected date after initialization. Can be single date string/object or array depending on selection mode            |
-| default_date              | boolean                           | true                  | If `false` will keep empty value until date selected                                                                 |
-| current                   | number/object/string              | date                  | Represents date that will be in the center of rendered calendar, defaults to `date` option's value                   |
-| flat                      | boolean                           | false                 | Whatever if the date picker is appended to the element or triggered by an event                                      |
-| first_day                 | 0/1                               | 1                     | First day of week: 0 - Sunday, 1 - Monday                                                                            |
-| prev                      | string                            | &#9664;               | Previous button content                                                                                              |
-| next                      | string                            | &#9654;               | Next button content                                                                                                  |
-| mode                      | single/multiple/range             | single                | Date selection mode                                                                                                  |
-| select_day                | boolean                           | true                  | Allow or deny days selection                                                                                         |
-| select_month              | boolean                           | true                  | Allow or deny months selection                                                                                       |
-| select_year               | boolean                           | true                  | Allow or deny year selection                                                                                         |
-| view                      | days/months/years                 | days                  | View mode after initialization                                                                                       |
-| calendars                 | int                               | 1                     | Number of calendars, that will be rendered                                                                           |
-| format                    | string                            | d-m-Y                 | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                                   |
-| title_format              | string                            | B, Y                  | Date format for calendar title in days view (aAbBCdeHIjklmMpPsSuwyY are supported)                                   |
-| position                  | top/right/bottom/left             | bottom                | Date picker's position relative to the triggered element                                                             |
-| class_name                | string                            |                       | Class to be added to root datepicker element                                                                         |
-| hide_on_select            | boolean                           | false                 | If `true` - datepicker will be hidden after selection (for range mode allows to select first and last days)          |
-| min                       | number/object/string              |                       | Min date available for selection                                                                                     |
-| max                       | number/object/string              |                       | Max date available for selection                                                                                     |
-| separator                 | string                            | ` - `                 | Is used for joining separate dates in multiple mode and first/last dates in range mode                               |
-| locale                    | object                            |                       | Object, that contains localized days of week names and months. See [Localization](#localization)                     |
-| render                    | function                          |                       | Executed for each day element rendering, takes date argument, allows to select, disable or add class to element      |
-| instance_template         | function                          | (look at source code) | Responsible for rendering simple PickMeUp instance with header and days of weeks                                     |
-| instance_content_template | function                          | (look at source code) | Responsible for rendering instance content container (which contains years, months or days)                          |
+| Option                    | Value type                        | Default                           | Description                                                                                                          |
+|---------------------------|-----------------------------------|-----------------------------------|----------------------------------------------------------------------------------------------------------------------|
+| date                      | array/number/object/string        | new Date                          | Selected date after initialization. Can be single date string/object or array depending on selection mode            |
+| default_date              | boolean                           | true                              | If `false` will keep empty value until date selected                                                                 |
+| current                   | number/object/string              | date                              | Represents date that will be in the center of rendered calendar, defaults to `date` option's value                   |
+| flat                      | boolean                           | false                             | Whatever if the date picker is appended to the element or triggered by an event                                      |
+| first_day                 | 0/1                               | 1                                 | First day of week: 0 - Sunday, 1 - Monday                                                                            |
+| prev                      | string                            | &#9664;                           | Previous button content                                                                                              |
+| next                      | string                            | &#9654;                           | Next button content                                                                                                  |
+| mode                      | single/multiple/range             | single                            | Date selection mode                                                                                                  |
+| select_day                | boolean                           | true                              | Allow or deny days selection                                                                                         |
+| select_month              | boolean                           | true                              | Allow or deny months selection                                                                                       |
+| select_year               | boolean                           | true                              | Allow or deny year selection                                                                                         |
+| view                      | days/months/years                 | days                              | View mode after initialization                                                                                       |
+| calendars                 | int                               | 1                                 | Number of calendars, that will be rendered                                                                           |
+| format                    | string                            | d-m-Y                             | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                                   |
+| title_format              | string                            | B, Y                              | Date format for calendar title in days view (aAbBCdeHIjklmMpPsSuwyY are supported)                                   |
+| position                  | top/right/bottom/left             | bottom                            | Date picker's position relative to the triggered element                                                             |
+| class_name                | string                            |                                   | Class to be added to root datepicker element                                                                         |
+| hide_on_select            | boolean                           | false                             | If `true` - datepicker will be hidden after selection (for range mode allows to select first and last days)          |
+| min                       | number/object/string              |                                   | Min date available for selection                                                                                     |
+| max                       | number/object/string              |                                   | Max date available for selection                                                                                     |
+| separator                 | string                            | ` - `                             | Is used for joining separate dates in multiple mode and first/last dates in range mode                               |
+| locale                    | string                            | en                                | String, that specifies current locale.                                                                               |
+| locales                   | object                            | see [Localization](#localization) | Key-value object, where keys are locales and values contain localized days of week names and months                  |
+| render                    | function                          |                                   | Executed for each day element rendering, takes date argument, allows to select, disable or add class to element      |
+| instance_template         | function                          | (look at source code)             | Responsible for rendering simple PickMeUp instance with header and days of weeks                                     |
+| instance_content_template | function                          | (look at source code)             | Responsible for rendering instance content container (which contains years, months or days)                          |
 
 ##### Selecting/disabling dates with custom logic
 `render` options might return object with any of following keys:
@@ -201,26 +202,27 @@ pickmeup('.date').destroy();
 ```
 
 ## Localization
-Sample object for English language:
+You can add locales to global defaults and then use different locales in particular instance with `locale` option.
+Sample object for English language (no need to add, already included in source code):
 ````javascript
-{
+pickmeup.defaults.locales['en'] = {
 	days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 	daysShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 	daysMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
 	months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 	monthsShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-}
+};
 ````
 
 Russian:
 ````javascript
-{
+pickmeup.defaults.locales['ru'] = {
 	days: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота'],
 	daysShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
 	daysMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
 	months: ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'],
 	monthsShort: ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
-}
+};
 ````
 
 ## Other

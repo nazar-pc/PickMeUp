@@ -310,7 +310,7 @@
 				header = local_date.getFullYear();
 			} else if (dom_has_class(root_element, 'pmu-view-days')) {
 				date_add_months(local_date, i - current_cal);
-				header = format_date(local_date, options.title_format, options.locale);
+				header = format_date(local_date, options.title_format, options.locales[options.locale]);
 			}
 			if (!shown_date_to) {
 				if (max_date) {
@@ -440,7 +440,7 @@
 					month_element;
 				for (month = 0; month < 12; ++month) {
 					month_element                  = document.createElement('div');
-					month_element.textContent      = options.locale.monthsShort[month];
+					month_element.textContent      = options.locales[options.locale].monthsShort[month];
 					month_element.__pickmeup_month = month;
 					month_element.__pickmeup_year  = current_year;
 					if (
@@ -889,7 +889,7 @@
 		if (options.mode == 'single') {
 			result = new Date(options.date);
 			return {
-				formatted_date : format_date(result, options.format, options.locale),
+				formatted_date : format_date(result, options.format, options.locales[options.locale]),
 				date           : result
 			};
 		} else {
@@ -899,7 +899,7 @@
 			};
 			options.date.forEach(function (val) {
 				var date = new Date(val);
-				result.formatted_date.push(format_date(date, options.format, options.locale));
+				result.formatted_date.push(format_date(date, options.format, options.locales[options.locale]));
 				result.date.push(date);
 			});
 			return result;
@@ -1081,10 +1081,10 @@
 		if (typeof formatted === 'string') {
 			var date = prepared_date.date;
 			if (date instanceof Date) {
-				return format_date(date, formatted, options.locale)
+				return format_date(date, formatted, options.locales[options.locale])
 			} else {
 				return date.map(function (value) {
-					return format_date(value, formatted, options.locale);
+					return format_date(value, formatted, options.locales[options.locale]);
 				});
 			}
 		} else {
@@ -1101,17 +1101,17 @@
 		var options = target.__pickmeup.options,
 			i;
 		if (!(date instanceof Array) || date.length > 0) {
-			options.date = parse_date(date, options.format, options.separator, options.locale);
+			options.date = parse_date(date, options.format, options.separator, options.locales[options.locale]);
 			if (options.mode != 'single') {
 				if (options.date instanceof Array) {
-					options.date[0] = options.date[0] || parse_date(new Date, options.format, options.separator, options.locale);
+					options.date[0] = options.date[0] || parse_date(new Date, options.format, options.separator, options.locales[options.locale]);
 					if (options.mode == 'range') {
-						options.date[1] = options.date[1] || parse_date(options.date[0], options.format, options.separator, options.locale);
+						options.date[1] = options.date[1] || parse_date(options.date[0], options.format, options.separator, options.locales[options.locale]);
 					}
 				} else {
 					options.date = [options.date];
 					if (options.mode == 'range') {
-						options.date.push(parse_date(options.date[0], options.format, options.separator, options.locale));
+						options.date.push(parse_date(options.date[0], options.format, options.separator, options.locales[options.locale]));
 					}
 				}
 				for (i = 0; i < options.date.length; ++i) {
@@ -1145,7 +1145,7 @@
 			}
 		}
 		if (current) {
-			options.current = parse_date(current, options.format, options.separator, options.locale);
+			options.current = parse_date(current, options.format, options.separator, options.locales[options.locale]);
 		} else {
 			current         = options.mode === 'single' ? options.date : options.date[options.date.length - 1];
 			options.current = current ? new Date(current) : new Date;
@@ -1222,13 +1222,13 @@
 			options.calendars = Math.max(1, parseInt(options.calendars, 10) || 1);
 			options.mode      = /single|multiple|range/.test(options.mode) ? options.mode : 'single';
 			if (options.min) {
-				options.min = parse_date(options.min, options.format, options.separator, options.locale);
+				options.min = parse_date(options.min, options.format, options.separator, options.locales[options.locale]);
 				if (!options.select_day) {
 					options.min.setDate(1);
 				}
 			}
 			if (options.max) {
-				options.max = parse_date(options.max, options.format, options.separator, options.locale);
+				options.max = parse_date(options.max, options.format, options.separator, options.locales[options.locale]);
 				if (!options.select_day) {
 					options.max.setDate(1);
 				}
@@ -1321,12 +1321,15 @@
 		max                       : null,
 		render                    : function () {
 		},
-		locale                    : {
-			days        : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-			daysShort   : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-			daysMin     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-			months      : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-			monthsShort : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+		locale                    : 'en',
+		locales                   : {
+			en : {
+				days        : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+				daysShort   : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+				daysMin     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+				months      : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+				monthsShort : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+			}
 		},
 		/**
 		 * @param {Object} options
@@ -1334,7 +1337,7 @@
 		 * @returns {string}
 		 */
 		instance_template         : function (options) {
-			var days_of_week = options.locale.daysMin.slice();
+			var days_of_week = options.locales[options.locale].daysMin.slice();
 			// If Monday is the first day of the week
 			if (options.first_day) {
 				days_of_week.push(days_of_week.shift());
