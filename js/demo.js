@@ -11,7 +11,7 @@ addEventListener('DOMContentLoaded', function () {
 		mode : 'range'
 	});
 	var plus_5_days = new Date;
-	plus_5_days.addDays(5);
+	plus_5_days.setDate(plus_5_days.getDate() + 5);
 	pickmeup('.three-calendars', {
 		flat      : true,
 		date      : [

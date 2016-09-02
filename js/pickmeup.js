@@ -7,44 +7,10 @@
  * @license   MIT License, see license.txt
  */
 
-(function (d) {
-	function getMaxDays () {
-		var tmpDate = new Date(this.toString()),
-			d       = 28,
-			m       = tmpDate.getMonth();
-		while (tmpDate.getMonth() == m) {
-			++d;
-			tmpDate.setDate(d);
-		}
-		return d - 1;
-	}
-
-	d.addDays      = function (n) {
-		this.setDate(this.getDate() + n);
-	};
-	d.addMonths    = function (n) {
-		var day = this.getDate();
-		this.setDate(1);
-		this.setMonth(this.getMonth() + n);
-		this.setDate(Math.min(day, getMaxDays.apply(this)));
-	};
-	d.addYears     = function (n) {
-		var day = this.getDate();
-		this.setDate(1);
-		this.setFullYear(this.getFullYear() + n);
-		this.setDate(Math.min(day, getMaxDays.apply(this)));
-	};
-	d.getDayOfYear = function () {
-		var now  = new Date(this.getFullYear(), this.getMonth(), this.getDate(), 0, 0, 0);
-		var then = new Date(this.getFullYear(), 0, 0, 0, 0, 0);
-		var time = now - then;
-		return Math.floor(time / 24 * 60 * 60 * 1000);
-	};
-})(Date.prototype);
-
 (function (root, factory) {
 	if (typeof define === 'function' && define.amd) {
 		// AMD
+		//noinspection JSUnresolvedFunction
 		define(factory);
 	} else if (typeof exports === 'object') {
 		// CommonJS
@@ -54,6 +20,10 @@
 		root.pickmeup = factory();
 	}
 }(this, function () {
+	/**
+	 * Functions prefixed with `dom_` are simple convenient wrappers for various operations with DOM
+	 */
+
 	/**
 	 * @param {(Element|NodeList)} element
 	 * @param {Function}           callback
@@ -205,6 +175,7 @@
 
 	/**
 	 * @param {Element} element
+	 *
 	 * @returns {{top: number, left: number}}
 	 */
 	function dom_offset (element) {
@@ -231,6 +202,68 @@
 		return element.dispatchEvent(e);
 	}
 
+	/**
+	 * Functions prefixed with `date_` are simple convenient wrappers for various operations with dates
+	 */
+
+	/**
+	 * @param {Date} date
+	 *
+	 * @returns {number}
+	 */
+	function date_get_max_days (date) {
+		var tmpDate = new Date(date),
+			d       = 28,
+			m       = tmpDate.getMonth();
+		while (tmpDate.getMonth() == m) {
+			++d;
+			tmpDate.setDate(d);
+		}
+		return d - 1;
+	}
+
+	/**
+	 * @param {Date}   date
+	 * @param {number} number_of_days
+	 */
+	function date_add_days (date, number_of_days) {
+		date.setDate(date.getDate() + number_of_days);
+	}
+
+	/**
+	 * @param {Date}   date
+	 * @param {number} number_of_months
+	 */
+	function date_add_months (date, number_of_months) {
+		var day = date.getDate();
+		date.setDate(1);
+		date.setMonth(date.getMonth() + number_of_months);
+		date.setDate(Math.min(day, date_get_max_days(date)));
+	}
+
+	/**
+	 * @param {Date}   date
+	 * @param {number} number_of_years
+	 */
+	function date_add_years (date, number_of_years) {
+		var day = this.getDate();
+		date.setDate(1);
+		date.setFullYear(thdatedates.getFullYear() + number_of_years);
+		date.setDate(Math.min(day, date_get_max_days(date)));
+	}
+
+	/**
+	 * @param {Date} date
+	 *
+	 * @returns {number}
+	 */
+	function date_get_day_of_the_year (date) {
+		var now  = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+		var then = new Date(date.getFullYear(), 0, 0, 0, 0, 0);
+		var time = now - then;
+		return Math.floor(time / 24 * 60 * 60 * 1000);
+	}
+
 	function fill () {
 		var pickmeup     = this.pickmeup,
 			options      = pickmeup.__pickmeup.options,
@@ -247,13 +280,13 @@
 			tmp_date;
 		if (min_date) {
 			min_date.setDate(1);
-			min_date.addMonths(1);
-			min_date.addDays(-1);
+			date_add_months(min_date, 1);
+			date_add_days(min_date, -1);
 		}
 		if (max_date) {
 			max_date.setDate(1);
-			max_date.addMonths(1);
-			max_date.addDays(-1);
+			date_add_months(max_date, 1);
+			date_add_days(max_date, -1);
 		}
 		/**
 		 * Remove old content except header navigation
@@ -267,13 +300,13 @@
 			reset_time(local_date);
 			instance = dom_query_all(pickmeup, '.pmu-instance')[i];
 			if (dom_has_class(pickmeup, 'pmu-view-years')) {
-				local_date.addYears((i - current_cal) * 12);
+				date_add_years(local_date, (i - current_cal) * 12);
 				header = (local_date.getFullYear() - 6) + ' - ' + (local_date.getFullYear() + 5);
 			} else if (dom_has_class(pickmeup, 'pmu-view-months')) {
-				local_date.addYears(i - current_cal);
+				date_add_years(local_date, i - current_cal);
 				header = local_date.getFullYear();
 			} else if (dom_has_class(pickmeup, 'pmu-view-days')) {
-				local_date.addMonths(i - current_cal);
+				date_add_months(local_date, i - current_cal);
 				header = formatDate(local_date, options.title_format, options.locale);
 			}
 			if (!shown_date_to) {
@@ -282,15 +315,15 @@
 					// in order not to show calendar with all disabled dates
 					tmp_date = new Date(local_date);
 					if (options.select_day) {
-						tmp_date.addMonths(options.calendars - 1);
+						date_add_months(tmp_date, options.calendars - 1);
 					} else if (options.select_month) {
-						tmp_date.addYears(options.calendars - 1);
+						date_add_years(tmp_date, options.calendars - 1);
 					} else {
-						tmp_date.addYears((options.calendars - 1) * 12);
+						date_add_years(tmp_date, (options.calendars - 1) * 12);
 					}
 					if (tmp_date > max_date) {
 						--i;
-						current_date.addMonths(-1);
+						date_add_months(current_date, -1);
 						shown_date_to = undefined;
 						continue;
 					}
@@ -301,11 +334,11 @@
 				shown_date_from = new Date(local_date);
 				// If all dates in this month are before min option - set next month as current in order not to show calendar with all disabled dates
 				shown_date_from.setDate(1);
-				shown_date_from.addMonths(1);
-				shown_date_from.addDays(-1);
+				date_add_months(shown_date_from, 1);
+				date_add_days(shown_date_from, -1);
 				if (min_date && min_date > shown_date_from) {
 					--i;
-					current_date.addMonths(1);
+					date_add_months(current_date, 1);
 					shown_date_from = undefined;
 					continue;
 				}
@@ -448,7 +481,7 @@
 				(function () {
 					local_date.setDate(1);
 					var day = (local_date.getDay() - options.first_day) % 7;
-					local_date.addDays(-(day + (day < 0 ? 7 : 0)));
+					date_add_days(local_date, -(day + (day < 0 ? 7 : 0)));
 				})();
 				for (day = 0; day < 42; ++day) {
 					day_element                  = document.createElement('div');
@@ -494,15 +527,15 @@
 					}
 					days_elements.push(day_element);
 					// Move to the next day
-					local_date.addDays(1);
+					date_add_days(local_date, 1);
 				}
 				instance.appendChild(options.instance_content_template(days_elements, 'pmu-days'));
 			})();
 		}
 		shown_date_from.setDate(1);
 		shown_date_to.setDate(1);
-		shown_date_to.addMonths(1);
-		shown_date_to.addDays(-1);
+		date_add_months(shown_date_to, 1);
+		date_add_days(shown_date_to, -1);
 		var prev = dom_query(pickmeup, '.pmu-prev'),
 			next = dom_query(pickmeup, '.pmu-next');
 		if (prev) {
@@ -611,7 +644,7 @@
 		var hr = date.getHours();
 		var pm = (hr >= 12);
 		var ir = (pm) ? (hr - 12) : hr;
-		var dy = date.getDayOfYear();
+		var dy = date_get_day_of_the_year(date);
 		if (ir == 0) {
 			ir = 12;
 		}
@@ -757,7 +790,7 @@
 			instance_index = dom_query_all(root, '.pmu-instance').indexOf(instance);
 		if (dom_matches(element.parentElement, 'nav')) {
 			if (dom_has_class(element, 'pmu-month')) {
-				options.current.addMonths(instance_index - Math.floor(options.calendars / 2));
+				date_add_months(options.current, instance_index - Math.floor(options.calendars / 2));
 				if (dom_has_class(root, 'pmu-view-years')) {
 					// Shift back to current date, otherwise with min value specified may jump on few (tens) years forward
 					if (options.mode != 'single') {
@@ -818,7 +851,7 @@
 					options.binded.update_date(options.current);
 				}
 				// Move current month to the first place (needed for multiple calendars)
-				options.current.addMonths(Math.floor(options.calendars / 2) - instance_index);
+				date_add_months(options.current, Math.floor(options.calendars / 2) - instance_index);
 			} else {
 				var new_date = new Date(options.current);
 				new_date.setYear(element.__pickmeup_year);
@@ -972,11 +1005,11 @@
 		var pickmeup = this.pickmeup;
 		var options  = pickmeup.__pickmeup.options;
 		if (dom_has_class(pickmeup, 'pmu-view-years')) {
-			options.current.addYears(-12);
+			date_add_years(options.current, -12);
 		} else if (dom_has_class(pickmeup, 'pmu-view-months')) {
-			options.current.addYears(-1);
+			date_add_years(options.current, -1);
 		} else if (dom_has_class(pickmeup, 'pmu-view-days')) {
-			options.current.addMonths(-1);
+			date_add_months(options.current, -1);
 		}
 		if (fill) {
 			options.binded.fill();
@@ -990,11 +1023,11 @@
 		var pickmeup = this.pickmeup;
 		var options  = pickmeup.__pickmeup.options;
 		if (dom_has_class(pickmeup, 'pmu-view-years')) {
-			options.current.addYears(12);
+			date_add_years(options.current, 12);
 		} else if (dom_has_class(pickmeup, 'pmu-view-months')) {
-			options.current.addYears(1);
+			date_add_years(options.current, 1);
 		} else if (dom_has_class(pickmeup, 'pmu-view-days')) {
-			options.current.addMonths(1);
+			date_add_months(options.current, 1);
 		}
 		if (fill) {
 			options.binded.fill();
