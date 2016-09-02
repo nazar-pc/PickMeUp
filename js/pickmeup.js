@@ -122,32 +122,32 @@
 	}
 
 	/**
-	 * @param {Element}          pickmeup
-	 * @param {(Element|Window)} target
+	 * @param {Element}          target
+	 * @param {(Element|Window)} element
 	 * @param {string}           event
 	 * @param {Function}         callback
 	 */
-	function dom_on (pickmeup, target, event, callback) {
+	function dom_on (target, element, event, callback) {
 		if (event.indexOf(' ') !== -1) {
 			var events        = event.split(' '),
 				events_number = events.length,
 				i;
 			for (i = 0; i < events_number; ++i) {
-				dom_on(pickmeup, target, events[i], callback)
+				dom_on(target, element, events[i], callback)
 			}
 		} else {
-			pickmeup.__pickmeup.events.push([target, event, callback]);
-			target.addEventListener(event, callback);
+			target.__pickmeup.events.push([element, event, callback]);
+			element.addEventListener(event, callback);
 		}
 	}
 
 	/**
-	 * @param {Element}          pickmeup
-	 * @param {(Element|Window)} [target=undefined]
+	 * @param {Element}          target
+	 * @param {(Element|Window)} [element=undefined]
 	 * @param {string}           [event='']
 	 * @param {Function}         [callback=undefined]
 	 */
-	function dom_off (pickmeup, target, event, callback) {
+	function dom_off (target, element, event, callback) {
 		var events,
 			events_number,
 			i;
@@ -155,14 +155,14 @@
 			events        = event.split(' ');
 			events_number = events.length;
 			for (i = 0; i < events_number; ++i) {
-				dom_off(pickmeup, target, events[i], callback)
+				dom_off(target, element, events[i], callback)
 			}
 		} else {
-			events        = pickmeup.__pickmeup.events;
+			events        = target.__pickmeup.events;
 			events_number = events.length;
 			for (i = 0; i < events_number; ++i) {
 				if (
-					(target && target != events[i][0]) ||
+					(element && element != events[i][0]) ||
 					(event && event != events[i][1]) ||
 					(callback && callback != events[i][2])
 				) {
@@ -246,7 +246,7 @@
 	 * @param {number} number_of_years
 	 */
 	function date_add_years (date, number_of_years) {
-		var day = this.getDate();
+		var day = date.getDate();
 		date.setDate(1);
 		date.setFullYear(thdatedates.getFullYear() + number_of_years);
 		date.setDate(Math.min(day, date_get_max_days(date)));
@@ -264,9 +264,12 @@
 		return Math.floor(time / 24 * 60 * 60 * 1000);
 	}
 
-	function fill () {
-		var pickmeup     = this.pickmeup,
-			options      = pickmeup.__pickmeup.options,
+	/**
+	 * @param {Element} target
+	 */
+	function fill (target) {
+		var root_element = target.__pickmeup.element,
+			options      = target.__pickmeup.options,
 			current_cal  = Math.floor(options.calendars / 2),
 			actual_date  = options.date,
 			current_date = options.current,
@@ -291,23 +294,23 @@
 		/**
 		 * Remove old content except header navigation
 		 */
-		dom_remove(dom_query_all(pickmeup, '.pmu-instance > :not(nav)'));
+		dom_remove(dom_query_all(root_element, '.pmu-instance > :not(nav)'));
 		/**
 		 * If several calendars should be shown
 		 */
 		for (var i = 0; i < options.calendars; i++) {
 			local_date = new Date(current_date);
 			reset_time(local_date);
-			instance = dom_query_all(pickmeup, '.pmu-instance')[i];
-			if (dom_has_class(pickmeup, 'pmu-view-years')) {
+			instance = dom_query_all(root_element, '.pmu-instance')[i];
+			if (dom_has_class(root_element, 'pmu-view-years')) {
 				date_add_years(local_date, (i - current_cal) * 12);
 				header = (local_date.getFullYear() - 6) + ' - ' + (local_date.getFullYear() + 5);
-			} else if (dom_has_class(pickmeup, 'pmu-view-months')) {
+			} else if (dom_has_class(root_element, 'pmu-view-months')) {
 				date_add_years(local_date, i - current_cal);
 				header = local_date.getFullYear();
-			} else if (dom_has_class(pickmeup, 'pmu-view-days')) {
+			} else if (dom_has_class(root_element, 'pmu-view-days')) {
 				date_add_months(local_date, i - current_cal);
-				header = formatDate(local_date, options.title_format, options.locale);
+				header = format_date(local_date, options.title_format, options.locale);
 			}
 			if (!shown_date_to) {
 				if (max_date) {
@@ -536,18 +539,18 @@
 		shown_date_to.setDate(1);
 		date_add_months(shown_date_to, 1);
 		date_add_days(shown_date_to, -1);
-		var prev = dom_query(pickmeup, '.pmu-prev'),
-			next = dom_query(pickmeup, '.pmu-next');
+		var prev = dom_query(root_element, '.pmu-prev'),
+			next = dom_query(root_element, '.pmu-next');
 		if (prev) {
 			prev.style.visibility = options.min && options.min >= shown_date_from ? 'hidden' : 'visible';
 		}
 		if (next) {
 			next.style.visibility = options.max && options.max <= shown_date_to ? 'hidden' : 'visible';
 		}
-		dom_dispatch_event(pickmeup, 'fill');
+		dom_dispatch_event(root_element, 'fill');
 	}
 
-	function parseDate (date, format, separator, locale) {
+	function parse_date (date, format, separator, locale) {
 		var i;
 		if (date instanceof Date || date instanceof Number) {
 			return reset_time(new Date(date));
@@ -556,14 +559,14 @@
 		} else if (date instanceof Array) {
 			date = date.slice();
 			for (i = 0; i < date.length; ++i) {
-				date[i] = parseDate(date[i], format, separator, locale);
+				date[i] = parse_date(date[i], format, separator, locale);
 			}
 			return date;
 		}
 		var splitted_date = date.split(separator);
 		if (splitted_date.length > 1) {
 			splitted_date.forEach(function (element, index, array) {
-				array[index] = parseDate(element.trim(), format, separator, locale);
+				array[index] = parse_date(element.trim(), format, separator, locale);
 			});
 			return splitted_date;
 		}
@@ -635,7 +638,7 @@
 		return date;
 	}
 
-	function formatDate (date, format, locale) {
+	function format_date (date, format, locale) {
 		var m  = date.getMonth();
 		var d  = date.getDate();
 		var y  = date.getFullYear();
@@ -724,9 +727,15 @@
 		return parts.join('');
 	}
 
-	function update_date (new_date) {
-		var pickmeup = this.pickmeup,
-			options  = pickmeup.__pickmeup.options,
+	/**
+	 * @param {Element} target
+	 * @param {Date}    new_date
+	 *
+	 * @returns {boolean}
+	 */
+	function update_date (target, new_date) {
+		var root_element = target.__pickmeup.element,
+			options      = target.__pickmeup.options,
 			i;
 		reset_time(new_date);
 		(function () {
@@ -759,11 +768,12 @@
 					break;
 			}
 		})();
-		var prepared_date = prepareDate(options);
-		if (dom_matches(this, 'input')) {
-			this.value = options.mode == 'single' ? prepared_date.formatted_date : prepared_date.formatted_date.join(options.separator);
+		var prepared_date = prepare_date(options);
+		if (dom_matches(target, 'input')) {
+			//noinspection JSUndefinedPropertyAssignment
+			target.value = options.mode == 'single' ? prepared_date.formatted_date : prepared_date.formatted_date.join(options.separator);
 		}
-		dom_dispatch_event(pickmeup, 'change', prepared_date);
+		dom_dispatch_event(root_element, 'change', prepared_date);
 		if (
 			!options.flat &&
 			options.hide_on_select &&
@@ -771,20 +781,30 @@
 				options.mode != 'range' || !options.lastSel
 			)
 		) {
-			options.binded.hide();
+			options.bound.hide();
 			return false;
 		}
 	}
 
-	function click (e) {
-		var element = e.target;
+	/**
+	 * @param {Element} target
+	 * @param {Event}   event
+	 *
+	 * @returns {boolean}
+	 */
+	function click (target, event) {
+		//noinspection JSValidateTypes
+		/**
+		 * @type {Element}
+		 */
+		var element = event.target;
 		if (!dom_has_class(element, 'pmu-button')) {
 			element = dom_closest_parent(element, '.pmu-button');
 		}
 		if (!dom_has_class(element, 'pmu-button') || dom_has_class(element, 'pmu-disabled')) {
 			return false;
 		}
-		var options        = this.pickmeup.__pickmeup.options,
+		var options        = target.__pickmeup.options,
 			instance       = dom_closest_parent(element, '.pmu-instance'),
 			root           = instance.parentElement,
 			instance_index = dom_query_all(root, '.pmu-instance').indexOf(instance);
@@ -824,9 +844,9 @@
 				}
 			} else {
 				if (dom_has_class(element, 'pmu-prev')) {
-					options.binded.prev(false);
+					options.bound.prev(false);
 				} else {
-					options.binded.next(false);
+					options.bound.next(false);
 				}
 			}
 		} else {
@@ -839,7 +859,7 @@
 					dom_remove_class(root, 'pmu-view-years');
 					dom_add_class(root, 'pmu-view-days');
 				} else {
-					options.binded.update_date(options.current);
+					options.bound.update_date(options.current);
 				}
 			} else if (dom_has_class(root, 'pmu-view-months')) {
 				options.current.setMonth(element.__pickmeup_month);
@@ -848,7 +868,7 @@
 					dom_remove_class(root, 'pmu-view-months');
 					dom_add_class(root, 'pmu-view-days');
 				} else {
-					options.binded.update_date(options.current);
+					options.bound.update_date(options.current);
 				}
 				// Move current month to the first place (needed for multiple calendars)
 				date_add_months(options.current, Math.floor(options.calendars / 2) - instance_index);
@@ -857,19 +877,19 @@
 				new_date.setYear(element.__pickmeup_year);
 				new_date.setMonth(element.__pickmeup_month);
 				new_date.setDate(element.__pickmeup_day);
-				options.binded.update_date(new_date);
+				options.bound.update_date(new_date);
 			}
 		}
-		options.binded.fill();
+		options.bound.fill();
 		return true;
 	}
 
-	function prepareDate (options) {
+	function prepare_date (options) {
 		var result;
 		if (options.mode == 'single') {
 			result = new Date(options.date);
 			return {
-				formatted_date : formatDate(result, options.format, options.locale),
+				formatted_date : format_date(result, options.format, options.locale),
 				date           : result
 			};
 		} else {
@@ -879,19 +899,23 @@
 			};
 			options.date.forEach(function (val) {
 				var date = new Date(val);
-				result.formatted_date.push(formatDate(date, options.format, options.locale));
+				result.formatted_date.push(format_date(date, options.format, options.locale));
 				result.date.push(date);
 			});
 			return result;
 		}
 	}
 
-	function show (force) {
-		var pickmeup = this.pickmeup,
+	/**
+	 * @param {Element} target
+	 * @param {boolean} [force=false]
+	 */
+	function show (target, force) {
+		var root_element = target.__pickmeup.element,
 			value;
-		if (force || dom_has_class(pickmeup, 'pmu-hidden')) {
-			var options  = pickmeup.__pickmeup.options,
-				pos      = dom_offset(this),
+		if (force || dom_has_class(root_element, 'pmu-hidden')) {
+			var options  = target.__pickmeup.options,
+				pos      = dom_offset(target),
 				viewport = {
 					l : window.pageXOffset,
 					t : window.pageYOffset,
@@ -900,150 +924,167 @@
 				},
 				top      = pos.top,
 				left     = pos.left;
-			options.binded.fill();
-			if (dom_matches(this, 'input')) {
-				value = this.value;
+			options.bound.fill();
+			if (dom_matches(target, 'input')) {
+				value = target.value;
 				if (value) {
-					options.binded.set_date(value);
+					options.bound.set_date(value);
 				}
 				dom_on(
-					pickmeup,
-					this,
+					target,
+					target,
 					'keydown',
 					function (e) {
 						if (e.which == 9) {
-							options.binded.hide();
+							options.bound.hide();
 						}
 					}
 				);
 				options.lastSel = false;
 			}
-			if (!dom_dispatch_event(pickmeup, 'show')) {
+			if (!dom_dispatch_event(root_element, 'show')) {
 				return;
 			}
 			if (!options.flat) {
 				switch (options.position) {
 					case 'top':
-						top -= pickmeup.offsetHeight;
+						top -= root_element.offsetHeight;
 						break;
 					case 'left':
-						left -= pickmeup.offsetWidth;
+						left -= root_element.offsetWidth;
 						break;
 					case 'right':
-						left += this.offsetWidth;
+						left += target.offsetWidth;
 						break;
 					case 'bottom':
-						top += this.offsetHeight;
+						top += target.offsetHeight;
 						break;
 				}
-				if (top + pickmeup.offsetHeight > viewport.t + viewport.h) {
-					top = pos.top - pickmeup.offsetHeight;
+				if (top + root_element.offsetHeight > viewport.t + viewport.h) {
+					top = pos.top - root_element.offsetHeight;
 				}
 				if (top < viewport.t) {
-					top = pos.top + this.offsetHeight;
+					top = pos.top + target.offsetHeight;
 				}
-				if (left + pickmeup.offsetWidth > viewport.l + viewport.w) {
-					left = pos.left - pickmeup.offsetWidth;
+				if (left + root_element.offsetWidth > viewport.l + viewport.w) {
+					left = pos.left - root_element.offsetWidth;
 				}
 				if (left < viewport.l) {
-					left = pos.left + this.offsetWidth
+					left = pos.left + target.offsetWidth
 				}
-				pickmeup.style.top  = top + 'px';
-				pickmeup.style.left = left + 'px';
-				dom_remove_class(pickmeup, 'pmu-hidden');
-				dom_on(pickmeup, document.documentElement, 'click', options.binded.hide);
-				dom_on(pickmeup, window, 'resize', options.binded.forced_show);
+				root_element.style.top  = top + 'px';
+				root_element.style.left = left + 'px';
+				dom_remove_class(root_element, 'pmu-hidden');
+				dom_on(target, document.documentElement, 'click', options.bound.hide);
+				dom_on(target, window, 'resize', options.bound.forced_show);
 			}
 		}
 	}
 
-	function forced_show () {
-		show.call(this, true);
-	}
-
-	function hide (e) {
-		//noinspection JSBitwiseOperatorUsage
+	/**
+	 * @param {Element} target
+	 * @param {Event}   event
+	 */
+	function hide (target, event) {
+		var root_element = target.__pickmeup.element,
+			options      = target.__pickmeup.options;
+		//noinspection JSBitwiseOperatorUsage,JSCheckFunctionSignatures
 		if (
-			!e || !e.target ||											//Called directly
+			!event || !event.target ||										//Called directly
 			(
-				e.target != this &&										//Clicked not on element itself
-				!(this.pickmeup.compareDocumentPosition(e.target) & 16)	//And not on its children
+				event.target != target &&									//Clicked not on element itself
+				!(root_element.compareDocumentPosition(event.target) & 16)	//And not on its children
 			)
 		) {
-			var pickmeup = this.pickmeup,
-				options  = pickmeup.__pickmeup.options;
-			if (dom_dispatch_event(pickmeup, 'hide')) {
-				dom_add_class(pickmeup, 'pmu-hidden');
-				dom_off(pickmeup, document.documentElement, 'click', options.binded.hide);
-				dom_off(pickmeup, window, 'resize', options.binded.forced_show);
+			if (dom_dispatch_event(root_element, 'hide')) {
+				dom_add_class(root_element, 'pmu-hidden');
+				dom_off(target, document.documentElement, 'click', options.bound.hide);
+				dom_off(target, window, 'resize', options.bound.forced_show);
 				options.lastSel = false;
 			}
 		}
 	}
 
-	function update () {
-		var pickmeup = this.pickmeup,
-			options  = pickmeup.__pickmeup.options;
-		dom_off(pickmeup, document.documentElement, 'click', options.binded.hide);
-		dom_off(pickmeup, window, 'resize', options.binded.forced_show);
-		options.binded.forced_show();
+	/**
+	 * @param {Element} target
+	 */
+	function update (target) {
+		var options = target.__pickmeup.options;
+		dom_off(target, document.documentElement, 'click', options.bound.hide);
+		dom_off(target, window, 'resize', options.bound.forced_show);
+		options.bound.forced_show();
 	}
 
-	function clear () {
-		var options = this.pickmeup.__pickmeup.options;
+	/**
+	 * @param {Element} target
+	 */
+	function clear (target) {
+		var options = target.__pickmeup.options;
 		if (options.mode != 'single') {
 			options.date    = [];
 			options.lastSel = false;
-			options.binded.fill();
+			options.bound.fill();
 		}
 	}
 
-	function prev (fill) {
+	/**
+	 * @param {Element} target
+	 * @param {boolean} [fill=true]
+	 */
+	function prev (target, fill) {
 		if (typeof fill == 'undefined') {
 			fill = true;
 		}
-		var pickmeup = this.pickmeup;
-		var options  = pickmeup.__pickmeup.options;
-		if (dom_has_class(pickmeup, 'pmu-view-years')) {
+		var root_element = target.__pickmeup.element;
+		var options      = target.__pickmeup.options;
+		if (dom_has_class(root_element, 'pmu-view-years')) {
 			date_add_years(options.current, -12);
-		} else if (dom_has_class(pickmeup, 'pmu-view-months')) {
+		} else if (dom_has_class(root_element, 'pmu-view-months')) {
 			date_add_years(options.current, -1);
-		} else if (dom_has_class(pickmeup, 'pmu-view-days')) {
+		} else if (dom_has_class(root_element, 'pmu-view-days')) {
 			date_add_months(options.current, -1);
 		}
 		if (fill) {
-			options.binded.fill();
+			options.bound.fill();
 		}
 	}
 
-	function next (fill) {
+	/**
+	 * @param {Element} target
+	 * @param {boolean} [fill=true]
+	 */
+	function next (target, fill) {
 		if (typeof fill == 'undefined') {
 			fill = true;
 		}
-		var pickmeup = this.pickmeup;
-		var options  = pickmeup.__pickmeup.options;
-		if (dom_has_class(pickmeup, 'pmu-view-years')) {
+		var root_element = target.__pickmeup.element;
+		var options      = target.__pickmeup.options;
+		if (dom_has_class(root_element, 'pmu-view-years')) {
 			date_add_years(options.current, 12);
-		} else if (dom_has_class(pickmeup, 'pmu-view-months')) {
+		} else if (dom_has_class(root_element, 'pmu-view-months')) {
 			date_add_years(options.current, 1);
-		} else if (dom_has_class(pickmeup, 'pmu-view-days')) {
+		} else if (dom_has_class(root_element, 'pmu-view-days')) {
 			date_add_months(options.current, 1);
 		}
 		if (fill) {
-			options.binded.fill();
+			options.bound.fill();
 		}
 	}
 
-	function get_date (formatted) {
-		var options       = this.pickmeup.__pickmeup.options,
-			prepared_date = prepareDate(options);
+	/**
+	 * @param {Element} target
+	 * @param {boolean} [formatted=true]
+	 */
+	function get_date (target, formatted) {
+		var options       = target.__pickmeup.options,
+			prepared_date = prepare_date(options);
 		if (typeof formatted === 'string') {
 			var date = prepared_date.date;
 			if (date instanceof Date) {
-				return formatDate(date, formatted, options.locale)
+				return format_date(date, formatted, options.locale)
 			} else {
 				return date.map(function (value) {
-					return formatDate(value, formatted, options.locale);
+					return format_date(value, formatted, options.locale);
 				});
 			}
 		} else {
@@ -1051,21 +1092,26 @@
 		}
 	}
 
-	function set_date (date, current) {
-		var options = this.pickmeup.__pickmeup.options,
+	/**
+	 * @param {Element}                                       target
+	 * @param {(Date|Date[]|number|number[]|string|string[])} date
+	 * @param {Date}                                          [current=undefined]
+	 */
+	function set_date (target, date, current) {
+		var options = target.__pickmeup.options,
 			i;
 		if (!(date instanceof Array) || date.length > 0) {
-			options.date = parseDate(date, options.format, options.separator, options.locale);
+			options.date = parse_date(date, options.format, options.separator, options.locale);
 			if (options.mode != 'single') {
 				if (options.date instanceof Array) {
-					options.date[0] = options.date[0] || parseDate(new Date, options.format, options.separator, options.locale);
+					options.date[0] = options.date[0] || parse_date(new Date, options.format, options.separator, options.locale);
 					if (options.mode == 'range') {
-						options.date[1] = options.date[1] || parseDate(options.date[0], options.format, options.separator, options.locale);
+						options.date[1] = options.date[1] || parse_date(options.date[0], options.format, options.separator, options.locale);
 					}
 				} else {
 					options.date = [options.date];
 					if (options.mode == 'range') {
-						options.date.push(parseDate(options.date[0], options.format, options.separator, options.locale));
+						options.date.push(parse_date(options.date[0], options.format, options.separator, options.locale));
 					}
 				}
 				for (i = 0; i < options.date.length; ++i) {
@@ -1099,32 +1145,35 @@
 			}
 		}
 		if (current) {
-			options.current = parseDate(current, options.format, options.separator, options.locale);
+			options.current = parse_date(current, options.format, options.separator, options.locale);
 		} else {
 			current         = options.mode === 'single' ? options.date : options.date[options.date.length - 1];
 			options.current = current ? new Date(current) : new Date;
 		}
 		options.current.setDate(1);
-		options.binded.fill();
-		if (dom_matches(this, 'input') && options.default_date !== false) {
-			var prepared_date = prepareDate(options),
-				current_value = this.value,
+		options.bound.fill();
+		if (dom_matches(target, 'input') && options.default_date !== false) {
+			var prepared_date = prepare_date(options),
+				current_value = target.value,
 				new_value     = options.mode == 'single' ? prepared_date.formatted_date : prepared_date.formatted_date.join(options.separator);
 			if (!current_value) {
 				dom_dispatch_event(pickmeup, 'change', prepared_date);
 			}
 			if (current_value != new_value) {
-				this.value = new_value;
+				//noinspection JSUndefinedPropertyAssignment
+				target.value = new_value;
 			}
 		}
 	}
 
-	function destroy () {
-		var pickmeup = this.pickmeup;
-		dom_off(pickmeup);
-		dom_remove(this.pickmeup);
-		delete this.pickmeup.__pickmeup;
-		delete this.pickmeup;
+	/**
+	 * @param {Element} target
+	 */
+	function destroy (target) {
+		var root_element = target.__pickmeup.element;
+		dom_off(target);
+		dom_remove(root_element);
+		delete target.__pickmeup;
 	}
 
 	function correct_date_outside_of_limit (date, min, max) {
@@ -1137,14 +1186,14 @@
 	}
 
 	/**
-	 * @param {(Element|string)} element
+	 * @param {(Element|string)} target
 	 * @param {Object}           [initial_options={}]
 	 */
-	function pickmeup_init (element, initial_options) {
-		if (typeof element == 'string') {
-			element = document.querySelector(element);
+	function pickmeup_init (target, initial_options) {
+		if (typeof target == 'string') {
+			target = document.querySelector(target);
 		}
-		if (!element.pickmeup) {
+		if (!target.__pickmeup) {
 			var i,
 				option,
 				options = {};
@@ -1152,7 +1201,7 @@
 				options[i] = i in initial_options ? initial_options[i] : pickmeup_init.defaults[i];
 			}
 			for (i in options) {
-				option = element.getAttribute('pmu-' + i);
+				option = target.getAttribute('pmu-' + i);
 				if (option !== null) {
 					options[i] = option;
 				}
@@ -1173,82 +1222,78 @@
 			options.calendars = Math.max(1, parseInt(options.calendars, 10) || 1);
 			options.mode      = /single|multiple|range/.test(options.mode) ? options.mode : 'single';
 			if (options.min) {
-				options.min = parseDate(options.min, options.format, options.separator, options.locale);
+				options.min = parse_date(options.min, options.format, options.separator, options.locale);
 				if (!options.select_day) {
 					options.min.setDate(1);
 				}
 			}
 			if (options.max) {
-				options.max = parseDate(options.max, options.format, options.separator, options.locale);
+				options.max = parse_date(options.max, options.format, options.separator, options.locale);
 				if (!options.select_day) {
 					options.max.setDate(1);
 				}
 			}
-			var pickmeup        = document.createElement('div');
-			element.pickmeup    = pickmeup;
-			pickmeup.__pickmeup = {
+			var element               = document.createElement('div');
+			//noinspection JSUndefinedPropertyAssignment
+			target.__pickmeup         = {
 				options : options,
-				events  : []
+				events  : [],
+				element : element
 			};
-			dom_add_class(pickmeup, 'pickmeup');
+			element.__pickmeup_target = target;
+			dom_add_class(element, 'pickmeup');
 			if (options.class_name) {
-				dom_add_class(pickmeup, options.class_name);
+				dom_add_class(element, options.class_name);
 			}
-			options.binded = {
-				fill        : fill.bind(element),
-				update_date : update_date.bind(element),
-				click       : click.bind(element),
-				show        : show.bind(element),
-				forced_show : forced_show.bind(element),
-				hide        : hide.bind(element),
-				update      : update.bind(element),
-				clear       : clear.bind(element),
-				prev        : prev.bind(element),
-				next        : next.bind(element),
-				get_date    : get_date.bind(element),
-				set_date    : set_date.bind(element),
-				destroy     : destroy.bind(element)
+			options.bound = {
+				fill        : fill.bind(target, target),
+				update_date : update_date.bind(target, target),
+				click       : click.bind(target, target),
+				show        : show.bind(target, target),
+				forced_show : show.bind(target, target, true),
+				hide        : hide.bind(target, target),
+				update      : update.bind(target, target),
+				clear       : clear.bind(target, target),
+				prev        : prev.bind(target, target),
+				next        : next.bind(target, target),
+				get_date    : get_date.bind(target, target),
+				set_date    : set_date.bind(target, target),
+				destroy     : destroy.bind(target, target)
 			};
-			dom_add_class(pickmeup, 'pmu-view-' + options.view);
-			pickmeup.innerHTML = options.instance_template(options).repeat(options.calendars);
-			dom_on(pickmeup, pickmeup, 'click', options.binded.click);
+			dom_add_class(element, 'pmu-view-' + options.view);
+			//noinspection JSValidateTypes
+			element.innerHTML = options.instance_template(options).repeat(options.calendars);
+			dom_on(target, element, 'click', options.bound.click);
 			dom_on(
-				pickmeup,
-				pickmeup,
+				target,
+				element,
 				'onselectstart' in Element.prototype ? 'selectstart' : 'mousedown',
 				function (e) {
 					e.preventDefault();
 				});
 			if (options.flat) {
-				dom_add_class(pickmeup, 'pmu-flat');
-				element.appendChild(pickmeup);
+				dom_add_class(element, 'pmu-flat');
+				target.appendChild(element);
 			} else {
-				dom_add_class(pickmeup, 'pmu-hidden');
-				document.body.appendChild(pickmeup);
-				dom_on(
-					pickmeup,
-					element,
-					'click',
-					function () {
-						options.binded.show();
-					}
-				);
-				dom_on(pickmeup, element, 'input', options.binded.update);
-				dom_on(pickmeup, element, 'change', options.binded.update);
+				dom_add_class(element, 'pmu-hidden');
+				document.body.appendChild(element);
+				dom_on(target, target, 'click', show.bind(target, target, false));
+				dom_on(target, target, 'input', options.bound.update);
+				dom_on(target, target, 'change', options.bound.update);
 			}
-			options.binded.set_date(options.date, options.current);
+			options.bound.set_date(options.date, options.current);
 		}
-		options = element.pickmeup.__pickmeup.options;
+		options = target.__pickmeup.options;
 		return {
-			hide     : options.binded.hide,
-			show     : options.binded.hide,
-			clear    : options.binded.hide,
-			update   : options.binded.hide,
-			prev     : options.binded.hide,
-			next     : options.binded.hide,
-			destroy  : options.binded.hide,
-			get_date : options.binded.get_date,
-			set_date : options.binded.set_date
+			hide     : options.bound.hide,
+			show     : options.bound.show,
+			clear    : options.bound.clear,
+			update   : options.bound.update,
+			prev     : options.bound.prev,
+			next     : options.bound.next,
+			get_date : options.bound.get_date,
+			set_date : options.bound.set_date,
+			destroy  : options.bound.destroy
 		}
 	}
 
@@ -1285,6 +1330,7 @@
 		},
 		/**
 		 * @param {Object} options
+		 *
 		 * @returns {string}
 		 */
 		instance_template         : function (options) {
@@ -1305,6 +1351,7 @@
 		/**
 		 * @param {Element[]} elements
 		 * @param {string}    container_class_name
+		 *
 		 * @returns {Element}
 		 */
 		instance_content_template : function (elements, container_class_name) {
