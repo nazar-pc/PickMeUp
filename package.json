@@ -1,43 +1,47 @@
 {
-	"name"        : "pickmeup",
-	"title"       : "PickMeUp",
-	"description" : "Really simple, powerful, customizable and lightweight standalone datepicker",
-	"keywords"    : [
+	"name"            : "pickmeup",
+	"title"           : "PickMeUp",
+	"description"     : "Really simple, powerful, customizable and lightweight standalone datepicker",
+	"keywords"        : [
 		"datepicker",
 		"date",
 		"calendar"
 	],
-	"version"     : "2.10.0",
-	"homepage"    : "https://github.com/nazar-pc/PickMeUp",
-	"author"      : {
+	"version"         : "2.10.0",
+	"homepage"        : "https://github.com/nazar-pc/PickMeUp",
+	"author"          : {
 		"name"  : "Nazar Mokrynskyi",
 		"email" : "nazar@mokrynskyi.com",
-		"url"   : "http://cleverstyle.org"
+		"url"   : "https://cleverstyle.org"
 	},
-	"maintainers" : [
+	"maintainers"     : [
 		{
 			"name"  : "Nazar Mokrynskyi",
 			"email" : "nazar@mokrynskyi.com",
-			"url"   : "http://cleverstyle.org"
+			"url"   : "https://cleverstyle.org"
 		},
 		{
 			"name" : "Stefan Petre",
 			"url"  : "http://www.eyecon.ro"
 		}
 	],
-	"repository"  : {
+	"repository"      : {
 		"type" : "git",
 		"url"  : "git://github.com/nazar-pc/PickMeUp.git"
 	},
-	"licenses"    : [
+	"licenses"        : [
 		{
 			"type" : "MIT",
 			"url"  : "https://github.com/nazar-pc/PickMeUp/blob/master/license.txt"
 		}
 	],
-	"bugs"        : "https://github.com/nazar-pc/PickMeUp/issues",
-	"docs"        : "https://github.com/nazar-pc/PickMeUp",
-	"demo"        : "http://nazar-pc.github.io/PickMeUp",
-	"download"    : "https://github.com/nazar-pc/PickMeUp",
-	"main"        : "js/pickmeup.min.js"
+	"bugs"            : "https://github.com/nazar-pc/PickMeUp/issues",
+	"docs"            : "https://github.com/nazar-pc/PickMeUp",
+	"demo"            : "http://nazar-pc.github.io/PickMeUp",
+	"download"        : "https://github.com/nazar-pc/PickMeUp",
+	"main"            : "dist/pickmeup.min.js",
+	"devDependencies" : {
+		"google-closure-compiler-js" : "^20160828.0.0",
+		"gulp"                       : "^3.9.1"
+	}
 }

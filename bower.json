@@ -7,8 +7,7 @@
 	],
 	"description" : "Really simple, powerful, customizable and lightweight standalone datepicker",
 	"main"        : [
-		"js/pickmeup.js",
-		"css/pickmeup.css"
+		"dist/pickmeup.js"
 	],
 	"keywords"    : [
 		"datepicker",

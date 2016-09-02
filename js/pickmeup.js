@@ -248,7 +248,7 @@
 	function date_add_years (date, number_of_years) {
 		var day = date.getDate();
 		date.setDate(1);
-		date.setFullYear(thdatedates.getFullYear() + number_of_years);
+		date.setFullYear(date.getFullYear() + number_of_years);
 		date.setDate(Math.min(day, date_get_max_days(date)));
 	}
 
@@ -1157,7 +1157,7 @@
 				current_value = target.value,
 				new_value     = options.mode == 'single' ? prepared_date.formatted_date : prepared_date.formatted_date.join(options.separator);
 			if (!current_value) {
-				dom_dispatch_event(pickmeup, 'change', prepared_date);
+				dom_dispatch_event(target.__pickmeup.element, 'change', prepared_date);
 			}
 			if (current_value != new_value) {
 				//noinspection JSUndefinedPropertyAssignment
