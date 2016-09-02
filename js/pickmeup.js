@@ -231,39 +231,6 @@
 		return element.dispatchEvent(e);
 	}
 
-	var tpl = {
-		head : function (options) {
-			var days_of_week = [
-				options.locale.daysMin[0],
-				options.locale.daysMin[1],
-				options.locale.daysMin[2],
-				options.locale.daysMin[3],
-				options.locale.daysMin[4],
-				options.locale.daysMin[5],
-				options.locale.daysMin[6]
-			];
-			// If Monday is the first day of the week
-			if (options.first_day) {
-				days_of_week.push(days_of_week.shift());
-			}
-			return '<div class="pmu-instance">' +
-				'<nav>' +
-				'<div class="pmu-prev pmu-button">' + options.prev + '</div>' +
-				'<div class="pmu-month pmu-button"></div>' +
-				'<div class="pmu-next pmu-button">' + options.next + '</div>' +
-				'</nav>' +
-				'<nav class="pmu-day-of-week"><div>' + days_of_week.join('</div><div>') + '</div></nav>' +
-				'</div>';
-		},
-		body : function (elements, container_class_name) {
-			var result = '';
-			for (var i = 0; i < elements.length; ++i) {
-				result += '<div class="' + elements[i].class_name + ' pmu-button">' + elements[i].text + '</div>'
-			}
-			return '<div class="' + container_class_name + '">' + result + '</div>';
-		}
-	};
-
 	function fill () {
 		var pickmeup     = this.pickmeup,
 			options      = pickmeup.__pickmeup.options,
@@ -274,7 +241,6 @@
 			max_date     = options.max ? new Date(options.max) : null,
 			local_date,
 			header,
-			html,
 			instance,
 			shown_date_from,
 			shown_date_to,
@@ -345,7 +311,6 @@
 				}
 			}
 			dom_query(instance, '.pmu-month').textContent = header;
-			html                                          = '';
 			var is_year_selected                          = function (year) {
 				return (
 						options.mode == 'range' &&
@@ -404,54 +369,51 @@
 					)
 			};
 			(function () {
-				var years           = [],
+				var years_elements  = [],
 					start_from_year = local_date.getFullYear() - 6,
 					min_year        = new Date(options.min).getFullYear(),
 					max_year        = new Date(options.max).getFullYear(),
-					year;
-				for (var j = 0; j < 12; ++j) {
-					year = {
-						text       : start_from_year + j,
-						class_name : []
-					};
-					if (
-						(
-							options.min && year.text < min_year
-						) ||
-						(
-							options.max && year.text > max_year
-						)
-					) {
-						year.class_name.push('pmu-disabled');
-					} else if (is_year_selected(year.text)) {
-						year.class_name.push('pmu-selected');
-					}
-					year.class_name = year.class_name.join(' ');
-					years.push(year);
-				}
-				html += tpl.body(years, 'pmu-years');
-			})();
-			(function () {
-				var months       = [],
-					current_year = local_date.getFullYear(),
-					min_year     = new Date(options.min).getFullYear(),
-					min_month    = new Date(options.min).getMonth(),
-					max_year     = new Date(options.max).getFullYear(),
-					max_month    = new Date(options.max).getMonth(),
-					month,
+					year,
+					year_element,
 					j;
 				for (j = 0; j < 12; ++j) {
-					month = {
-						text       : options.locale.monthsShort[j],
-						class_name : []
-					};
+					year                         = start_from_year + j;
+					year_element                 = document.createElement('div');
+					year_element.textContent     = year;
+					year_element.__pickmeup_year = year;
+					if (
+						(options.min && year < min_year) ||
+						(options.max && year > max_year)
+					) {
+						dom_add_class(year_element, 'pmu-disabled');
+					} else if (is_year_selected(year)) {
+						dom_add_class(year_element, 'pmu-selected');
+					}
+					years_elements.push(year_element);
+				}
+				instance.appendChild(options.instance_content_template(years_elements, 'pmu-years'));
+			})();
+			(function () {
+				var months_elements = [],
+					current_year    = local_date.getFullYear(),
+					min_year        = new Date(options.min).getFullYear(),
+					min_month       = new Date(options.min).getMonth(),
+					max_year        = new Date(options.max).getFullYear(),
+					max_month       = new Date(options.max).getMonth(),
+					month,
+					month_element;
+				for (month = 0; month < 12; ++month) {
+					month_element                  = document.createElement('div');
+					month_element.textContent      = options.locale.monthsShort[month];
+					month_element.__pickmeup_month = month;
+					month_element.__pickmeup_year  = current_year;
 					if (
 						(
 							options.min &&
 							(
 								current_year < min_year ||
 								(
-									j < min_month && current_year == min_year
+									month < min_month && current_year == min_year
 								)
 							)
 						) ||
@@ -460,53 +422,53 @@
 							(
 								current_year > max_year ||
 								(
-									j > max_month && current_year >= max_year
+									month > max_month && current_year >= max_year
 								)
 							)
 						)
 					) {
-						month.class_name.push('pmu-disabled');
-					} else if (is_months_selected(current_year, j)) {
-						month.class_name.push('pmu-selected');
+						dom_add_class(month_element, 'pmu-disabled');
+					} else if (is_months_selected(current_year, month)) {
+						dom_add_class(month_element, 'pmu-selected');
 					}
-					month.class_name = month.class_name.join(' ');
-					months.push(month);
+					months_elements.push(month_element);
 				}
-				html += tpl.body(months, 'pmu-months');
+				instance.appendChild(options.instance_content_template(months_elements, 'pmu-months'));
 			})();
 			(function () {
-				var days          = [],
+				var days_elements = [],
 					current_month = local_date.getMonth(),
 					today         = reset_time(new Date).valueOf(),
 					day,
-					j,
+					day_element,
 					from_user,
 					val,
 					disabled;
-				// Correct first day in calendar taking into account first day of week (Sunday or Monday)
+				// Correct first day in calendar taking into account the first day of the week (Sunday or Monday)
 				(function () {
 					local_date.setDate(1);
 					var day = (local_date.getDay() - options.first_day) % 7;
 					local_date.addDays(-(day + (day < 0 ? 7 : 0)));
 				})();
-				for (j = 0; j < 42; ++j) {
-					day = {
-						text       : local_date.getDate(),
-						class_name : []
-					};
+				for (day = 0; day < 42; ++day) {
+					day_element                  = document.createElement('div');
+					day_element.textContent      = local_date.getDate();
+					day_element.__pickmeup_day   = local_date.getDate();
+					day_element.__pickmeup_month = local_date.getMonth();
+					day_element.__pickmeup_year  = local_date.getFullYear();
 					if (current_month != local_date.getMonth()) {
-						day.class_name.push('pmu-not-in-month');
+						dom_add_class(day_element, 'pmu-not-in-month');
 					}
 					if (local_date.getDay() == 0) {
-						day.class_name.push('pmu-sunday');
+						dom_add_class(day_element, 'pmu-sunday');
 					} else if (local_date.getDay() == 6) {
-						day.class_name.push('pmu-saturday');
+						dom_add_class(day_element, 'pmu-saturday');
 					}
 					from_user = options.render(new Date(local_date)) || {};
 					val       = local_date.valueOf();
 					disabled  = (options.min && options.min > local_date) || (options.max && options.max < local_date);
 					if (from_user.disabled || disabled) {
-						day.class_name.push('pmu-disabled');
+						dom_add_class(day_element, 'pmu-disabled');
 					} else if (
 						from_user.selected ||
 						options.date.valueOf() == val ||
@@ -520,22 +482,22 @@
 							options.mode == 'range' && val >= options.date[0] && val <= options.date[1]
 						)
 					) {
-						day.class_name.push('pmu-selected');
+						dom_add_class(day_element, 'pmu-selected');
 					}
 					if (val == today) {
-						day.class_name.push('pmu-today');
+						dom_add_class(day_element, 'pmu-today');
 					}
 					if (from_user.class_name) {
-						day.class_name.push(from_user.class_name);
+						from_user.class_name.split(' ').forEach(
+							dom_add_class.bind(day_element, day_element)
+						);
 					}
-					day.class_name = day.class_name.join(' ');
-					days.push(day);
-					// Move to next day
+					days_elements.push(day_element);
+					// Move to the next day
 					local_date.addDays(1);
 				}
-				html += tpl.body(days, 'pmu-days');
+				instance.appendChild(options.instance_content_template(days_elements, 'pmu-days'));
 			})();
-			instance.insertAdjacentHTML('beforeend', html);
 		}
 		shown_date_from.setDate(1);
 		shown_date_to.setDate(1);
@@ -730,7 +692,8 @@
 	}
 
 	function update_date (new_date) {
-		var options = this.pickmeup.__pickmeup.options,
+		var pickmeup = this.pickmeup,
+			options  = pickmeup.__pickmeup.options,
 			i;
 		reset_time(new_date);
 		(function () {
@@ -781,19 +744,19 @@
 	}
 
 	function click (e) {
-		var el = e.target;
-		if (!dom_has_class(el, 'pmu-button')) {
-			el = dom_closest_parent(el, '.pmu-button');
+		var element = e.target;
+		if (!dom_has_class(element, 'pmu-button')) {
+			element = dom_closest_parent(element, '.pmu-button');
 		}
-		if (!dom_has_class(el, 'pmu-button') || dom_has_class(el, 'pmu-disabled')) {
+		if (!dom_has_class(element, 'pmu-button') || dom_has_class(element, 'pmu-disabled')) {
 			return false;
 		}
 		var options        = this.pickmeup.__pickmeup.options,
-			instance       = dom_closest_parent(el, '.pmu-instance'),
+			instance       = dom_closest_parent(element, '.pmu-instance'),
 			root           = instance.parentElement,
 			instance_index = dom_query_all(root, '.pmu-instance').indexOf(instance);
-		if (dom_matches(el.parentElement, 'nav')) {
-			if (dom_has_class(el, 'pmu-month')) {
+		if (dom_matches(element.parentElement, 'nav')) {
+			if (dom_has_class(element, 'pmu-month')) {
 				options.current.addMonths(instance_index - Math.floor(options.calendars / 2));
 				if (dom_has_class(root, 'pmu-view-years')) {
 					// Shift back to current date, otherwise with min value specified may jump on few (tens) years forward
@@ -827,7 +790,7 @@
 					}
 				}
 			} else {
-				if (dom_has_class(el, 'pmu-prev')) {
+				if (dom_has_class(element, 'pmu-prev')) {
 					options.binded.prev(false);
 				} else {
 					options.binded.next(false);
@@ -835,7 +798,7 @@
 			}
 		} else {
 			if (dom_has_class(root, 'pmu-view-years')) {
-				options.current.setFullYear(parseInt(el.textContent, 10));
+				options.current.setFullYear(element.__pickmeup_year);
 				if (options.select_month) {
 					dom_remove_class(root, 'pmu-view-years');
 					dom_add_class(root, 'pmu-view-months');
@@ -846,24 +809,21 @@
 					options.binded.update_date(options.current);
 				}
 			} else if (dom_has_class(root, 'pmu-view-months')) {
-				options.current.setMonth(dom_query_all(instance, '.pmu-months .pmu-button').indexOf(el));
-				options.current.setFullYear(parseInt(dom_query(instance, '.pmu-month').textContent, 10));
+				options.current.setMonth(element.__pickmeup_month);
+				options.current.setFullYear(element.__pickmeup_year);
 				if (options.select_day) {
 					dom_remove_class(root, 'pmu-view-months');
 					dom_add_class(root, 'pmu-view-days');
 				} else {
 					options.binded.update_date(options.current);
 				}
-				// Move current month to the first place
+				// Move current month to the first place (needed for multiple calendars)
 				options.current.addMonths(Math.floor(options.calendars / 2) - instance_index);
 			} else {
-				var val  = parseInt(el.textContent, 10), new_date;
-				new_date = new Date(options.current);
-				new_date.addMonths(instance_index - Math.floor(options.calendars / 2));
-				if (dom_has_class(el, 'pmu-not-in-month')) {
-					new_date.addMonths(val > 15 ? -1 : 1);
-				}
-				new_date.setDate(val);
+				var new_date = new Date(options.current);
+				new_date.setYear(element.__pickmeup_year);
+				new_date.setMonth(element.__pickmeup_month);
+				new_date.setDate(element.__pickmeup_day);
 				options.binded.update_date(new_date);
 			}
 		}
@@ -1201,10 +1161,6 @@
 			if (options.class_name) {
 				dom_add_class(pickmeup, options.class_name);
 			}
-			var html = '';
-			for (i = 0; i < options.calendars; i++) {
-				html += tpl.head(options);
-			}
 			options.binded = {
 				fill        : fill.bind(element),
 				update_date : update_date.bind(element),
@@ -1221,7 +1177,7 @@
 				destroy     : destroy.bind(element)
 			};
 			dom_add_class(pickmeup, 'pmu-view-' + options.view);
-			pickmeup.innerHTML = html;
+			pickmeup.innerHTML = options.instance_template(options).repeat(options.calendars);
 			dom_on(pickmeup, pickmeup, options.trigger_event, options.binded.click);
 			dom_on(
 				pickmeup,
@@ -1264,46 +1220,78 @@
 	}
 
 	pickmeup_init.defaults = {
-		current        : null,
-		date           : new Date,
-		default_date   : new Date,
-		flat           : false,
-		first_day      : 1,
-		prev           : '&#9664;',
-		next           : '&#9654;',
-		mode           : 'single',
-		select_year    : true,
-		select_month   : true,
-		select_day     : true,
-		view           : 'days',
-		calendars      : 1,
-		format         : 'd-m-Y',
-		title_format   : 'B, Y',
-		position       : 'bottom',
+		current                   : null,
+		date                      : new Date,
+		default_date              : new Date,
+		flat                      : false,
+		first_day                 : 1,
+		prev                      : '&#9664;',
+		next                      : '&#9654;',
+		mode                      : 'single',
+		select_year               : true,
+		select_month              : true,
+		select_day                : true,
+		view                      : 'days',
+		calendars                 : 1,
+		format                    : 'd-m-Y',
+		title_format              : 'B, Y',
+		position                  : 'bottom',
 		// TODO: Use touchend and compute distance from touchstart coordinates
-		trigger_event  : 'click touchstart',
-		class_name     : '',
-		separator      : ' - ',
-		hide_on_select : false,
-		min            : null,
-		max            : null,
-		render         : function () {
+		trigger_event             : 'click touchstart',
+		class_name                : '',
+		separator                 : ' - ',
+		hide_on_select            : false,
+		min                       : null,
+		max                       : null,
+		render                    : function () {
 		},
-		show           : function () {
-			return true;
-		},
-		hide           : function () {
-			return true;
-		},
-		fill           : function () {
-			return true;
-		},
-		locale         : {
+		locale                    : {
 			days        : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 			daysShort   : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
 			daysMin     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
 			months      : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 			monthsShort : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+		},
+		/**
+		 * @param {Object} options
+		 * @returns {string}
+		 */
+		instance_template         : function (options) {
+			var days_of_week = [
+				options.locale.daysMin[0],
+				options.locale.daysMin[1],
+				options.locale.daysMin[2],
+				options.locale.daysMin[3],
+				options.locale.daysMin[4],
+				options.locale.daysMin[5],
+				options.locale.daysMin[6]
+			];
+			// If Monday is the first day of the week
+			if (options.first_day) {
+				days_of_week.push(days_of_week.shift());
+			}
+			return '<div class="pmu-instance">' +
+				'<nav>' +
+				'<div class="pmu-prev pmu-button">' + options.prev + '</div>' +
+				'<div class="pmu-month pmu-button"></div>' +
+				'<div class="pmu-next pmu-button">' + options.next + '</div>' +
+				'</nav>' +
+				'<nav class="pmu-day-of-week"><div>' + days_of_week.join('</div><div>') + '</div></nav>' +
+				'</div>';
+		},
+		/**
+		 * @param {Element[]} elements
+		 * @param {string}    container_class_name
+		 * @returns {Element}
+		 */
+		instance_content_template : function (elements, container_class_name) {
+			var root_element = document.createElement('div');
+			dom_add_class(root_element, container_class_name);
+			for (var i = 0; i < elements.length; ++i) {
+				dom_add_class(elements[i], 'pmu-button');
+				root_element.appendChild(elements[i]);
+			}
+			return root_element;
 		}
 	};
 
