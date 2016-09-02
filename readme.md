@@ -224,9 +224,9 @@ Russian:
 ````
 
 ## Other
-Current options (for whatever reason) can be accessed as `element.pickmeup.__pickmeup.options`.
+Current options (for whatever reason) can be accessed as `element.__pickmeup.options`.
 
-Root pickmeup element can be accessed as `element.pickmeup`.
+Root pickmeup element can be accessed as `element.__pickmeup.element`.
 
 ## Styling
 If you want other colors - just change several variables in scss file.
