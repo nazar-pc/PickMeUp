@@ -1290,15 +1290,7 @@
 		 * @returns {string}
 		 */
 		instance_template         : function (options) {
-			var days_of_week = [
-				options.locale.daysMin[0],
-				options.locale.daysMin[1],
-				options.locale.daysMin[2],
-				options.locale.daysMin[3],
-				options.locale.daysMin[4],
-				options.locale.daysMin[5],
-				options.locale.daysMin[6]
-			];
+			var days_of_week = options.locale.daysMin.slice();
 			// If Monday is the first day of the week
 			if (options.first_day) {
 				days_of_week.push(days_of_week.shift());
