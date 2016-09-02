@@ -30,6 +30,7 @@ $today-color                      : $color-hover !default;
 	box-sizing      : content-box;
 	display         : inline-block;
 	position        : absolute;
+	touch-action    : manipulation;
 
 	* {
 		-moz-box-sizing : border-box;

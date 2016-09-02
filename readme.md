@@ -74,7 +74,6 @@ All options and events are the same.
 | format                    | string                            | d-m-Y                 | Date format (aAbBCdeHIjklmMpPsSuwyY are supported)                                                                   |
 | title_format              | string                            | B, Y                  | Date format for calendar title in days view (aAbBCdeHIjklmMpPsSuwyY are supported)                                   |
 | position                  | top/right/bottom/left             | bottom                | Date picker's position relative to the triggered element                                                             |
-| trigger_event             | string                            | click touchstart      | Event to trigger the date picker                                                                                     |
 | class_name                | string                            |                       | Class to be added to root datepicker element                                                                         |
 | hide_on_select            | boolean                           | false                 | If `true` - datepicker will be hidden after selection (for range mode allows to select first and last days)          |
 | min                       | number/object/string              |                       | Min date available for selection                                                                                     |

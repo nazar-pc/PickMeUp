@@ -951,7 +951,7 @@
 				pickmeup.style.top  = top + 'px';
 				pickmeup.style.left = left + 'px';
 				dom_remove_class(pickmeup, 'pmu-hidden');
-				dom_on(pickmeup, document.documentElement, options.trigger_event, options.binded.hide);
+				dom_on(pickmeup, document.documentElement, 'click', options.binded.hide);
 				dom_on(pickmeup, window, 'resize', options.binded.forced_show);
 			}
 		}
@@ -974,7 +974,7 @@
 				options  = pickmeup.__pickmeup.options;
 			if (dom_dispatch_event(pickmeup, 'hide')) {
 				dom_add_class(pickmeup, 'pmu-hidden');
-				dom_off(pickmeup, document.documentElement, options.trigger_event, options.binded.hide);
+				dom_off(pickmeup, document.documentElement, 'click', options.binded.hide);
 				dom_off(pickmeup, window, 'resize', options.binded.forced_show);
 				options.lastSel = false;
 			}
@@ -984,7 +984,7 @@
 	function update () {
 		var pickmeup = this.pickmeup,
 			options  = pickmeup.__pickmeup.options;
-		dom_off(pickmeup, document.documentElement, options.trigger_event, options.binded.hide);
+		dom_off(pickmeup, document.documentElement, 'click', options.binded.hide);
 		dom_off(pickmeup, window, 'resize', options.binded.forced_show);
 		options.binded.forced_show();
 	}
@@ -1211,7 +1211,7 @@
 			};
 			dom_add_class(pickmeup, 'pmu-view-' + options.view);
 			pickmeup.innerHTML = options.instance_template(options).repeat(options.calendars);
-			dom_on(pickmeup, pickmeup, options.trigger_event, options.binded.click);
+			dom_on(pickmeup, pickmeup, 'click', options.binded.click);
 			dom_on(
 				pickmeup,
 				pickmeup,
@@ -1228,7 +1228,7 @@
 				dom_on(
 					pickmeup,
 					element,
-					options.trigger_event,
+					'click',
 					function () {
 						options.binded.show();
 					}
@@ -1269,8 +1269,6 @@
 		format                    : 'd-m-Y',
 		title_format              : 'B, Y',
 		position                  : 'bottom',
-		// TODO: Use touchend and compute distance from touchstart coordinates
-		trigger_event             : 'click touchstart',
 		class_name                : '',
 		separator                 : ' - ',
 		hide_on_select            : false,
