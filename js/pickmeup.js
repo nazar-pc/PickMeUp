@@ -368,28 +368,14 @@
 					first_month = new Date(actual_date[0]).getMonth(),
 					last_month  = new Date(actual_date[1]).getMonth();
 				return (
-						options.mode == 'range' &&
-						year > first_year &&
-						year < lastyear
-					) ||
 					(
 						options.mode == 'range' &&
-						year == first_year &&
-						year < lastyear &&
-						month >= first_month
-					) ||
-					(
-						options.mode == 'range' &&
-						year > first_year &&
-						year == lastyear &&
-						month <= last_month
-					) ||
-					(
-						options.mode == 'range' &&
-						year == first_year &&
-						year == lastyear &&
-						month >= first_month &&
-						month <= last_month
+						(
+							(year > first_year && year < lastyear) ||
+							(year > first_year && year == lastyear && month <= last_month) ||
+							(year == first_year && year < lastyear && month >= first_month) ||
+							(year == first_year && year == lastyear && month >= first_month && month <= last_month)
+						)
 					) ||
 					(
 						options.mode == 'multiple' &&
@@ -403,6 +389,7 @@
 						new Date(actual_date).getFullYear() == year &&
 						new Date(actual_date).getMonth() == month
 					)
+				);
 			};
 			(function () {
 				var years_elements  = [],
@@ -502,7 +489,9 @@
 					}
 					from_user = options.render(new Date(local_date)) || {};
 					val       = local_date.valueOf();
-					disabled  = (options.min && options.min > local_date) || (options.max && options.max < local_date);
+					disabled  =
+						(options.min && options.min > local_date) ||
+						(options.max && options.max < local_date);
 					if (from_user.disabled || disabled) {
 						dom_add_class(day_element, 'pmu-disabled');
 					} else if (
@@ -550,8 +539,11 @@
 		dom_dispatch_event(root_element, 'fill');
 	}
 
-	function parse_date (date, format, separator, locale) {
-		var i;
+	function parse_date (date, options) {
+		var format    = options.format,
+			separator = options.separator,
+			locale    = options.locale,
+			i;
 		if (date instanceof Date || date instanceof Number) {
 			return reset_time(new Date(date));
 		} else if (!date) {
@@ -559,14 +551,14 @@
 		} else if (date instanceof Array) {
 			date = date.slice();
 			for (i = 0; i < date.length; ++i) {
-				date[i] = parse_date(date[i], format, separator, locale);
+				date[i] = parse_date(date[i], options);
 			}
 			return date;
 		}
 		var splitted_date = date.split(separator);
 		if (splitted_date.length > 1) {
 			splitted_date.forEach(function (element, index, array) {
-				array[index] = parse_date(element.trim(), format, separator, locale);
+				array[index] = parse_date(element.trim(), options);
 			});
 			return splitted_date;
 		}
@@ -1101,17 +1093,17 @@
 		var options = target.__pickmeup.options,
 			i;
 		if (!(date instanceof Array) || date.length > 0) {
-			options.date = parse_date(date, options.format, options.separator, options.locales[options.locale]);
+			options.date = parse_date(date, options);
 			if (options.mode != 'single') {
 				if (options.date instanceof Array) {
-					options.date[0] = options.date[0] || parse_date(new Date, options.format, options.separator, options.locales[options.locale]);
+					options.date[0] = options.date[0] || parse_date(new Date, options);
 					if (options.mode == 'range') {
-						options.date[1] = options.date[1] || parse_date(options.date[0], options.format, options.separator, options.locales[options.locale]);
+						options.date[1] = options.date[1] || parse_date(options.date[0], options);
 					}
 				} else {
 					options.date = [options.date];
 					if (options.mode == 'range') {
-						options.date.push(parse_date(options.date[0], options.format, options.separator, options.locales[options.locale]));
+						options.date.push(parse_date(options.date[0], options));
 					}
 				}
 				for (i = 0; i < options.date.length; ++i) {
@@ -1145,7 +1137,7 @@
 			}
 		}
 		if (current) {
-			options.current = parse_date(current, options.format, options.separator, options.locales[options.locale]);
+			options.current = parse_date(current, options);
 		} else {
 			current         = options.mode === 'single' ? options.date : options.date[options.date.length - 1];
 			options.current = current ? new Date(current) : new Date;
@@ -1222,13 +1214,13 @@
 			options.calendars = Math.max(1, parseInt(options.calendars, 10) || 1);
 			options.mode      = /single|multiple|range/.test(options.mode) ? options.mode : 'single';
 			if (options.min) {
-				options.min = parse_date(options.min, options.format, options.separator, options.locales[options.locale]);
+				options.min = parse_date(options.min, options);
 				if (!options.select_day) {
 					options.min.setDate(1);
 				}
 			}
 			if (options.max) {
-				options.max = parse_date(options.max, options.format, options.separator, options.locales[options.locale]);
+				options.max = parse_date(options.max, options);
 				if (!options.select_day) {
 					options.max.setDate(1);
 				}
