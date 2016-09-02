@@ -231,34 +231,38 @@
 		return element.dispatchEvent(e);
 	}
 
-	var views = {
-			years  : 'pmu-view-years',
-			months : 'pmu-view-months',
-			days   : 'pmu-view-days'
-		},
-		tpl   = {
-			head : function (d) {
-				var result = '';
-				for (var i = 0; i < 7; ++i) {
-					result += '<div>' + d.day[i] + '</div>'
-				}
-				return '<div class="pmu-instance">' +
-					'<nav>' +
-					'<div class="pmu-prev pmu-button">' + d.prev + '</div>' +
-					'<div class="pmu-month pmu-button"></div>' +
-					'<div class="pmu-next pmu-button">' + d.next + '</div>' +
-					'</nav>' +
-					'<nav class="pmu-day-of-week">' + result + '</nav>' +
-					'</div>';
-			},
-			body : function (elements, container_class_name) {
-				var result = '';
-				for (var i = 0; i < elements.length; ++i) {
-					result += '<div class="' + elements[i].class_name + ' pmu-button">' + elements[i].text + '</div>'
-				}
-				return '<div class="' + container_class_name + '">' + result + '</div>';
+	var tpl = {
+		head : function (options) {
+			var days_of_week = [
+				options.locale.daysMin[0],
+				options.locale.daysMin[1],
+				options.locale.daysMin[2],
+				options.locale.daysMin[3],
+				options.locale.daysMin[4],
+				options.locale.daysMin[5],
+				options.locale.daysMin[6]
+			];
+			// If Monday is the first day of the week
+			if (options.first_day) {
+				days_of_week.push(days_of_week.shift());
 			}
-		};
+			return '<div class="pmu-instance">' +
+				'<nav>' +
+				'<div class="pmu-prev pmu-button">' + options.prev + '</div>' +
+				'<div class="pmu-month pmu-button"></div>' +
+				'<div class="pmu-next pmu-button">' + options.next + '</div>' +
+				'</nav>' +
+				'<nav class="pmu-day-of-week"><div>' + days_of_week.join('</div><div>') + '</div></nav>' +
+				'</div>';
+		},
+		body : function (elements, container_class_name) {
+			var result = '';
+			for (var i = 0; i < elements.length; ++i) {
+				result += '<div class="' + elements[i].class_name + ' pmu-button">' + elements[i].text + '</div>'
+			}
+			return '<div class="' + container_class_name + '">' + result + '</div>';
+		}
+	};
 
 	function fill () {
 		var pickmeup     = this.pickmeup,
@@ -1042,7 +1046,7 @@
 			prepared_date = prepareDate(options);
 		if (typeof formatted === 'string') {
 			var date = prepared_date.date;
-			if (date.constructor == Date) {
+			if (date instanceof Date) {
 				return formatDate(date, formatted, options.locale)
 			} else {
 				return date.map(function (value) {
@@ -1187,8 +1191,7 @@
 					options.max.setDate(1);
 				}
 			}
-			var cnt,
-				pickmeup        = document.createElement('div');
+			var pickmeup        = document.createElement('div');
 			element.pickmeup    = pickmeup;
 			pickmeup.__pickmeup = {
 				options : options,
@@ -1200,25 +1203,7 @@
 			}
 			var html = '';
 			for (i = 0; i < options.calendars; i++) {
-				cnt = options.first_day;
-				html += tpl.head({
-					prev : options.prev,
-					next : options.next,
-					day  : [
-						options.locale.daysMin[(cnt++) % 7],
-						options.locale.daysMin[(cnt++) % 7],
-						options.locale.daysMin[(cnt++) % 7],
-						options.locale.daysMin[(cnt++) % 7],
-						options.locale.daysMin[(cnt++) % 7],
-						options.locale.daysMin[(cnt++) % 7],
-						options.locale.daysMin[(cnt++) % 7]
-					]
-				});
-			}
-			for (i in options) {
-				if (['render', 'before_show', 'show', 'hide'].indexOf(i) != -1) {
-					options[i] = options[i].bind(element);
-				}
+				html += tpl.head(options);
 			}
 			options.binded = {
 				fill        : fill.bind(element),
@@ -1235,7 +1220,7 @@
 				set_date    : set_date.bind(element),
 				destroy     : destroy.bind(element)
 			};
-			dom_add_class(pickmeup, views[options.view]);
+			dom_add_class(pickmeup, 'pmu-view-' + options.view);
 			pickmeup.innerHTML = html;
 			dom_on(pickmeup, pickmeup, options.trigger_event, options.binded.click);
 			dom_on(
@@ -1314,9 +1299,9 @@
 			return true;
 		},
 		locale         : {
-			days        : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-			daysShort   : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-			daysMin     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+			days        : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+			daysShort   : ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+			daysMin     : ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
 			months      : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
 			monthsShort : ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 		}
