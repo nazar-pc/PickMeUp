@@ -14,7 +14,7 @@ Browser support:
 ## [Demo](http://nazar-pc.github.io/PickMeUp)
 
 ## Getting started
-You need only 2 files: `js/pickmeup.min.js` and `css/pickmeup.css`.
+You need only 2 files: `dist/pickmeup.min.js` and `css/pickmeup.css`.
 
 The plugin can also be loaded as AMD or CommonJS module.
 
