@@ -1,8 +1,7 @@
+/.idea
 /.npmignore
 /bower.json
-/changelog.md
 /gulpfile.js
 /index.html
-/readme.md
 /demo/
 *.coffee
