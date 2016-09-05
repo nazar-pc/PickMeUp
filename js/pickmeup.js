@@ -542,7 +542,7 @@
 	function parse_date (date, options) {
 		var format    = options.format,
 			separator = options.separator,
-			locale    = options.locale,
+			locale    = options.locales[options.locale],
 			i;
 		if (date instanceof Date || date instanceof Number) {
 			return reset_time(new Date(date));
