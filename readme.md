@@ -8,8 +8,7 @@ Based on DatePicker by Stefan Petre
 
 Browser support:
 * IE 10+
-* Opera 12.1+
-* Latest versions of Firefox and Chrome
+* 2 latest stable versions of Firefox, Chromium, Opera and Edge
 
 ## [Demo](http://nazar-pc.github.io/PickMeUp)
 
