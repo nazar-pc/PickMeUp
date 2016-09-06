@@ -1186,6 +1186,7 @@
 			var i,
 				option,
 				options = {};
+			initial_options = initial_options || {};
 			for (i in pickmeup_init.defaults) {
 				options[i] = i in initial_options ? initial_options[i] : pickmeup_init.defaults[i];
 			}
