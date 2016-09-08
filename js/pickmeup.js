@@ -963,8 +963,10 @@
 				root_element.style.top  = top + 'px';
 				root_element.style.left = left + 'px';
 				dom_remove_class(root_element, 'pmu-hidden');
-				dom_on(target, document.documentElement, 'click', options.bound.hide);
-				dom_on(target, window, 'resize', options.bound.forced_show);
+				setTimeout(function () {
+					dom_on(target, document.documentElement, 'click', options.bound.hide);
+					dom_on(target, window, 'resize', options.bound.forced_show);
+				});
 			}
 		}
 	}
