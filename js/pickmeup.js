@@ -536,7 +536,7 @@
 		if (next) {
 			next.style.visibility = options.max && options.max <= shown_date_to ? 'hidden' : 'visible';
 		}
-		dom_dispatch_event(root_element, 'fill');
+		dom_dispatch_event(target, 'fill');
 	}
 
 	function parse_date (date, options) {
@@ -724,8 +724,7 @@
 	 * @param {Date}    new_date
 	 */
 	function update_date (target, new_date) {
-		var root_element = target.__pickmeup.element,
-			options      = target.__pickmeup.options,
+		var options = target.__pickmeup.options,
 			i;
 		reset_time(new_date);
 		(function () {
@@ -763,7 +762,7 @@
 			//noinspection JSUndefinedPropertyAssignment
 			target.value = options.mode == 'single' ? prepared_date.formatted_date : prepared_date.formatted_date.join(options.separator);
 		}
-		dom_dispatch_event(root_element, 'change', prepared_date);
+		dom_dispatch_event(target, 'change', prepared_date);
 		if (
 			!options.flat &&
 			options.hide_on_select &&
@@ -931,7 +930,7 @@
 				);
 				options.lastSel = false;
 			}
-			if (!dom_dispatch_event(root_element, 'show')) {
+			if (!dom_dispatch_event(target, 'show')) {
 				return;
 			}
 			if (!options.flat) {
@@ -985,7 +984,7 @@
 				!(root_element.compareDocumentPosition(event.target) & 16)	//And not on its children
 			)
 		) {
-			if (dom_dispatch_event(root_element, 'hide')) {
+			if (dom_dispatch_event(target, 'hide')) {
 				dom_add_class(root_element, 'pmu-hidden');
 				dom_off(target, document.documentElement, 'click', options.bound.hide);
 				dom_off(target, window, 'resize', options.bound.forced_show);
@@ -1146,7 +1145,7 @@
 				current_value = target.value,
 				new_value     = options.mode == 'single' ? prepared_date.formatted_date : prepared_date.formatted_date.join(options.separator);
 			if (!current_value) {
-				dom_dispatch_event(target.__pickmeup.element, 'change', prepared_date);
+				dom_dispatch_event(target, 'change', prepared_date);
 			}
 			if (current_value != new_value) {
 				//noinspection JSUndefinedPropertyAssignment
@@ -1185,7 +1184,7 @@
 		if (!target.__pickmeup) {
 			var i,
 				option,
-				options = {};
+				options     = {};
 			initial_options = initial_options || {};
 			for (i in pickmeup_init.defaults) {
 				options[i] = i in initial_options ? initial_options[i] : pickmeup_init.defaults[i];
