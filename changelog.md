@@ -1,3 +1,12 @@
+3.0.5 (09 September, 2016)
+* Remove `.idea` from npm package
+* Small fix for getting locales when parsing date
+* Remove mentioning support for Opera 12.1 (didn't check it for a long time and never will)
+* Fix for error when no options specified during initialization
+* Fix for events being dispatched on instance element, rather than on target element, where PickMeUp was initialized, fixes [#134](https://github.com/nazar-pc/PickMeUp/issues/134)
+* Fix for strange issue when showing datepicker in `click` event handler of another element didn't work, fixes [#135](https://github.com/nazar-pc/PickMeUp/issues/135)
+* Fix for non-flat datepicker was closed immediately in `range` mode, fixes [#136](https://github.com/nazar-pc/PickMeUp/issues/136)
+
 3.0.0 (02 September, 2016)
 * PickMeUp is now standalone, no jQuery needed
 * `.pmu-flat` and `.pmu-hidden` classes added
