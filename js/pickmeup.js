@@ -792,6 +792,8 @@
 		if (!dom_has_class(element, 'pmu-button') || dom_has_class(element, 'pmu-disabled')) {
 			return false;
 		}
+		event.preventDefault();
+		event.stopPropagation();
 		var options        = target.__pickmeup.options,
 			instance       = dom_closest_parent(element, '.pmu-instance'),
 			root           = instance.parentElement,
