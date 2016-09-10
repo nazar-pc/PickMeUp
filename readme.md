@@ -98,7 +98,7 @@ var now = new Date;
 pickmeup(element, {
     render : function (date) {
         if (date < now) {
-            return {disable : true, class_name : 'date-in-past'};
+            return {disabled : true, class_name : 'date-in-past'};
         }
         return {};
     } 
