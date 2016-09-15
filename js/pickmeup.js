@@ -1254,8 +1254,12 @@
 				destroy     : destroy.bind(target, target)
 			};
 			dom_add_class(element, 'pmu-view-' + options.view);
-			//noinspection JSValidateTypes
-			element.innerHTML = options.instance_template(options).repeat(options.calendars);
+			var content_template = options.instance_template(options),
+				content          = '';
+			for (i = 0; i < options.calendars; ++i) {
+				content += content_template;
+			}
+			element.innerHTML = content;
 			dom_on(target, element, 'click', options.bound.click);
 			dom_on(
 				target,
