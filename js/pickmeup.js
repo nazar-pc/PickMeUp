@@ -1180,10 +1180,15 @@
 	/**
 	 * @param {(Element|string)} target
 	 * @param {Object}           [initial_options={}]
+	 *
+	 * @return {(Object|null)} Object with useful methods on success, `null` otherwise
 	 */
 	function pickmeup_init (target, initial_options) {
 		if (typeof target == 'string') {
 			target = document.querySelector(target);
+		}
+		if (!target) {
+			return null;
 		}
 		if (!target.__pickmeup) {
 			var i,
