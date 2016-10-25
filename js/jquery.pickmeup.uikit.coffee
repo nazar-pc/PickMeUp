@@ -8,7 +8,7 @@ do ($ = jQuery) ->
 	$.fn.pickmeup_uikit	= (initial_options) ->
 		this.each ->
 			pickmeup(initial_options)
-			$(this.pickmeup)
+			$(this.__pickmeup.element)
 				.removeClass('pickmeup')
 				.addClass('pickmeup-uikit uk-panel-box')
 				.css('padding', 0)

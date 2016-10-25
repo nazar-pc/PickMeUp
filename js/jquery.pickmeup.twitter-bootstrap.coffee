@@ -8,7 +8,7 @@ do ($ = jQuery) ->
 	$.fn.pickmeup_twitter_bootstrap	= (initial_options) ->
 		this.each ->
 			pickmeup(this, initial_options)
-			$(this.pickmeup)
+			$(this.__pickmeup.element)
 				.removeClass('pickmeup')
 				.addClass('pickmeup-twitter-bootstrap well')
 				.css('padding', 0)
