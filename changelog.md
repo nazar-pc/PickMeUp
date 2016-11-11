@@ -1,3 +1,11 @@
+3.0.7 (11 November, 2016)
+* Fixed main file ([PR #142](https://github.com/nazar-pc/PickMeUp/pull/142))
+* Do not fail with exception when target element to initialize PickMeUp not found, fixes [#148](https://github.com/nazar-pc/PickMeUp/issues/148)
+* Fix for Twitter Bootstrap and UIkit wrappers (caused by changes in PickMeUp internals), fixes [#138](https://github.com/nazar-pc/PickMeUp/issues/138)
+
+3.0.6 (15 September, 2016)
+* IE compatibility fix
+
 3.0.5 (09 September, 2016)
 * Remove `.idea` from npm package
 * Small fix for getting locales when parsing date
