@@ -1,3 +1,6 @@
+3.0.8 (16 November, 2016)
+* Fix for removing own event listeners during destroying, fixes [#153](https://github.com/nazar-pc/PickMeUp/issues/153)
+
 3.0.7 (11 November, 2016)
 * Fixed main file ([PR #142](https://github.com/nazar-pc/PickMeUp/pull/142))
 * Do not fail with exception when target element to initialize PickMeUp not found, fixes [#148](https://github.com/nazar-pc/PickMeUp/issues/148)

@@ -151,7 +151,7 @@
 		var events,
 			events_number,
 			i;
-		if (event.indexOf(' ') !== -1) {
+		if (event && event.indexOf(' ') !== -1) {
 			events        = event.split(' ');
 			events_number = events.length;
 			for (i = 0; i < events_number; ++i) {
