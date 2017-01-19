@@ -492,10 +492,7 @@
 					disabled  =
 						(options.min && options.min > local_date) ||
 						(options.max && options.max < local_date);
-					if (from_user.disabled || disabled) {
-						dom_add_class(day_element, 'pmu-disabled');
-					} else if (
-						from_user.selected ||
+					selected  =
 						options.date.valueOf() == val ||
 						(
 							options.date instanceof Array &&
@@ -505,8 +502,10 @@
 						) ||
 						(
 							options.mode == 'range' && val >= options.date[0] && val <= options.date[1]
-						)
-					) {
+						);
+					if (from_user.disabled || (!('disabled' in from_user) && disabled)) {
+						dom_add_class(day_element, 'pmu-disabled');
+					} else if (from_user.selected || (!('selected' in from_user) && selected)) {
 						dom_add_class(day_element, 'pmu-selected');
 					}
 					if (val == today) {
