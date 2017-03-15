@@ -10,6 +10,8 @@ Browser support:
 * IE 10+
 * 2 latest stable versions of Firefox, Chromium, Opera and Edge
 
+If you find this project useful, consider supporting its development on [patreon.com/nazarpc](https://www.patreon.com/nazarpc), this would help me a lot!
+
 ## [Demo](http://nazar-pc.github.io/PickMeUp)
 
 ## Getting started
