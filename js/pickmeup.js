@@ -474,6 +474,7 @@
 					date_add_days(local_date, -(day + (day < 0 ? 7 : 0)));
 				})();
 				for (day = 0; day < 42; ++day) {
+					local_date.setHours(0);
 					day_element                  = document.createElement('div');
 					day_element.textContent      = local_date.getDate();
 					day_element.__pickmeup_day   = local_date.getDate();
