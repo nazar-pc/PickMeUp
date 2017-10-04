@@ -1,5 +1,6 @@
 Unreleased yet
 * Fix for `disabled` and `selected` in `render` callback didn't work with `false`
+* Fix for Summer/Winter time preventing dates from being shown as selected
 
 3.0.8 (16 November, 2016)
 * Fix for removing own event listeners during destroying, fixes [#153](https://github.com/nazar-pc/PickMeUp/issues/153)

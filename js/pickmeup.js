@@ -488,7 +488,8 @@
 						dom_add_class(day_element, 'pmu-saturday');
 					}
 					from_user = options.render(new Date(local_date)) || {};
-					val       = local_date.valueOf();
+					// We only reset time for this value in order to deal with Summer/Winter time, but changing `local_date` itself will break days incrementing
+					val       = reset_time(new Date(local_date)).valueOf();
 					disabled  =
 						(options.min && options.min > local_date) ||
 						(options.max && options.max < local_date);
