@@ -1,4 +1,4 @@
-Unreleased yet
+3.0.9 (08 October, 2017)
 * Fix for `disabled` and `selected` in `render` callback didn't work with `false`
 * Fix for Summer/Winter time preventing dates from being shown as selected
 
