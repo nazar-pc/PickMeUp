@@ -7,7 +7,7 @@
 		"date",
 		"calendar"
 	],
-	"version"         : "3.0.9",
+	"version"         : "3.0.10",
 	"homepage"        : "https://github.com/nazar-pc/PickMeUp",
 	"author"          : {
 		"name"  : "Nazar Mokrynskyi",
@@ -43,5 +43,6 @@
 	"devDependencies" : {
 		"google-closure-compiler-js" : "^20160828.0.1",
 		"gulp"                       : "^3.9.1"
-	}
+	},
+	"faircodeId"      : "pd_6bOuEo9pHbWVEqzm9F3K3T"
 }

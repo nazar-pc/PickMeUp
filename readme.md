@@ -12,6 +12,8 @@ Browser support:
 
 If you find this project useful, consider supporting its development on [patreon.com/nazarpc](https://www.patreon.com/nazarpc), this would help me a lot!
 
+Or if you are representing a company, here is [Faircode page](https://faircode.io/product/PickMeUp?utm_source=badge&utm_medium=badgelarge&utm_campaign=PickMeUp).
+
 ## [Demo](http://nazar-pc.github.io/PickMeUp)
 
 ## Getting started

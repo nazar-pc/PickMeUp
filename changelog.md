@@ -1,4 +1,4 @@
-Unreleased yet
+3.0.10 (07 November, 2017)
 * Fix parsing dates with custom locale for days of the week
 
 3.0.9 (08 October, 2017)
