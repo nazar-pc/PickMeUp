@@ -466,7 +466,8 @@
 					day_element,
 					from_user,
 					val,
-					disabled;
+					disabled,
+					selected;
 				// Correct first day in calendar taking into account the first day of the week (Sunday or Monday)
 				(function () {
 					local_date.setDate(1);
