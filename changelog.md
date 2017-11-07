@@ -1,3 +1,6 @@
+3.0.11 (07 November, 2017)
+* Fix for selected is not defined
+
 3.0.10 (07 November, 2017)
 * Fix parsing dates with custom locale for days of the week
 
