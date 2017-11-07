@@ -566,7 +566,7 @@
 		separator   = separator.map(function (item) {
 			return '(' + item + ')';
 		});
-		separator   = new RegExp('[^0-9' + separator + ']+');
+		separator   = new RegExp('[^0-9a-zA-Z' + separator.join('') + ']+');
 		var parts   = date.split(separator),
 			against = format.split(separator),
 			d,
