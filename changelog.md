@@ -1,3 +1,6 @@
+Unreleased yet
+* Fix parsing dates with custom locale for days of the week
+
 3.0.9 (08 October, 2017)
 * Fix for `disabled` and `selected` in `render` callback didn't work with `false`
 * Fix for Summer/Winter time preventing dates from being shown as selected
