@@ -72,7 +72,7 @@
 	 * @returns {boolean}
 	 */
 	function dom_matches (element, selector) {
-		return (element.matches || element.webkitMatchesSelector || element.msMatchesSelector).call(element, selector);
+		return (element.matches || element.webkitMatchesSelector || element.msMatchesSelector || element.oMatchesSelector).call(element, selector);
 	}
 
 	/**
