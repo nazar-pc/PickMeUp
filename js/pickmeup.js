@@ -913,8 +913,8 @@
 					w : document.documentElement.clientWidth,
 					h : document.documentElement.clientHeight
 				},
-				top      = pos.top,
-				left     = pos.left;
+				top      = position.top,
+				left     = position.left;
 			options.bound.fill();
 			if (dom_matches(target, 'input')) {
 				value = target.value;
@@ -957,16 +957,16 @@
 							break;
 					}
 					if (top + root_element.offsetHeight > viewport.t + viewport.h) {
-						top = pos.top - root_element.offsetHeight;
+						top = position.top - root_element.offsetHeight;
 					}
 					if (top < viewport.t) {
-						top = pos.top + target.offsetHeight;
+						top = position.top + target.offsetHeight;
 					}
 					if (left + root_element.offsetWidth > viewport.l + viewport.w) {
-						left = pos.left - root_element.offsetWidth;
+						left = position.left - root_element.offsetWidth;
 					}
 					if (left < viewport.l) {
-						left = pos.left + target.offsetWidth;
+						left = position.left + target.offsetWidth;
 					}
 					left += 'px';
 					top += 'px';
