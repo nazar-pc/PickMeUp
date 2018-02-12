@@ -1,10 +1,8 @@
 /**
- * @package   PickMeUp
- * @author    Nazar Mokrynskyi <nazar@mokrynskyi.com>
- * @author    Stefan Petre <www.eyecon.ro>
- * @copyright Copyright (c) 2013-2017, Nazar Mokrynskyi
- * @copyright Copyright (c) 2008-2009, Stefan Petre
- * @license   MIT License, see license.txt
+ * @package PickMeUp
+ * @author  Nazar Mokrynskyi <nazar@mokrynskyi.com>
+ * @author  Stefan Petre <www.eyecon.ro>
+ * @license 0BSD
  */
 
 (function (root, factory) {

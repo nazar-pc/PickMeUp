@@ -246,4 +246,8 @@ Before reporting an issue, be so kind to prepare reproducible example on jsfiddl
 You can start with working demo of latest stable version of PickMeUp: [jsfiddle.net/0kg5jL3p](https://jsfiddle.net/qx152r6r/)
 
 ## License
-MIT License, see license.txt
+Free Public License 1.0.0 / Zero Clause BSD License
+
+https://opensource.org/licenses/FPL-1.0.0
+
+https://tldrlegal.com/license/bsd-0-clause-license

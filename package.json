@@ -9,36 +9,13 @@
 	],
 	"version"         : "3.0.11",
 	"homepage"        : "https://github.com/nazar-pc/PickMeUp",
-	"author"          : {
-		"name"  : "Nazar Mokrynskyi",
-		"email" : "nazar@mokrynskyi.com",
-		"url"   : "https://cleverstyle.org"
-	},
-	"maintainers"     : [
-		{
-			"name"  : "Nazar Mokrynskyi",
-			"email" : "nazar@mokrynskyi.com",
-			"url"   : "https://cleverstyle.org"
-		},
-		{
-			"name" : "Stefan Petre",
-			"url"  : "http://www.eyecon.ro"
-		}
-	],
+	"author"          : "Nazar Mokrynskyi <nazar@mokrynskyi.com>",
 	"repository"      : {
 		"type" : "git",
 		"url"  : "git://github.com/nazar-pc/PickMeUp.git"
 	},
-	"licenses"        : [
-		{
-			"type" : "MIT",
-			"url"  : "https://github.com/nazar-pc/PickMeUp/blob/master/license.txt"
-		}
-	],
-	"bugs"            : "https://github.com/nazar-pc/PickMeUp/issues",
-	"docs"            : "https://github.com/nazar-pc/PickMeUp",
+	"license"         : "0BSD",
 	"demo"            : "http://nazar-pc.github.io/PickMeUp",
-	"download"        : "https://github.com/nazar-pc/PickMeUp",
 	"main"            : "dist/pickmeup.min.js",
 	"devDependencies" : {
 		"google-closure-compiler-js" : "^20160828.0.1",
