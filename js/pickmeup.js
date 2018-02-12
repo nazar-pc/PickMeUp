@@ -637,7 +637,6 @@
 		var d  = date.getDate();
 		var y  = date.getFullYear();
 		var w  = date.getDay();
-		var s  = {};
 		var hr = date.getHours();
 		var pm = (hr >= 12);
 		var ir = (pm) ? (hr - 12) : hr;
@@ -907,7 +906,7 @@
 			value;
 		if (force || dom_has_class(root_element, 'pmu-hidden')) {
 			var options  = target.__pickmeup.options,
-				pos      = dom_offset(target),
+				position = dom_offset(target),
 				viewport = {
 					l : window.pageXOffset,
 					t : window.pageYOffset,
@@ -938,34 +937,42 @@
 				return;
 			}
 			if (!options.flat) {
-				switch (options.position) {
-					case 'top':
-						top -= root_element.offsetHeight;
-						break;
-					case 'left':
-						left -= root_element.offsetWidth;
-						break;
-					case 'right':
-						left += target.offsetWidth;
-						break;
-					case 'bottom':
-						top += target.offsetHeight;
-						break;
+				if (options.position instanceof Function) {
+					position = options.position.call(target);
+					left     = position.left;
+					top      = position.top;
+				} else {
+					switch (options.position) {
+						case 'top':
+							top -= root_element.offsetHeight;
+							break;
+						case 'left':
+							left -= root_element.offsetWidth;
+							break;
+						case 'right':
+							left += target.offsetWidth;
+							break;
+						case 'bottom':
+							top += target.offsetHeight;
+							break;
+					}
+					if (top + root_element.offsetHeight > viewport.t + viewport.h) {
+						top = pos.top - root_element.offsetHeight;
+					}
+					if (top < viewport.t) {
+						top = pos.top + target.offsetHeight;
+					}
+					if (left + root_element.offsetWidth > viewport.l + viewport.w) {
+						left = pos.left - root_element.offsetWidth;
+					}
+					if (left < viewport.l) {
+						left = pos.left + target.offsetWidth;
+					}
+					left += 'px';
+					top += 'px';
 				}
-				if (top + root_element.offsetHeight > viewport.t + viewport.h) {
-					top = pos.top - root_element.offsetHeight;
-				}
-				if (top < viewport.t) {
-					top = pos.top + target.offsetHeight;
-				}
-				if (left + root_element.offsetWidth > viewport.l + viewport.w) {
-					left = pos.left - root_element.offsetWidth;
-				}
-				if (left < viewport.l) {
-					left = pos.left + target.offsetWidth
-				}
-				root_element.style.top  = top + 'px';
-				root_element.style.left = left + 'px';
+				root_element.style.left = left;
+				root_element.style.top  = top;
 				dom_remove_class(root_element, 'pmu-hidden');
 				setTimeout(function () {
 					dom_on(target, document.documentElement, 'click', options.bound.hide);

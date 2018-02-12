@@ -1,7 +1,8 @@
-Unreleased yet
+3.1.0 (13 February, 2018)
 * License changed from MIT to 0BSD
 * Removed Bower support, use NPM instead
 * CoffeeScript files converted to LiveScript
+* Added support for customizing position by specifying custom function as `position` option
 
 3.0.11 (07 November, 2017)
 * Fix for selected is not defined
