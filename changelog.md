@@ -1,3 +1,8 @@
+Unreleased yet
+* License changed from MIT to 0BSD
+* Removed Bower support, use NPM instead
+* CoffeeScript files converted to LiveScript
+
 3.0.11 (07 November, 2017)
 * Fix for selected is not defined
 
