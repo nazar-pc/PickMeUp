@@ -907,15 +907,16 @@
 			value;
 		if (force || dom_has_class(root_element, 'pmu-hidden')) {
 			var options  = target.__pickmeup.options,
-				pos      = dom_offset(target),
 				viewport = {
 					l : window.pageXOffset,
 					t : window.pageYOffset,
 					w : document.documentElement.clientWidth,
 					h : document.documentElement.clientHeight
 				},
-				top      = pos.top,
-				left     = pos.left;
+				stick_to  = dom_query(document, options.attach_to) || target,
+				pos       = dom_offset(stick_to),
+				top       = pos.top,
+				left      = pos.left;
 			options.bound.fill();
 			if (dom_matches(target, 'input')) {
 				value = target.value;
@@ -1319,6 +1320,7 @@
 		title_format              : 'B, Y',
 		position                  : 'bottom',
 		class_name                : '',
+		attach_to                 : '',
 		separator                 : ' - ',
 		hide_on_select            : false,
 		min                       : null,
