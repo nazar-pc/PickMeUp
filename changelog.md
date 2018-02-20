@@ -1,3 +1,6 @@
+3.1.2 (20 February, 2018)
+* Fix for `j` formatting option
+
 3.1.0 (13 February, 2018)
 * License changed from MIT to 0BSD
 * Removed Bower support, use NPM instead

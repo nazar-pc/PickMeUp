@@ -259,7 +259,7 @@
 		var now  = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
 		var then = new Date(date.getFullYear(), 0, 0, 0, 0, 0);
 		var time = now - then;
-		return Math.floor(time / 24 * 60 * 60 * 1000);
+		return Math.floor(time / (24 * 60 * 60 * 1000));
 	}
 
 	/**
