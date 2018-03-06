@@ -937,6 +937,7 @@
 				return;
 			}
 			if (!options.flat) {
+				dom_remove_class(root_element, 'pmu-hidden');
 				if (options.position instanceof Function) {
 					position = options.position.call(target);
 					left     = position.left;
@@ -973,7 +974,6 @@
 				}
 				root_element.style.left = left;
 				root_element.style.top  = top;
-				dom_remove_class(root_element, 'pmu-hidden');
 				setTimeout(function () {
 					dom_on(target, document.documentElement, 'click', options.bound.hide);
 					dom_on(target, window, 'resize', options.bound.forced_show);
