@@ -7,7 +7,7 @@
 		"date",
 		"calendar"
 	],
-	"version"         : "3.1.2",
+	"version"         : "3.1.3",
 	"homepage"        : "https://github.com/nazar-pc/PickMeUp",
 	"author"          : "Nazar Mokrynskyi <nazar@mokrynskyi.com>",
 	"repository"      : {

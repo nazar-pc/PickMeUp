@@ -1,3 +1,6 @@
+3.1.3 (06 March, 2018)
+* Fix `top` and `left` positions that were working incorrectly because of hidden root element
+
 3.1.2 (20 February, 2018)
 * Fix for `j` formatting option
 
