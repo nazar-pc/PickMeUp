@@ -344,7 +344,7 @@
 					continue;
 				}
 			}
-			dom_query(instance, '.pmu-month').textContent = header;
+			dom_query(instance, '.pmu-month').innerHTML = header;
 			var is_year_selected                          = function (year) {
 				return (
 						options.mode == 'range' &&
@@ -714,8 +714,10 @@
 				case 'Y':
 					part = y;
 					break;
+				default:
+					parts[i] = 'default';
 			}
-			parts[i] = part;
+			parts[i] = '<span class="pmu-month-text-' + parts[i] + '">' + part + '</span>';
 		}
 		return parts.join('');
 	}
