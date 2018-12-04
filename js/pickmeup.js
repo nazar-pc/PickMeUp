@@ -308,7 +308,12 @@
 				header = local_date.getFullYear();
 			} else if (dom_has_class(root_element, 'pmu-view-days')) {
 				date_add_months(local_date, i - current_cal);
-				header = format_date(local_date, options.title_format, options.locales[options.locale], true);
+				if (typeof options.title_format === "function") {
+					header = options.title_format(local_date, options.locales[options.locale]);
+				}
+				else {
+					header = format_date(local_date, options.title_format, options.locales[options.locale]);
+				}
 			}
 			if (!shown_date_to) {
 				if (max_date) {
@@ -632,7 +637,7 @@
 		return date;
 	}
 
-	function format_date (date, format, locale, html) {
+	function format_date (date, format, locale) {
 		var m  = date.getMonth();
 		var d  = date.getDate();
 		var y  = date.getFullYear();
@@ -714,15 +719,8 @@
 				case 'Y':
 					part = y;
 					break;
-				default:
-					parts[i] = 'default';
 			}
-			if (html) {
-				parts[i] = '<span class="pmu-month-text-' + parts[i] + '">' + part + '</span>';
-			}
-			else {
-				parts[i] = part;
-			}
+			parts[i] = part;
 		}
 		return parts.join('');
 	}
@@ -884,6 +882,7 @@
 
 	function prepare_date (options) {
 		var result;
+		console.log("preparing date")
 		if (options.mode == 'single') {
 			result = new Date(options.date);
 			return {
