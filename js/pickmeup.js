@@ -882,7 +882,6 @@
 
 	function prepare_date (options) {
 		var result;
-		console.log("preparing date")
 		if (options.mode == 'single') {
 			result = new Date(options.date);
 			return {
