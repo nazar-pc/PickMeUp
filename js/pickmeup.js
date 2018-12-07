@@ -308,7 +308,12 @@
 				header = local_date.getFullYear();
 			} else if (dom_has_class(root_element, 'pmu-view-days')) {
 				date_add_months(local_date, i - current_cal);
-				header = format_date(local_date, options.title_format, options.locales[options.locale]);
+				if (typeof options.title_format === "function") {
+					header = options.title_format(local_date, options.locales[options.locale]);
+				}
+				else {
+					header = format_date(local_date, options.title_format, options.locales[options.locale]);
+				}
 			}
 			if (!shown_date_to) {
 				if (max_date) {
@@ -344,7 +349,7 @@
 					continue;
 				}
 			}
-			dom_query(instance, '.pmu-month').textContent = header;
+			dom_query(instance, '.pmu-month').innerHTML = header;
 			var is_year_selected                          = function (year) {
 				return (
 						options.mode == 'range' &&
