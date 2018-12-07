@@ -1,3 +1,6 @@
+3.2.0 (07 December, 2018)
+* `title_format` can now be a function, allowing more customization
+
 3.1.3 (06 March, 2018)
 * Fix `top` and `left` positions that were working incorrectly because of hidden root element
 
