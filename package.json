@@ -18,8 +18,8 @@
 	"demo"            : "http://nazar-pc.github.io/PickMeUp",
 	"main"            : "dist/pickmeup.min.js",
 	"devDependencies" : {
-		"google-closure-compiler-js" : "^20160828.0.1",
-		"gulp"                       : "^3.9.1"
+		"google-closure-compiler" : "^20181125.0.1",
+		"gulp"                    : "^4.0.0"
 	},
 	"faircodeId"      : "pd_6bOuEo9pHbWVEqzm9F3K3T"
 }

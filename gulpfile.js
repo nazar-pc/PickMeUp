@@ -1,5 +1,5 @@
 const gulp     = require('gulp');
-const compiler = require('google-closure-compiler-js').gulp();
+const compiler = require('google-closure-compiler').gulp();
 
 // TODO: Produce multiple files when https://github.com/google/closure-compiler-js/issues/17 resolved
 gulp.task('dist', function () {
@@ -9,9 +9,9 @@ gulp.task('dist', function () {
 		// 'js/jquery.pickmeup.uikit.js'
 	])
 		.pipe(compiler({
-			jsOutputFile : 'pickmeup.min.js',
-			languageIn   : 'ES5',
-			languageOut  : 'ES5'
+			js_output_file : 'pickmeup.min.js',
+			language_in    : 'ES5',
+			language_out   : 'ES5'
 		}))
 		.pipe(gulp.dest('dist'));
 });
