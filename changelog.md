@@ -1,3 +1,6 @@
+3.2.1 (19 January, 2019)
+* fix for parsing dates consisting of timestamps
+
 3.2.0 (07 December, 2018)
 * `title_format` can now be a function, allowing more customization
 
