@@ -547,7 +547,7 @@
 			separator = options.separator,
 			locale    = options.locales[options.locale],
 			i;
-		if (date instanceof Date || date instanceof Number) {
+		if (date instanceof Date || typeof date === 'number') {
 			return reset_time(new Date(date));
 		} else if (!date) {
 			return reset_time(new Date);
