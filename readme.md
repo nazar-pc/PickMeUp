@@ -246,5 +246,8 @@ Before reporting an issue, be so kind to prepare reproducible example on jsfiddl
 You can start with working demo of latest stable version of PickMeUp: [jsfiddle.net/0kg5jL3p](https://jsfiddle.net/qx152r6r/)
 
 ## License
+Zero-Clause BSD
 
-[Zero-Clause BSD](https://landley.net/toybox/license.html)
+https://opensource.org/licenses/0BSD
+
+https://tldrlegal.com/license/bsd-0-clause-license 
