@@ -588,6 +588,7 @@
 					break;
 				case 'd':
 				case 'e':
+				case 't':
 					d = parseInt(parts[i], 10);
 					break;
 				case 'm':
@@ -705,6 +706,10 @@
 					break;
 				case 'S':
 					part = (sec < 10) ? ("0" + sec) : sec;
+					break;
+				case 't':
+					// Calculate the last day of the month
+					part = new Date(y, m + 1, 0).getDate();
 					break;
 				case 'u':
 					part = w + 1;
