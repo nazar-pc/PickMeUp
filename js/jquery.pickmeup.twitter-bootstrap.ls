@@ -15,7 +15,7 @@ let $ = jQuery
 	do !->
 		# Styles
 		$tmp		= $('<div hidden />').appendTo(document.body);
-		$panel		= $('<div class="panel" />')
+		$panel		= $('<div class="card" />')
 		$link_hover	= $('<button class="btn btn-link" />').hover()
 		$text_muted	= $('<span class="text-muted" />')
 		$disabled	= $('<span class="text-muted" />')
