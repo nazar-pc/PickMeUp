@@ -362,6 +362,9 @@
 							return prev;
 						}, []).indexOf(year) !== -1
 					) ||
+					(
+						options.mode === 'mixed' && in_year_range(year, actual_date)
+					) ||
 					new Date(actual_date).getFullYear() === year;
 			};
 			var is_months_selected                      = function (year, month) {
@@ -386,6 +389,9 @@
 							prev.push(current.getFullYear() + '-' + current.getMonth());
 							return prev;
 						}, []).indexOf(year + '-' + month) !== -1
+					) ||
+					(
+						options.mode === 'mixed' && in_month_range(month, year, actual_date)
 					) ||
 					(
 						new Date(actual_date).getFullYear() === year &&
@@ -506,6 +512,9 @@
 						) ||
 						(
 							options.mode === 'range' && val >= options.date[0] && val <= options.date[1]
+						) ||
+						(
+							options.mode === 'mixed' && in_range(val, options)
 						);
 					if (from_user.disabled || (!('disabled' in from_user) && disabled)) {
 						dom_add_class(day_element, 'pmu-disabled');
@@ -540,6 +549,41 @@
 			next.style.visibility = options.max && options.max <= shown_date_to ? 'hidden' : 'visible';
 		}
 		dom_dispatch_event(target, 'fill');
+	}
+
+	function in_range (date, options) {
+		pairs = options.date.length - (options.date.length % 2);
+		for (i = 0; i < pairs; i = i+2) {
+			if (date >= options.date[i].valueOf() && date <= options.date[i + 1].valueOf())
+				return true;
+		}
+		return false;
+	}
+
+	function in_year_range (year, dates) {
+		pairs = dates.length - (dates.length % 2);
+		for (i = 0; i < pairs; i = i+2) {
+			if (year >= new Date(dates[i]).getFullYear() &&
+			    year <= new Date(dates[i + 1]).getFullYear())
+				return true;
+		}
+		return false;
+	}
+
+	function in_month_range (month, year, dates) {
+		pairs = dates.length - (dates.length % 2);
+		for (i = 0; i < pairs; i = i+2) {
+			var first_year  = new Date(dates[i]).getFullYear(),
+			lastyear    = new Date(dates[i + 1]).getFullYear(),
+			first_month = new Date(dates[i]).getMonth(),
+			last_month  = new Date(dates[i + 1]).getMonth();
+			if ((year > first_year && year < lastyear) ||
+			    (year > first_year && year === lastyear && month <= last_month) ||
+			    (year === first_year && year < lastyear && month >= first_month) ||
+			    (year === first_year && year === lastyear && month >= first_month && month <= last_month))
+				return true;
+		}
+		return false;
 	}
 
 	function parse_date (date, options) {
@@ -762,6 +806,22 @@
 					}
 					options.lastSel = !options.lastSel;
 					break;
+				case 'mixed':
+					last_index = Math.floor((options.date.length)/2);
+					last_index = last_index * 2;
+
+					if (!options.lastSel) {
+						options.date[last_index] = new_date;
+					} else {
+						if (new_date < options.date[last_index]) {
+							options.date[last_index + 1] = options.date[last_index];
+							options.date[last_index] = new_date;
+						} else {
+							options.date[last_index + 1] = new_date;
+						}
+					}
+					options.lastSel = !options.lastSel;
+					break;
 				default:
 					options.date = new_date.valueOf();
 					break;
@@ -781,6 +841,18 @@
 			)
 		) {
 			options.bound.hide();
+		}
+	}
+
+	/**
+	 * @param {Element} target
+	 * @param {Event}   event
+	 */
+	function key_action (target, event) {
+		var options = target.__pickmeup.options;
+		if (event.code === options.key) {
+			// FIXME Currently removeDate is unused
+			options.removeDate = !options.removeDate;
 		}
 	}
 
@@ -941,6 +1013,7 @@
 					}
 				);
 				options.lastSel = false;
+				options.removeDate = false;
 			}
 			if (!dom_dispatch_event(target, 'show')) {
 				return;
@@ -1011,6 +1084,7 @@
 				dom_off(target, document.documentElement, 'click', options.bound.hide);
 				dom_off(target, window, 'resize', options.bound.forced_show);
 				options.lastSel = false;
+				options.removeDate = false;
 			}
 		}
 	}
@@ -1236,7 +1310,7 @@
 				options.view = 'months';
 			}
 			options.calendars = Math.max(1, parseInt(options.calendars, 10) || 1);
-			options.mode      = /single|multiple|range/.test(options.mode) ? options.mode : 'single';
+			options.mode      = /single|multiple|range|mixed/.test(options.mode) ? options.mode : 'single';
 			if (options.min) {
 				options.min = parse_date(options.min, options);
 				if (!options.select_day) {
@@ -1274,7 +1348,8 @@
 				next        : next.bind(target, target),
 				get_date    : get_date.bind(target, target),
 				set_date    : set_date.bind(target, target),
-				destroy     : destroy.bind(target, target)
+				destroy     : destroy.bind(target, target),
+				key_action  : key_action.bind(target, target)
 			};
 			dom_add_class(element, 'pmu-view-' + options.view);
 			var content_template = options.instance_template(options),
@@ -1291,6 +1366,10 @@
 				function (e) {
 					e.preventDefault();
 				});
+			if (options.mode == 'mixed') {
+				dom_on(target, document, 'keydown', options.bound.key_action);
+				dom_on(target, document, 'keyup', options.bound.key_action);
+			}
 			if (options.flat) {
 				dom_add_class(element, 'pmu-flat');
 				target.appendChild(element);
@@ -1339,6 +1418,7 @@
 		hide_on_select            : false,
 		min                       : null,
 		max                       : null,
+		key			  : "ControlLeft",
 		render                    : function () {
 		},
 		locale                    : 'en',
