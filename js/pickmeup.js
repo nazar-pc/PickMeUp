@@ -781,6 +781,7 @@
 			)
 		) {
 			options.bound.hide();
+			$(target).blur();
 		}
 	}
 
