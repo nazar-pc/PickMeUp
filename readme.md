@@ -1,3 +1,11 @@
+# ⚠️ Project is archived
+
+I have created this library library many years ago and didn't update it in last few years due to not working with frontend anymore.
+
+With that I decided to archive the project.
+
+If you'd like to step in maintaining and modernize the project with the original vision in mind, please reach out via email.
+
 ## PickMeUp - Really simple, powerful, customizable and lightweight standalone datepicker
 
 No dependencies, single/range/multiple selections, ability to put custom content into dates, very flexible styling and customization abilities.
